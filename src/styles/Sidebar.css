@@ -1,0 +1,137 @@
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #1a1a2e;
+  color: #ffffff;
+  padding-top: 20px;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar-header {
+  padding: 0 20px 30px 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
+}
+
+.sidebar.closed .sidebar-header {
+  padding: 0 10px 30px 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sidebar.closed .logo-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.nav-item:hover {
+  background-color: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+}
+
+.nav-item.active {
+  background-color: rgba(102, 126, 234, 0.2);
+  color: #667eea;
+  border-left: 3px solid #667eea;
+  padding-left: 12px;
+}
+
+.sidebar.closed .nav-item {
+  justify-content: center;
+  gap: 0;
+  padding: 12px 10px;
+}
+
+.sidebar.closed .nav-item span {
+  display: none;
+}
+
+.sidebar.closed .nav-item.active {
+  border-left: none;
+  border-top: 3px solid #667eea;
+  padding-left: 10px;
+  padding-top: 9px;
+}
+
+.icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item.logout {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+  color: #ff6b6b;
+}
+
+.nav-item.logout:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
