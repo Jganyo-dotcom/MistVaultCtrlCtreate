@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
   const activities = [
     {
       id: 1,
@@ -41,7 +44,7 @@ function Dashboard() {
       <div className="dashboard-header-section">
         <div className="dashboard-left">
           <h1>Dashboard</h1>
-          <button className="add-btn">Add Hospital</button>
+          <button className="add-btn" type="button" onClick={() => navigate("/add-hospital")}>Add Hospital</button>
         </div>
         <div className="search-bar">
           <i className="search-icon">🔍</i>

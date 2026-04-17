@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/SignIn.css";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("authenticated") === "true") {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,8 +21,8 @@ function SignIn() {
       return;
     }
 
-    console.log("Email:", email);
-    console.log("Password:", password);
+    localStorage.setItem("authenticated", "true");
+    navigate("/dashboard");
   };
 
   return (
