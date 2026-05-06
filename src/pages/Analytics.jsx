@@ -1,288 +1,152 @@
 import React, { useState } from "react";
 import "../styles/Analytics.css";
+import {
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend
+} from "recharts";
 
-const BarChart = ({ data = [], dataKey, valueKey, title }) => {
-  if (!data.length) return null;
 
-  const maxValue = Math.max(...data.map((d) => d[valueKey]), 0) || 1;
+const Analytics = () => {
+    const [timeRange, setTimeRange] = useState("Last 6 months");
 
-  return (
-    <div className="chart-container">
-      <h3>{title}</h3>
-      <div className="bar-chart">
-        {data.map((item, index) => (
-          <div key={index} className="bar-item">
-            <div className="bar-label">{item[dataKey]}</div>
-            <div className="bar-wrapper">
-              <div
-                className="bar"
-                style={{ height: `${(item[valueKey] / maxValue) * 200}px` }}
-              ></div>
+    const trendData = [
+        { month: "SEP", usage: 0 },
+        { month: "OCT", usage: 40 },
+        { month: "NOV", usage: 20 },
+        { month: "DEC", usage: 40 },
+        { month: "JAN", usage: 60 },
+        { month: "FEB", usage: 100 },
+    ];
+
+    const hospitalData = [
+        { name: "Sunrise Clinic", value: 90 },
+        { name: "Amazing Grace..", value: 75 },
+        { name: "Promise Land..", value: 65 },
+        { name: "Bloom Private...", value: 60 },
+        { name: "RiverLand Hos..", value: 50 },
+
+    ];
+
+    const featureData = [
+        { name: "Patient Records", value: 35 },
+        { name: "Lab Uploads", value: 20 },
+        { name: "Staff Activity", value: 15 },
+        { name: "Radiology Uploads", value: 20 },
+        { name: "Pharmacy Entries", value: 10 },
+    ];
+
+    const COLORS = ["#2563eb", "#22c55e", "#14b8a6", "#f97316", "#a855f7"];
+
+    return (
+        <div className="analytics-container">
+
+            {/* Header */}
+            <div className="analytics-header">
+                <h3>EMR Analytics</h3>
+                <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
+                    <option>Last 6 months</option>
+                    <option>Last 3 months</option>
+                    <option>Last 12 months</option>
+                </select>
             </div>
-            <div className="bar-value">{item[valueKey]}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+
+            {/* Stats Cards */}
+            <div className="stats-row">
+                <div className="stats-card">
+                    <h1>78%</h1>
+                    <p>Average Platform Engagement</p>
+                </div>
+                <div className="stats-card">
+                    <h1>Sunrise Clinic ↑</h1>
+                    <p>Highest Engagement</p>
+                </div>
+                <div className="stats-card">
+                    <h1>Lifeline Clinic ↓</h1>
+                    <p>Lowest Engagement</p>
+                </div>
+            </div>
+
+            {/* Area Chart */}
+            <div className="chart-section">
+                <h3>EMR Usage Trend</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={trendData}>
+                        <defs>
+                            <linearGradient id="colorUsage" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                        <XAxis dataKey="month" />
+                        <YAxis tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
+                        <Tooltip formatter={(v) => `${v}%`} />
+                        <Area
+                            type="monotone"
+                            dataKey="usage"
+                            stroke="#2563eb"
+                            strokeWidth={2}
+                            fill="url(#colorUsage)"
+                            dot={{ fill: "#2563eb", r: 5 }}
+                        />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </div>
+
+            {/* Bottom Row */}
+            <div className="bottom-row">
+
+                {/* Bar Chart */}
+                <div className="chart-card">
+                    <h3>Hospital Engagement Comparison</h3>
+                    <ResponsiveContainer width="100%" height={250}>
+                        <BarChart data={hospitalData} layout="vertical">
+                            <XAxis type="number" hide />
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                width={120}
+                                tick={{ fontSize: 12 }}
+                            />
+                            <Tooltip />
+                            <Bar dataKey="value" fill="#2563eb" radius={[0, 4, 4, 0]} />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+
+                {/* Donut Chart */}
+                <div className="chart-card">
+                    <h3>Platform Feature Usage</h3>
+                    <ResponsiveContainer width="100%" height={250}>
+                        <PieChart>
+                            <Pie
+                                data={featureData}
+                                cx="40%"
+                                cy="50%"
+                                innerRadius={70}
+                                outerRadius={100}
+                                dataKey="value"
+                            >
+                                {featureData.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={COLORS[index % COLORS.length]}
+                                    />
+                                ))}
+                            </Pie>
+                            <Legend
+                                layout="vertical"
+                                align="right"
+                                verticalAlign="middle"
+                            />
+                            <Tooltip />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+
+            </div>
+
+        </div>
+    );
 };
-
-const LineChart = ({ data = [] }) => {
-  if (!data.length) return null;
-
-  const maxValue =
-    Math.max(...data.map((d) => Math.max(d.usage, d.target)), 0) || 1;
-  const width = 500;
-  const height = 200;
-  const padding = 30;
-  const chartWidth = width - padding * 2;
-  const chartHeight = height - padding * 2;
-
-  const points = data.map((item, index) => {
-    const ratio =
-      data.length > 1 ? index / (data.length - 1) : 0.5;
-    return {
-      x: padding + ratio * chartWidth,
-      usageY:
-        padding + chartHeight - (item.usage / maxValue) * chartHeight,
-      targetY:
-        padding + chartHeight - (item.target / maxValue) * chartHeight,
-      label: item.month
-    };
-  });
-
-  const usagePath = points
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.usageY}`)
-    .join(" ");
-
-  const targetPath = points
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.targetY}`)
-    .join(" ");
-
-  return (
-    <div className="chart-container">
-      <h3>EMR Usage Trend</h3>
-      <svg width={width} height={height} className="line-chart">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <line
-            key={`grid-${i}`}
-            x1={padding}
-            y1={padding + (chartHeight / 4) * i}
-            x2={width - padding}
-            y2={padding + (chartHeight / 4) * i}
-            stroke="#e0e0e0"
-            strokeDasharray="4"
-          />
-        ))}
-
-        <line
-          x1={padding}
-          y1={padding}
-          x2={padding}
-          y2={height - padding}
-          stroke="#999"
-          strokeWidth="2"
-        />
-        <line
-          x1={padding}
-          y1={height - padding}
-          x2={width - padding}
-          y2={height - padding}
-          stroke="#999"
-          strokeWidth="2"
-        />
-
-        <path
-          d={targetPath}
-          fill="none"
-          stroke="#999"
-          strokeWidth="2"
-          strokeDasharray="5"
-          opacity="0.5"
-        />
-
-        <path
-          d={usagePath}
-          fill="none"
-          stroke="#667eea"
-          strokeWidth="3"
-        />
-
-        {points.map((p, i) => (
-          <circle
-            key={`usage-${i}`}
-            cx={p.x}
-            cy={p.usageY}
-            r="5"
-            fill="#667eea"
-          />
-        ))}
-
-        {points.map((p, i) => (
-          <text
-            key={`label-${i}`}
-            x={p.x}
-            y={height - padding + 20}
-            textAnchor="middle"
-            fontSize="12"
-            fill="#666"
-          >
-            {p.label}
-          </text>
-        ))}
-      </svg>
-      <div className="chart-legend">
-        <div className="legend-item">
-          <span
-            className="legend-color"
-            style={{ backgroundColor: "#667eea" }}
-          ></span>
-          Actual Usage
-        </div>
-        <div className="legend-item">
-          <span
-            className="legend-color"
-            style={{
-              backgroundColor: "transparent",
-              border: "2px dashed #999"
-            }}
-          ></span>
-          Target
-        </div>
-      </div>
-    </div>
-  );
-};
-
-function Analytics() {
-  const [dateRange, setDateRange] = useState("lastMonth");
-  const [startDate, setStartDate] = useState("2026-03-15");
-  const [endDate, setEndDate] = useState("2026-04-15");
-
-  const emrUsageTrendData = [
-    { month: "Jan", usage: 45, target: 60 },
-    { month: "Feb", usage: 52, target: 65 },
-    { month: "Mar", usage: 68, target: 70 },
-    { month: "Apr", usage: 72, target: 75 }
-  ];
-
-  const hospitalEngagementData = [
-    { hospital: "Sunrise Clinic", engagement: 85 },
-    { hospital: "Clean Health", engagement: 72 },
-    { hospital: "Promise Land", engagement: 88 },
-    { hospital: "Wellheit", engagement: 60 },
-    { hospital: "Care Medical", engagement: 78 }
-  ];
-
-  const featureUsageData = [
-    { feature: "Patient Management", usage: 950 },
-    { feature: "EMR Records", usage: 1240 },
-    { feature: "Appointments", usage: 680 },
-    { feature: "Billing System", usage: 520 },
-    { feature: "Reports", usage: 450 }
-  ];
-
-  return (
-    <div className="analytics-container">
-      <div className="analytics-header">
-        <h1>Analytics Dashboard</h1>
-        <p className="subtitle">
-          Monitor platform usage and hospital engagement
-        </p>
-      </div>
-
-      <div className="analytics-controls">
-        <div className="date-filter">
-          <label>Date Range</label>
-          <select
-            value={dateRange}
-            onChange={(e) => setDateRange(e.target.value)}
-          >
-            <option value="lastWeek">Last Week</option>
-            <option value="lastMonth">Last Month</option>
-            <option value="lastQuarter">Last Quarter</option>
-            <option value="custom">Custom Range</option>
-          </select>
-        </div>
-
-        {dateRange === "custom" && (
-          <div className="custom-date-range">
-            <div className="date-input-group">
-              <label>Start Date</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div className="date-input-group">
-              <label>End Date</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="analytics-metrics">
-        <div className="metric-card">
-          <div className="metric-icon">📊</div>
-          <div className="metric-content">
-            <p className="metric-label">Total Hospitals</p>
-            <p className="metric-value">5</p>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-icon">👥</div>
-          <div className="metric-content">
-            <p className="metric-label">Active Users</p>
-            <p className="metric-value">274</p>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-icon">📝</div>
-          <div className="metric-content">
-            <p className="metric-label">Total Records</p>
-            <p className="metric-value">6,300</p>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-icon">📈</div>
-          <div className="metric-content">
-            <p className="metric-label">Platform Usage</p>
-            <p className="metric-value">72%</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="charts-grid">
-        <div className="chart-card">
-          <LineChart data={emrUsageTrendData} />
-        </div>
-
-        <div className="chart-card">
-          <BarChart
-            data={hospitalEngagementData}
-            dataKey="hospital"
-            valueKey="engagement"
-            title="Hospital Engagement Comparison"
-          />
-        </div>
-
-        <div className="chart-card">
-          <BarChart
-            data={featureUsageData}
-            dataKey="feature"
-            valueKey="usage"
-            title="Platform Feature Usage"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default Analytics;
