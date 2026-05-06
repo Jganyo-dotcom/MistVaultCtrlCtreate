@@ -1,27 +1,30 @@
-/* Navbar Styles */
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 250px;
-  right: 0;
   height: 70px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(180deg, #0f1c3f, #09142b);
   display: flex;
   align-items: center;
-  padding: 0 30px;
-  transition: all 0.3s ease;
-  z-index: 999;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 0 20px;
+  gap: 20px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  flex-wrap: wrap;
 }
 
-.navbar-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Hamburger - Only visible on mobile */
+.menu-icon {
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: none;
 }
 
+.menu-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Actions */
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -29,43 +32,63 @@
   margin-left: auto;
 }
 
-.user-info {
-  color: #1a1a2e;
-  font-weight: 500;
-  font-size: 14px;
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  flex-shrink: 0;
 }
 
-.user-profile,
-.notification-bell {
-  width: 40px;
-  height: 40px;
+.icon:hover {
+  transform: scale(1.1);
+}
+
+/* User */
+.user-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  font-size: 20px;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.user-profile:hover,
-.notification-bell:hover {
-  background-color: #f0f0f0;
-}
-
-/* Adjust navbar when sidebar is closed */
-.sidebar.closed ~ .main-content .navbar {
-  left: 80px;
-}
-
-/* Responsive */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
   .navbar {
-    left: 0;
     padding: 0 15px;
+    gap: 15px;
   }
 
   .navbar-actions {
     gap: 15px;
+  }
+
+  .user-info span {
+    display: none;
+  }
+
+  .icon {
+    font-size: 18px;
+  }
+}
+
+/* Extra Small Phones */
+@media (max-width: 480px) {
+  .navbar {
+    height: 60px;
+    padding: 0 10px;
+    gap: 10px;
+  }
+
+  .navbar-actions {
+    gap: 10px;
+  }
+
+  .icon {
+    font-size: 16px;
   }
 }
