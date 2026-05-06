@@ -1,58 +1,63 @@
-import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  FiHome,
+  FiGrid,
+  FiBarChart2,
+  FiClipboard,
+  FiSettings,
+  FiLogOut,
+  FiX
+} from "react-icons/fi";
 import "../styles/Sidebar.css";
 
-function Sidebar({ isOpen, onNavigate, currentPage }) {
+export default function Sidebar({ isOpen, toggleSidebar, closeSidebar }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.setItem("authenticated", "false");
+    navigate("/signin");
+  };
+
   return (
-    <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
+    <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
       <div className="sidebar-header">
-        <div className="logo">
-          <div className="logo-icon">EMR</div>
-        </div>
+        <div className="logo-icon">EMR</div>
+        <button className="close-btn" onClick={toggleSidebar} title="Close sidebar">
+          <FiX />
+        </button>
       </div>
 
-      <nav className="sidebar-nav">
-        <div
-          className={`nav-item ${currentPage === "dashboard" ? "active" : ""}`}
-          onClick={() => onNavigate("dashboard")}
-        >
-          <i className="icon">📊</i>
+      <nav className="sidebar-nav" onClick={closeSidebar}>
+        <NavLink to="/" className="nav-item">
+          <FiGrid />
           <span>Dashboard</span>
-        </div>
-        <div
-          className={`nav-item ${currentPage === "hospitals" ? "active" : ""}`}
-          onClick={() => onNavigate("hospitals")}
-        >
-          <i className="icon">🏥</i>
+        </NavLink>
+
+        <NavLink to="/hospitals" className="nav-item">
+          <FiHome />
           <span>Hospitals</span>
-        </div>
-        <div
-          className={`nav-item ${currentPage === "analytics" ? "active" : ""}`}
-          onClick={() => onNavigate("analytics")}
-        >
-          <i className="icon">📈</i>
+        </NavLink>
+
+        <NavLink to="/analytics" className="nav-item">
+          <FiBarChart2 />
           <span>Analytics</span>
-        </div>
-        <div
-          className={`nav-item ${currentPage === "auditlogs" ? "active" : ""}`}
-          onClick={() => onNavigate("auditlogs")}
-        >
-          <i className="icon">📋</i>
+        </NavLink>
+
+        <NavLink to="/auditlogs" className="nav-item">
+          <FiClipboard />
           <span>Audit Logs</span>
-        </div>
-        <div
-          className={`nav-item ${currentPage === "settings" ? "active" : ""}`}
-          onClick={() => onNavigate("settings")}
-        >
-          <i className="icon">⚙️</i>
+        </NavLink>
+
+        <NavLink to="/settings" className="nav-item">
+          <FiSettings />
           <span>Settings</span>
-        </div>
-        <div className="nav-item logout" onClick={() => onNavigate("logout")}>
-          <i className="icon">🚪</i>
+        </NavLink>
+
+        <button onClick={handleLogout} className="nav-item logout">
+          <FiLogOut />
           <span>Logout</span>
-        </div>
+        </button>
       </nav>
-    </aside>
+    </div>
   );
 }
-
-export default Sidebar;

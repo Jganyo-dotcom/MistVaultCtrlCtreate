@@ -1,3 +1,3 @@
-import { AddHospital } from "./Add hospital";
+import { AddHospital } from "./AddHospital";
 
 export default AddHospital;

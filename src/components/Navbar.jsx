@@ -1,24 +1,23 @@
-import React from "react";
+import { FiBell, FiUser, FiMenu } from "react-icons/fi";
 import "../styles/Navbar.css";
 
-function Navbar({ userName = "Akpan Samuel" }) {
+export default function Navbar({ toggleSidebar, isMobile }) {
   return (
-    <header className="navbar">
-      <div className="navbar-content">
-        <div className="navbar-actions">
-          <div className="user-info">
-            <span>{userName}</span>
-          </div>
-          <div className="user-profile">
-            <i>👤</i>
-          </div>
-          <div className="notification-bell">
-            <i>🔔</i>
-          </div>
+    <div className="navbar">
+      {/* Hamburger - Only on Mobile */}
+      {isMobile && (
+        <FiMenu className="menu-icon" onClick={toggleSidebar} />
+      )}
+
+      {/* Right */}
+      <div className="navbar-actions">
+        <div className="user-info">
+          <span>Akpan Samuel</span>
+          <FiUser className="icon" />
         </div>
+
+        <FiBell className="icon" />
       </div>
-    </header>
+    </div>
   );
 }
-
-export default Navbar;

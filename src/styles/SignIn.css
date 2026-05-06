@@ -90,3 +90,117 @@
 .signin-btn:hover {
   background: #162c6b;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .signin-container::before {
+    width: 150px;
+    height: 150px;
+    top: -25px;
+    left: -25px;
+  }
+
+  .signin-container::after {
+    width: 200px;
+    height: 200px;
+    bottom: -40px;
+    right: -40px;
+  }
+
+  .signin-card {
+    padding: 25px;
+    width: 280px;
+  }
+
+  .title {
+    margin-bottom: 18px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .form-group input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .forgot-password {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .signin-btn {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signin-container::before {
+    width: 120px;
+    height: 120px;
+    top: -20px;
+    left: -20px;
+  }
+
+  .signin-container::after {
+    width: 150px;
+    height: 150px;
+    bottom: -30px;
+    right: -30px;
+  }
+
+  .signin-card {
+    padding: 20px;
+    width: 90%;
+    max-width: 300px;
+    border-radius: 10px;
+  }
+
+  .title {
+    margin-bottom: 15px;
+  }
+
+  .title h1 {
+    font-size: 22px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+    margin-bottom: 3px;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    padding: 8px;
+    font-size: 13px;
+    border-radius: 4px;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #1e3a8a;
+  }
+
+  .forgot-password {
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+
+  .signin-btn {
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 18px;
+    font-weight: 500;
+  }
+}
