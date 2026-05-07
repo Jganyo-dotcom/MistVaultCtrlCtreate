@@ -6,6 +6,7 @@ import "../../styles/Layout.css";
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -25,6 +26,10 @@ export default function Layout() {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const toggleSidebarCollapse = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
   const closeSidebar = () => {
     if (isMobile) {
       setSidebarOpen(false);
@@ -39,10 +44,17 @@ export default function Layout() {
       )}
 
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} closeSidebar={closeSidebar} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        toggleSidebar={toggleSidebar}
+        closeSidebar={closeSidebar}
+        collapsed={sidebarCollapsed}
+        toggleCollapse={toggleSidebarCollapse}
+        isMobile={isMobile}
+      />
 
       {/* Main Content Area */}
-      <div className="layout-main">
+      <div className={`layout-main ${!isMobile && sidebarCollapsed ? "collapsed" : ""}`}>
         {/* Navbar */}
         <Navbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
 

@@ -1,13 +1,17 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { HospitalContext } from "../contexts/HospitalContext";
 import "../styles/Hospitals.css";
 
 function Hospitals() {
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState(() => {
+    const initial = searchParams.get("filter");
+    return initial === "active" || initial === "inactive" ? initial : "all";
+  });
 
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +26,15 @@ function Hospitals() {
     setToast(message);
     setTimeout(() => setToast(""), 3000);
   };
+
+  useEffect(() => {
+    const filter = searchParams.get("filter");
+    if (filter === "active" || filter === "inactive") {
+      setFilterStatus(filter);
+    } else {
+      setFilterStatus("all");
+    }
+  }, [searchParams]);
 
   const handleDeleteClick = (hospital) => {
     setDeleteTarget(hospital);
@@ -55,7 +68,7 @@ function Hospitals() {
       {/* TOAST */}
       {toast && <div className="toast">{toast}</div>}
 
-      {/* HEADER */}(
+      {/* HEADER */}
       <div className="hospitals-header">
 
         {/* LEFT */}
