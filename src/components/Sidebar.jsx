@@ -6,11 +6,20 @@ import {
   FiClipboard,
   FiSettings,
   FiLogOut,
-  FiX
+  FiX,
+  FiChevronLeft,
+  FiChevronRight
 } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
-export default function Sidebar({ isOpen, toggleSidebar, closeSidebar }) {
+export default function Sidebar({
+  isOpen,
+  toggleSidebar,
+  closeSidebar,
+  collapsed,
+  toggleCollapse,
+  isMobile
+}) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -19,43 +28,64 @@ export default function Sidebar({ isOpen, toggleSidebar, closeSidebar }) {
   };
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
+    <div
+      className={`sidebar ${
+        isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
+      }`}
+    >
       <div className="sidebar-header">
-        <div className="logo-icon">EMR</div>
-        <button className="close-btn" onClick={toggleSidebar} title="Close sidebar">
-          <FiX />
-        </button>
+        {!collapsed && <div className="logo-icon">EMR</div>}
+        <div className="sidebar-buttons">
+          {!isMobile && (
+            <button
+              className="collapse-btn"
+              onClick={toggleCollapse}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <FiChevronRight /> : <FiChevronLeft />}
+            </button>
+          )}
+          {isMobile && (
+            <button
+              className="close-btn"
+              onClick={toggleSidebar}
+              title="Close sidebar"
+            >
+              <FiX />
+            </button>
+          )}
+        </div>
       </div>
 
       <nav className="sidebar-nav" onClick={closeSidebar}>
         <NavLink to="/" className="nav-item">
           <FiGrid />
-          <span>Dashboard</span>
+          {!collapsed && <span>Dashboard</span>}
         </NavLink>
 
         <NavLink to="/hospitals" className="nav-item">
           <FiHome />
-          <span>Hospitals</span>
+          {!collapsed && <span>Hospitals</span>}
         </NavLink>
 
         <NavLink to="/analytics" className="nav-item">
           <FiBarChart2 />
-          <span>Analytics</span>
+          {!collapsed && <span>Analytics</span>}
         </NavLink>
 
         <NavLink to="/auditlogs" className="nav-item">
           <FiClipboard />
-          <span>Audit Logs</span>
+          {!collapsed && <span>Audit Logs</span>}
         </NavLink>
 
         <NavLink to="/settings" className="nav-item">
           <FiSettings />
-          <span>Settings</span>
+          {!collapsed && <span>Settings</span>}
         </NavLink>
 
         <button onClick={handleLogout} className="nav-item logout">
           <FiLogOut />
-          <span>Logout</span>
+          {!collapsed && <span>Logout</span>}
         </button>
       </nav>
     </div>

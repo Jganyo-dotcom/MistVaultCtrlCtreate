@@ -12,12 +12,36 @@
   flex-direction: column;
 }
 
+/* Collapsed State (Desktop) */
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar.collapsed .logo-icon {
+  display: none;
+}
+
+.sidebar.collapsed .nav-item span {
+  display: none;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 14px 20px;
+}
+
 /* Logo */
 .sidebar-header {
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-header {
+  padding: 20px 12px;
+  justify-content: center;
 }
 
 .logo-icon {
@@ -31,9 +55,33 @@
   color: white;
   font-weight: bold;
   font-size: 18px;
+  transition: all 0.3s ease;
 }
 
-/* Close Button */
+/* Collapse Button */
+.collapse-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.collapse-btn:hover {
+  color: #4a6cf7;
+}
+
+.sidebar-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Close Button (Mobile) */
 .close-btn {
   display: none;
   background: none;
@@ -52,6 +100,7 @@
   flex-direction: column;
   margin-top: 20px;
   flex: 1;
+  transition: all 0.3s ease;
 }
 
 /* Item */
@@ -76,6 +125,11 @@
   background: rgba(74, 108, 247, 0.15);
   color: #4a6cf7;
   border-left: 4px solid #4a6cf7;
+}
+
+.sidebar.collapsed .nav-item.active {
+  border-left: 4px solid transparent;
+  border-bottom: 4px solid #4a6cf7;
 }
 
 .nav-item svg {
@@ -110,6 +164,10 @@
   .sidebar.open {
     left: 0;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar.collapsed {
+    width: 260px;
   }
 
   .close-btn {

@@ -8,7 +8,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  Tooltip,
   ResponsiveContainer
 } from "recharts";
 
@@ -16,111 +15,85 @@ function Dashboard() {
   const navigate = useNavigate();
   const { logs } = useContext(ActivityContext);
 
-  // Data
-  const totalHospitals = 100;
-  const activeHospitals = 75;
-  const inactiveHospitals= 25;
+  const handleStatClick = (filter) => {
+    navigate(`/hospitals?filter=${filter}`);
+  };
 
-  const chartData = [
-    { name: "Active", value: activeHospitals },
-    { name: "Inactive", value: inactiveHospitals }
-  ];
-
-  const COLORS = ["#22c55e", "#ef4444"];
-
-  // Activities
   const activities = logs
     .slice(-5)
     .reverse()
     .map((log) => ({
       id: log.id,
       time: new Date(log.timestamp).toLocaleString(),
-      description: `${log.hospital} - ${log.description}`
+      description: `${log.hospital} ${log.description}`
     }));
 
   return (
     <div className="dashboard-container">
-      {/* Header */}
+
+      {/* HEADER */}
       <div className="dashboard-header-section">
-        <div className="dashboard-header-title">
-          <h1>
-            <FiGrid className="dashboard-header-icon" />
-            Dashboard
+        <div>
+          <h1 className="dashboard-title">
+            <FiGrid /> Dashboard
           </h1>
 
           <button
-            className="add-btn add-btn-below"
+            className="add-btn"
             onClick={() => navigate("/add-hospital")}
           >
             Add Hospital
           </button>
         </div>
 
-        <div className="search-container">
-          <div className="search-bar">
-            <span>🔍</span>
-            <input
-              type="text"
-              placeholder="Search by hospital name"
-              className="search-input"
-            />
-          </div>
+        <div className="search-bar">
+          <span>🔍</span>
+          <input placeholder="Search by hospital name" />
         </div>
       </div>
 
-      {/* Stats */}
-      <section className="stats-section"> 
-         <div className="stat-card">
-          <h2 className="stat-number">{totalHospitals}</h2>
-          <p className="stat-label">Registered Hospitals</p>
-        </div>
+      {/* STATS */}
+      <div className="stats-section">
+        <StatCard
+          value={100}
+          label="Registered Hospitals"
+          percent={100}
+          gradient="blue"
+          onClick={() => handleStatClick("all")}
+        />
 
-        <div className="stat-card">
-          <h2 className="stat-number">{activeHospitals}</h2>
-          <p className="stat-label">Active Hospitals</p>
-        </div>
+        <StatCard
+          value={75}
+          label="Active Hospitals"
+          percent={75}
+          gradient="green"
+          onClick={() => handleStatClick("active")}
+        />
 
-        <div className="stat-card">
-          <h2 className="stat-number">{inactiveHospitals}</h2>
-          <p className="stat-label">Inactive Hospitals</p>
-        </div>
-      </section>
+        <StatCard
+          value={25}
+          label="Inactive Hospitals"
+          percent={25}
+          gradient="red"
+          onClick={() => handleStatClick("inactive")}
+        />
+      </div>
 
-      {/* Chart */}
-      <section className="stat-card">
-        <h3 style={{ marginBottom: "10px" }}>Hospital Status Overview</h3>
-
-        <ResponsiveContainer width="100%" height={250}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              innerRadius={60}
-              outerRadius={90}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
-      </section>
-
-      {/* Activity */}
-      <section className="activity-section">
+      {/* ACTIVITY */}
+      <div className="activity-section">
         <div className="activity-header">
           <h2>Recent Activity</h2>
           <p>Last 5 Activities</p>
         </div>
 
-        <div className="activity-timeline">
+        <div 
+          className="activity-timeline"
+          onClick={() => navigate("/auditlogs")}
+        >
           {activities.map((activity, index) => (
             <div
               key={activity.id}
-              className={`activity-item ${
-                index === 0 ? "latest" : ""
-              }`}
+              className={`activity-item ${index === 0 ? "latest" : ""}`}
             >
               <div className="activity-dot"></div>
 
@@ -133,7 +106,63 @@ function Dashboard() {
             </div>
           ))}
         </div>
-      </section>
+      </div>
+
+    </div>
+  );
+}
+
+/* PREMIUM CARD */
+function StatCard({ value, label, percent, gradient, onClick }) {
+
+  const data = [
+    { value: percent },
+    { value: 100 - percent }
+  ];
+
+  const gradientMap = {
+    blue: ["#3b82f6", "#60a5fa"],
+    green: ["#22c55e", "#4ade80"],
+    red: ["#ef4444", "#f87171"]
+  };
+
+  const colors = [gradientMap[gradient][0], "#eef2f7"];
+
+  return (
+    <div
+      className={`stat-card premium${onClick ? " clickable" : ""}`}
+      onClick={onClick}
+    >
+
+      <div className="donut-wrapper">
+        <ResponsiveContainer width={120} height={120}>
+          <PieChart>
+            <defs>
+              <linearGradient id={`grad-${gradient}`} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor={gradientMap[gradient][0]} />
+                <stop offset="100%" stopColor={gradientMap[gradient][1]} />
+              </linearGradient>
+            </defs>
+
+            <Pie
+              data={data}
+              innerRadius={45}
+              outerRadius={55}
+              dataKey="value"
+              startAngle={90}
+              endAngle={-270}
+              isAnimationActive={true}
+              animationDuration={1000}
+            >
+              <Cell fill={`url(#grad-${gradient})`} />
+              <Cell fill="#eef2f7" />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      <h2 className="stat-number">{value}</h2>
+      <p className="stat-label">{label}</p>
     </div>
   );
 }
