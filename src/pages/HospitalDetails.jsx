@@ -16,27 +16,23 @@ function HospitalDetails() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    setError("");
-
     const controller = new AbortController();
+
     fetch(`/hospitals/${id}`, {
       headers: { Accept: "application/json" },
       signal: controller.signal
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Hospital not found");
-        }
+        if (!res.ok) throw new Error("Hospital not found");
         return res.json();
       })
       .then((data) => {
         setHospitalData(data);
         setEditData(data);
       })
-      .catch((fetchError) => {
-        if (fetchError.name !== "AbortError") {
-          setError(fetchError.message || "Hospital not found");
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          setError(err.message);
         }
       })
       .finally(() => setLoading(false));
@@ -46,17 +42,14 @@ function HospitalDetails() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setEditData((prev) => ({
       ...prev,
       [name]:
-        name === "departments" || name === "staff" || name === "engagement"
+        ["departments", "staff", "engagement"].includes(name)
           ? Number(value)
           : value
     }));
-  };
-
-  const handleEditToggle = () => {
-    setIsEditing(true);
   };
 
   const handleSave = () => {
@@ -70,85 +63,47 @@ function HospitalDetails() {
     setIsEditing(false);
   };
 
-  if (loading) {
+  if (loading) return <div className="details-container">Loading...</div>;
+
+  if (error || !hospitalData)
     return (
       <div className="details-container">
-        <p>Loading hospital details…</p>
+        <p>{error}</p>
+        <button onClick={() => navigate(-1)}>Go Back</button>
       </div>
     );
-  }
-
-  if (error || !hospitalData) {
-    return (
-      <div className="details-container" style={{ padding: "20px" }}>
-        <p>{error || "Hospital data not found."}</p>
-        <button onClick={() => navigate("/hospitals")}>Go Back</button>
-      </div>
-    );
-  }
 
   return (
     <div className="details-container">
 
-      <div className="back" onClick={() => navigate(-1)}>
-        ← Back
-      </div>
+      <div className="back" onClick={() => navigate(-1)}>← Back</div>
 
-      {/* TOP */}
+      {/* TOP CARD */}
       <div className="details-card">
         <div className="details-header">
 
           <div className="avatar">
-            {hospitalData.name
-              .split(" ")
-              .map((w) => w[0])
-              .join("")
-              .slice(0, 2)}
+            {hospitalData.name.slice(0, 2).toUpperCase()}
           </div>
 
           <div className="info">
+
             {isEditing ? (
               <div className="details-form">
-                <label>
-                  Hospital Name
-                  <input
-                    name="name"
-                    value={editData.name}
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <label>
-                  Representative
-                  <input
-                    name="representative"
-                    value={editData.representative}
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <label>
-                  Location
-                  <input
-                    name="location"
-                    value={editData.location}
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <label>
-                  Email
-                  <input
-                    name="email"
-                    value={editData.email}
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <label>
-                  Contact
-                  <input
-                    name="contact"
-                    value={editData.contact}
-                    onChange={handleInputChange}
-                  />
-                </label>
+
+                {["name", "representative", "location", "email", "contact"].map((field) => (
+                  <div className="form-group" key={field}>
+                    <input
+                      name={field}
+                      value={editData[field]}
+                      onChange={handleInputChange}
+                      required
+                      placeholder=" "
+                    />
+                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                  </div>
+                ))}
+
               </div>
             ) : (
               <>
@@ -160,7 +115,7 @@ function HospitalDetails() {
                       background:
                         hospitalData.status === "active"
                           ? "#22c55e"
-                          : "#dc2626"
+                          : "#ef4444"
                     }}
                   ></span>
                 </h2>
@@ -170,66 +125,49 @@ function HospitalDetails() {
                 <p>📞 {hospitalData.contact}</p>
               </>
             )}
+
           </div>
 
-          {isEditing ? (
-            <div className="details-actions">
-              <button className="edit-btn save" onClick={handleSave}>
-                Save
-              </button>
-              <button className="edit-btn cancel" onClick={handleCancel}>
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <button className="edit-btn" onClick={handleEditToggle}>
-              Edit
-            </button>
-          )}
+          <div className="actions">
+            {isEditing ? (
+              <>
+                <button className="btn primary" onClick={handleSave}>Save</button>
+                <button className="btn ghost" onClick={handleCancel}>Cancel</button>
+              </>
+            ) : (
+              <button className="btn ghost" onClick={() => setIsEditing(true)}>Edit</button>
+            )}
+          </div>
+
         </div>
 
         <div className="action-buttons">
-          <button className="btn-green">Revoke Admin Access</button>
-          <button className="btn-yellow">Deactivate</button>
-          <button className="btn-red">Delete</button>
+          <button className="btn success">Revoke Admin</button>
+          <button className="btn warning">Deactivate</button>
+          <button className="btn danger">Delete</button>
         </div>
       </div>
 
-      {/* BOTTOM */}
+      {/* GRID */}
       <div className="details-grid">
 
+        {/* LEFT */}
         <div className="details-box">
           <h3>Hospital Details</h3>
-          <div className="details-field">
-            <span>🆔 Access ID:</span>
-            {hospitalData.accessId}
-          </div>
-          <div className="details-field">
-            <span>📅 Date Registered:</span>
-            {hospitalData.date}
-          </div>
-          <div className="details-field">
-            <span>🌐 Website:</span>
-            {hospitalData.website}
-          </div>
-          <div className="details-field">
-            <span>🏥 Departments:</span>
-            {hospitalData.departments}
-          </div>
-          <div className="details-field">
-            <span>👥 Staff:</span>
-            {hospitalData.staff}
-          </div>
-          <div className="details-field">
-            <span>📈 Engagement:</span>
-            {hospitalData.engagement}%
-          </div>
+
+          <div className="details-field"><span>ID</span>{hospitalData.accessId}</div>
+          <div className="details-field"><span>Registered</span>{hospitalData.date}</div>
+          <div className="details-field"><span>Website</span>{hospitalData.website}</div>
+          <div className="details-field"><span>Departments</span>{hospitalData.departments}</div>
+          <div className="details-field"><span>Staff</span>{hospitalData.staff}</div>
+
         </div>
 
+        {/* RIGHT */}
         <div className="details-box center">
-          <h3>Performance</h3>
+          <h3>Performance (since registration)</h3>
 
-          <div className="recharts-wrapper">
+          <div className="chart-wrapper">
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie
@@ -238,14 +176,14 @@ function HospitalDetails() {
                     { name: "Remaining", value: 100 - hospitalData.engagement }
                   ]}
                   dataKey="value"
-                  innerRadius={70}
+                  innerRadius={80}
                   outerRadius={100}
                   startAngle={90}
                   endAngle={-270}
-                  paddingAngle={2}
+                  stroke="none"
                 >
-                  <Cell key="engagement" fill="#2563eb" />
-                  <Cell key="remaining" fill="#e5e7eb" />
+                  <Cell fill="#ef4444" />
+                  <Cell fill="#fee2e2" />
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
