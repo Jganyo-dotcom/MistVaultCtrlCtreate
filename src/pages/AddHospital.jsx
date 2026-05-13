@@ -30,6 +30,7 @@ export function AddHospital() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    contactCode: "+234",
     contact: "",
     address: "",
     city: "",
@@ -37,6 +38,7 @@ export function AddHospital() {
     postalCode: "",
     representative: "",
     repEmail: "",
+    repContactCode: "+234",
     repContact: ""
   });
 
@@ -154,10 +156,12 @@ export function AddHospital() {
                 onChange={handleChange}
                 error={errors.email}
               />
-              <Input 
+              <PhoneInput 
                 label="Official Contact" 
-                name="contact" 
-                value={formData.contact} 
+                codename="contactCode" 
+                codeValue={formData.contactCode}
+                phoneName="contact"
+                phoneValue={formData.contact} 
                 onChange={handleChange}
                 error={errors.contact}
               />
@@ -219,8 +223,10 @@ export function AddHospital() {
               />
               <Input 
                 label="Contact" 
-                name="repContact" 
-                value={formData.repContact} 
+                codeName="repContactCode" 
+                codeValue={formData.repContactCode} 
+                phoneName="repContact" 
+                phoneValue={formData.repContact}
                 onChange={handleChange}
                 error={errors.repContact}
               />
@@ -249,6 +255,45 @@ export function AddHospital() {
     </div>
   );
 }
+
+const PhoneInput = ({
+  label,
+  codeName,
+  codeValue,
+  phoneName,
+  phoneValue,
+  onChange,
+  error
+  }) => (
+    <div className={`input-group ${error ? "has-error" : ""}`}>
+      <label>{label}</label>
+      <div className="phone-input-wrapper">
+         <select
+        name={codeName}
+        value={codeValue}
+        onChange={onChange}
+        className="country-code"
+      >
+        <option value="+234">🇳🇬 +234</option>
+        <option value="+233">🇬🇭 +233</option>
+        <option value="+1">🇺🇸 +1</option>
+        <option value="+44">🇬🇧 +44</option>
+        <option value="+91">🇮🇳 +91</option>
+        
+      </select>
+      <input
+        type="tel"
+        name={phoneName}
+        value={phoneValue}
+        onChange={onChange}
+        placeholder="Enter phone number"
+        className={error ? "invalid" : ""}
+      />
+      </div>
+       {error && <span className="error-text">{error}</span>}
+
+    </div>
+  );
 
 const Input = ({ label, name, value, onChange, error, heading }) => (
   <div className={`input-group ${error ? "has-error" : ""}`}>
