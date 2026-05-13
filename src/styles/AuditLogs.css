@@ -1,9 +1,10 @@
 /* Audit Logs Page Styles */
 .auditlogs-container {
-  padding: 30px;
+  padding: 80px;
   background-color: #f8f9fa;
-  min-height: calc(100vh - 70px);
+  min-height: 100vh;
   overflow-y: auto;
+  margin-left: 250px;
 }
 
 .auditlogs-header {
@@ -197,273 +198,103 @@
     padding: 2px 8px;
     font-size: 11px;
   }
-}
-  color: #999;
-  font-size: 16px;
-}
 
-.search-bar input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 12px 0;
-  font-size: 14px;
-}
 
-.filter-dropdown {
-  padding: 12px 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #ffffff;
-  cursor: pointer;
-  font-size: 14px;
-  color: #1a1a2e;
-}
 
-.filter-dropdown:hover {
-  border-color: #667eea;
-}
 
-.logs-table-container {
-  background-color: white;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.logs-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.logs-table thead {
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.logs-table th {
-  padding: 15px;
-  text-align: left;
-  font-weight: 600;
-  color: #1a1a2e;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.logs-table tbody tr {
-  border-bottom: 1px solid #e0e0e0;
-  transition: all 0.3s ease;
-}
-
-.logs-table tbody tr:hover {
-  background-color: #f8f9fa;
-}
-
-.logs-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.logs-table td {
-  padding: 15px;
-  font-size: 14px;
-  color: #333;
-}
-
-.timestamp {
-  color: #666;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-}
-
-.hospital-name {
-  font-weight: 600;
-  color: #667eea;
-}
-
-.user-name {
-  color: #666;
-}
-
-.action-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.action-icon {
-  font-size: 14px;
-}
-
-.action-text {
-  text-transform: capitalize;
-}
-
-.action-text.update {
-  background-color: #e3f2fd;
-  color: #1976d2;
-}
-
-.action-text.delete {
-  background-color: #ffebee;
-  color: #d32f2f;
-}
-
-.action-text.backup {
-  background-color: #f3e5f5;
-  color: #7b1fa2;
-}
-
-.action-text.deactivate {
-  background-color: #fff3e0;
-  color: #e65100;
-}
-
-.action-text.create {
-  background-color: #e8f5e9;
-  color: #388e3c;
-}
-
-.action-text.security {
-  background-color: #fce4ec;
-  color: #c2185b;
-}
-
-.description {
-  color: #666;
-  font-size: 13px;
-  max-width: 300px;
-}
-
-.no-results {
-  text-align: center;
-  padding: 40px 20px;
-  color: #999;
-}
-
-@media (max-width: 1200px) {
-  .logs-table {
-    font-size: 12px;
-  }
-
-  .logs-table th,
-  .logs-table td {
-    padding: 12px;
-  }
-
-  .description {
-    max-width: 200px;
-  }
-}
-
-@media (max-width: 768px) {
-  .auditlogs-container {
-    margin-left: 80px;
-    padding: 20px;
-  }
-
-  .auditlogs-header h1 {
-    font-size: 22px;
-  }
-
-  .auditlogs-controls {
-    flex-direction: column;
-  }
-
-  .search-bar {
-    min-width: 100%;
-  }
-
-  .logs-table-container {
-    overflow-x: auto;
-  }
-
-  .logs-table {
-    min-width: 600px;
-  }
-
-  .description {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .auditlogs-container {
-    margin-left: 0;
-    padding: 12px;
-    margin-top: 60px;
-  }
-
-  .auditlogs-header h1 {
-    font-size: 20px;
-    margin-bottom: 4px;
-  }
-
-  .subtitle {
-    font-size: 12px;
-  }
-
-  .auditlogs-controls {
-    gap: 8px;
-    margin-bottom: 15px;
-  }
-
-  .search-bar {
-    padding: 0 10px;
-    gap: 8px;
-  }
-
-  .search-bar i {
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 0;
     font-size: 14px;
   }
 
-  .search-bar input {
-    padding: 8px 0;
-    font-size: 12px;
+  .filter-dropdown {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1a1a2e;
   }
 
-  .filter-dropdown {
-    padding: 8px 10px;
-    font-size: 12px;
+  .filter-dropdown:hover {
+    border-color: #667eea;
   }
 
   .logs-table-container {
-    overflow-x: auto;
-    border-radius: 8px;
+    background-color: white;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
   .logs-table {
-    min-width: 500px;
-    font-size: 11px;
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  .logs-table th,
-  .logs-table td {
-    padding: 8px;
+  .logs-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
   }
 
   .logs-table th {
-    font-size: 11px;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #1a1a2e;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .logs-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+  }
+
+  .logs-table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  .logs-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .logs-table td {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
   }
 
   .timestamp {
-    font-size: 10px;
-    white-space: nowrap;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
   }
 
-  .hospital-name,
+  .hospital-name {
+    font-weight: 600;
+    color: #667eea;
+  }
+
   .user-name {
-    font-size: 11px;
+    color: #666;
   }
 
   .action-badge {
-    gap: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
   }
 
   .action-icon {
@@ -471,15 +302,185 @@
   }
 
   .action-text {
-    font-size: 10px;
+    text-transform: capitalize;
+  }
+
+  .action-text.update {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  .action-text.delete {
+    background-color: #ffebee;
+    color: #d32f2f;
+  }
+
+  .action-text.backup {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+
+  .action-text.deactivate {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+
+  .action-text.create {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+
+  .action-text.security {
+    background-color: #fce4ec;
+    color: #c2185b;
   }
 
   .description {
-    display: none;
+    color: #666;
+    font-size: 13px;
+    max-width: 300px;
   }
 
   .no-results {
-    padding: 20px;
-    font-size: 12px;
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+  }
+
+  @media (max-width: 1200px) {
+    .logs-table {
+      font-size: 12px;
+    }
+
+    .logs-table th,
+    .logs-table td {
+      padding: 12px;
+    }
+
+    .description {
+      max-width: 200px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .auditlogs-container {
+      margin-left: 80px;
+      padding: 20px;
+    }
+
+    .auditlogs-header h1 {
+      font-size: 22px;
+    }
+
+    .auditlogs-controls {
+      flex-direction: column;
+    }
+
+    .search-bar {
+      min-width: 100%;
+    }
+
+    .logs-table-container {
+      overflow-x: auto;
+    }
+
+    .logs-table {
+      min-width: 600px;
+    }
+
+    .description {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .auditlogs-container {
+      margin-left: 0;
+      padding: 12px;
+      margin-top: 60px;
+    }
+
+    .auditlogs-header h1 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+    }
+
+    .auditlogs-controls {
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .search-bar {
+      padding: 0 10px;
+      gap: 8px;
+    }
+
+    .search-bar i {
+      font-size: 14px;
+    }
+
+    .search-bar input {
+      padding: 8px 0;
+      font-size: 12px;
+    }
+
+    .filter-dropdown {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .logs-table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+
+    .logs-table {
+      min-width: 500px;
+      font-size: 11px;
+    }
+
+    .logs-table th,
+    .logs-table td {
+      padding: 8px;
+    }
+
+    .logs-table th {
+      font-size: 11px;
+    }
+
+    .timestamp {
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .hospital-name,
+    .user-name {
+      font-size: 11px;
+    }
+
+    .action-badge {
+      gap: 4px;
+    }
+
+    .action-icon {
+      font-size: 14px;
+    }
+
+    .action-text {
+      font-size: 10px;
+    }
+
+    .description {
+      display: none;
+    }
+
+    .no-results {
+      padding: 20px;
+      font-size: 12px;
+    }
   }
 }
