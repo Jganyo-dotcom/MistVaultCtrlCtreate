@@ -66,6 +66,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #ffffff !important;
+  color: #000;
 }
 
 /* Forgot password */
@@ -89,6 +90,29 @@
 
 .signin-btn:hover {
   background: #162c6b;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */

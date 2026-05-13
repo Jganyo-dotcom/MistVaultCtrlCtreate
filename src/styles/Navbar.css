@@ -92,3 +92,79 @@
     font-size: 16px;
   }
 }
+
+/* Notification */
+.notification-wrapper {
+  position: relative;
+}
+
+/* Bell */
+.bell-icon {
+  position: relative;
+}
+
+/* Badge */
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Dropdown */
+.notification-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  padding: 15px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Title */
+.notification-dropdown h4 {
+  margin-bottom: 12px;
+  color: #0f1c3f;
+  font-size: 15px;
+}
+
+/* Item */
+.notification-item {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-bottom: 10px;
+  color: #111827;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.notification-item:hover {
+  background: #e2e8f0;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
