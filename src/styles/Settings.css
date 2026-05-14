@@ -2,7 +2,7 @@
 .settings-container {
   padding: 30px;
   background-color: #f8f9fa;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
   overflow-y: auto;
   margin-left: 250px;
 }

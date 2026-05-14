@@ -6,7 +6,7 @@
   background: #f6f8fc;
   padding: 80px;
   font-family: 'Inter', sans-serif;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
   overflow-y: auto;
   margin-left: 250px;
 }
