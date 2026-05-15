@@ -1,421 +1,354 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../styles/Settings.css";
+import { SettingsContext } from "../contexts/SettingsContext";
+import toast from "react-hot-toast";
 
 function Settings() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [editMode, setEditMode] = useState(false);
-  const [profileData, setProfileData] = useState({
-    fullName: "Akpan Samuel",
-    email: "akpan.samuel@example.com",
-    phone: "+234 (0) 812 345 6789",
-    department: "System Administrator",
-    role: "Admin",
-    joinDate: "2024-01-15",
-    avatar: "👤"
-  });
+  const { user, updateUser } = useContext(SettingsContext);
 
-  const [formData, setFormData] = useState(profileData);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+
+  const [twoFA, setTwoFA] = useState(user?.twoFA || false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    avatar: user?.avatar || ""
+  });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: ""
+    current: "",
+    new: "",
+    confirm: ""
   });
 
-  const [securitySettings, setSecuritySettings] = useState({
-    twoFactorAuth: true,
-    sessionTimeout: "30",
-    loginAlerts: true,
-    ipRestriction: false
-  });
+  const [supportMessage, setSupportMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState("");
 
-  const handleProfileEdit = () => {
-    setEditMode(!editMode);
-    if (editMode) {
-      setFormData(profileData);
-    }
+  const [errors, setErrors] = useState({});
+
+  // ================= VALIDATION =================
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email.includes("@")) newErrors.email = "Invalid email";
+    if (formData.phone.length < 10) newErrors.phone = "Invalid phone";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleProfileUpdate = () => {
-    setProfileData(formData);
-    setEditMode(false);
+  // ================= SAVE PROFILE =================
+  const handleSave = () => {
+    if (!validate()) return;
+
+    updateUser({ ...user, ...formData, twoFA });
+    toast.success("Profile updated 🚀");
+    setShowEditModal(false);
   };
 
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    if (passwordData.newPassword === passwordData.confirmPassword) {
-      alert("Password changed successfully!");
-      setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
+  // ================= 2FA =================
+  const handleToggle2FA = () => {
+    setTwoFA(prev => !prev);
+    toast.success(`2FA ${!twoFA ? "enabled 🔐" : "disabled"}`);
+  };
+
+  // ================= AVATAR =================
+  const handleAvatar = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        avatar: URL.createObjectURL(file)
       });
-    } else {
-      alert("New passwords do not match!");
     }
   };
 
-  const handleSecurityChange = (setting) => {
-    setSecuritySettings({
-      ...securitySettings,
-      [setting]: !securitySettings[setting]
-    });
+  // ================= CHANGE PASSWORD =================
+  const handleChangePassword = () => {
+    const { current, new: newPass, confirm } = passwordData;
+
+    if (!current || !newPass || !confirm) {
+      return toast.error("All fields required");
+    }
+
+    if (newPass.length < 6) {
+      return toast.error("Min 6 characters required");
+    }
+
+    if (newPass !== confirm) {
+      return toast.error("Passwords do not match");
+    }
+
+    setTimeout(() => {
+      toast.success("Password changed 🔐");
+      setShowPasswordModal(false);
+      setPasswordData({ current: "", new: "", confirm: "" });
+    }, 800);
+  };
+
+  // ================= LOGOUT ALL =================
+  const handleLogoutAll = () => {
+    setTimeout(() => {
+      toast.success("Logged out from all devices 🚪");
+    }, 700);
+  };
+
+  // ================= SUPPORT =================
+  const handleSupportSubmit = () => {
+    if (!supportMessage.trim()) return toast.error("Message required");
+
+    setTimeout(() => {
+      toast.success("Support message sent 🎉");
+      setSupportMessage("");
+      setShowSupportModal(false);
+    }, 800);
+  };
+
+  const handleReportIssue = () => {
+    if (!reportMessage.trim()) return toast.error("Describe issue");
+
+    setTimeout(() => {
+      toast.success("Issue reported 🚀");
+      setReportMessage("");
+      setShowReportModal(false);
+    }, 800);
   };
 
   return (
-    <div className="settings-container">
+    <div className={`settings-container ${darkMode ? "dark" : ""}`}>
+
+      {/* HEADER */}
       <div className="settings-header">
-        <h1>Settings</h1>
-        <p className="subtitle">Manage your account and preferences</p>
-      </div>
-
-      <div className="settings-tabs">
-        <button
-          className={`tab-button ${activeTab === "profile" ? "active" : ""}`}
-          onClick={() => setActiveTab("profile")}
-        >
-          👤 Profile
-        </button>
-        <button
-          className={`tab-button ${activeTab === "security" ? "active" : ""}`}
-          onClick={() => setActiveTab("security")}
-        >
-          🔒 Security
-        </button>
-        <button
-          className={`tab-button ${activeTab === "support" ? "active" : ""}`}
-          onClick={() => setActiveTab("support")}
-        >
-          💬 Support
+        <h2>Settings</h2>
+        <button onClick={() => setDarkMode(!darkMode)} className="toggle-dark">
+          {darkMode ? "☀ Light" : "🌙 Dark"}
         </button>
       </div>
 
-      {/* Profile Tab */}
-      {activeTab === "profile" && (
-        <div className="settings-content">
-          <div className="settings-card">
-            <div className="card-header">
-              <h2>Profile Information</h2>
-              <button
-                className={`edit-btn ${editMode ? "cancel" : ""}`}
-                onClick={handleProfileEdit}
-              >
-                {editMode ? "Cancel" : "✏️ Edit"}
-              </button>
+      {/* PROFILE */}
+      {/* <div className="settings-card">
+        <div className="card-header">
+          <h3>Profile</h3>
+          <button onClick={() => setShowEditModal(true)}>Edit</button>
+        </div>
+
+        <div className="profile-content">
+          <img
+            src={formData.avatar || "https://via.placeholder.com/80"}
+            alt=""
+            className="avatar"
+          />
+
+          <div>
+            <p>{user?.name}</p>
+            <p>{user?.email}</p>
+            <p>{user?.phone}</p>
+          </div>
+        </div>
+      </div> */}
+
+      {/* PROFILE */}
+<div className="settings-card">
+  <div className="card-header">
+    <h3>Profile</h3>
+    <button onClick={() => setShowEditModal(true)}>Edit</button>
+  </div>
+
+  <div className="profile-content">
+    <img
+      src={formData.avatar || "https://via.placeholder.com/80"}
+      alt=""
+      className="avatar"
+    />
+
+    <div className="profile-details">
+
+      {/* ROLE */}
+      <div className="profile-role">
+        {user?.role || "EMR ADMIN"}
+      </div>
+
+      {/* NAME */}
+      <p>
+        <span className="label">Name:</span> {user?.name}
+      </p>
+
+      {/* EMAIL */}
+      <p>
+        <span className="label">Email:</span> {user?.email}
+      </p>
+
+      {/* CONTACT */}
+      <p>
+        <span className="label">Contact:</span> {user?.phone}
+      </p>
+
+    </div>
+  </div>
+</div>
+
+      {/* SECURITY */}
+      <div className="settings-card">
+        <h3>Security</h3>
+
+        <div className="settings-item">
+          <span>Two-Factor Authentication</span>
+          <div
+            className={`switch ${twoFA ? "active" : ""}`}
+            onClick={handleToggle2FA}
+          />
+        </div>
+
+        <div className="settings-item">
+          <span>Change Password</span>
+          <button onClick={() => setShowPasswordModal(true)}>Update</button>
+        </div>
+
+        <div className="settings-item">
+          <span>Logout from all devices</span>
+          <button onClick={handleLogoutAll}>Logout</button>
+        </div>
+      </div>
+
+      {/* SUPPORT */}
+      <div className="settings-card">
+        <h3>Support</h3>
+
+        <div className="settings-item">
+          <span>Contact Support</span>
+          <button onClick={() => setShowSupportModal(true)}>Open</button>
+        </div>
+
+        <div className="settings-item">
+          <span>Support Email</span>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("support@yourapp.com");
+              toast.success("Email copied 📧");
+            }}
+          >
+            Copy
+          </button>
+        </div>
+
+        <div className="settings-item">
+          <span>Report Issue</span>
+          <button onClick={() => setShowReportModal(true)}>Report</button>
+        </div>
+      </div>
+
+      {/* ================= MODALS ================= */}
+
+      {/* EDIT PROFILE */}
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Edit Profile</h2>
+
+            <input type="file" onChange={handleAvatar} />
+
+            <input
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+            />
+            {errors.name && <span className="error">{errors.name}</span>}
+
+            <input
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+            {errors.email && <span className="error">{errors.email}</span>}
+
+            <input
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+            />
+            {errors.phone && <span className="error">{errors.phone}</span>}
+
+            <div className="modal-actions">
+              <button onClick={() => setShowEditModal(false)}>Cancel</button>
+              <button className="primary" onClick={handleSave}>Save</button>
             </div>
-
-            <div className="profile-section">
-              <div className="avatar-section">
-                <div className="avatar">{profileData.avatar}</div>
-                {editMode && (
-                  <button className="change-avatar-btn">Change Avatar</button>
-                )}
-              </div>
-
-              <div className="profile-fields">
-                <div className="form-group">
-                  <label>Full Name</label>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, fullName: e.target.value })
-                      }
-                    />
-                  ) : (
-                    <p className="field-value">{profileData.fullName}</p>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label>Email</label>
-                  {editMode ? (
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                    />
-                  ) : (
-                    <p className="field-value">{profileData.email}</p>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label>Phone</label>
-                  {editMode ? (
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                    />
-                  ) : (
-                    <p className="field-value">{profileData.phone}</p>
-                  )}
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Department</label>
-                    {editMode ? (
-                      <input
-                        type="text"
-                        value={formData.department}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            department: e.target.value
-                          })
-                        }
-                      />
-                    ) : (
-                      <p className="field-value">{profileData.department}</p>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label>Role</label>
-                    <p className="field-value">{profileData.role}</p>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Member Since</label>
-                  <p className="field-value">{profileData.joinDate}</p>
-                </div>
-              </div>
-            </div>
-
-            {editMode && (
-              <div className="card-actions">
-                <button className="btn-cancel" onClick={handleProfileEdit}>
-                  Discard
-                </button>
-                <button className="btn-save" onClick={handleProfileUpdate}>
-                  Save Changes
-                </button>
-              </div>
-            )}
           </div>
         </div>
       )}
 
-      {/* Security Tab */}
-      {activeTab === "security" && (
-        <div className="settings-content">
-          <div className="settings-card">
-            <h2>Security Settings</h2>
+      {/* PASSWORD */}
+      {showPasswordModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Change Password</h3>
 
-            <div className="security-section">
-              <div className="security-item">
-                <div className="security-info">
-                  <h3>Two-Factor Authentication</h3>
-                  <p>Add an extra layer of security to your account</p>
-                </div>
-                <label className="toggle-switch">
-                  <input
-                    type="checkbox"
-                    checked={securitySettings.twoFactorAuth}
-                    onChange={() => handleSecurityChange("twoFactorAuth")}
-                  />
-                  <span className="toggle-slider"></span>
-                </label>
-              </div>
+            <input type="password" placeholder="Current Password"
+              onChange={(e)=>setPasswordData({...passwordData,current:e.target.value})}/>
 
-              <div className="security-item">
-                <div className="security-info">
-                  <h3>Login Alerts</h3>
-                  <p>Get notified of new login attempts</p>
-                </div>
-                <label className="toggle-switch">
-                  <input
-                    type="checkbox"
-                    checked={securitySettings.loginAlerts}
-                    onChange={() => handleSecurityChange("loginAlerts")}
-                  />
-                  <span className="toggle-slider"></span>
-                </label>
-              </div>
+            <input type="password" placeholder="New Password"
+              onChange={(e)=>setPasswordData({...passwordData,new:e.target.value})}/>
 
-              <div className="security-item">
-                <div className="security-info">
-                  <h3>IP Restriction</h3>
-                  <p>Restrict login to specific IP addresses</p>
-                </div>
-                <label className="toggle-switch">
-                  <input
-                    type="checkbox"
-                    checked={securitySettings.ipRestriction}
-                    onChange={() => handleSecurityChange("ipRestriction")}
-                  />
-                  <span className="toggle-slider"></span>
-                </label>
-              </div>
+            <input type="password" placeholder="Confirm Password"
+              onChange={(e)=>setPasswordData({...passwordData,confirm:e.target.value})}/>
 
-              <div className="security-item">
-                <div className="security-info">
-                  <h3>Session Timeout</h3>
-                  <p>Automatically log out after inactivity</p>
-                </div>
-                <select
-                  value={securitySettings.sessionTimeout}
-                  onChange={(e) =>
-                    setSecuritySettings({
-                      ...securitySettings,
-                      sessionTimeout: e.target.value
-                    })
-                  }
-                  className="timeout-select"
-                >
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                  <option value="60">1 hour</option>
-                  <option value="120">2 hours</option>
-                  <option value="never">Never</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="settings-card">
-            <h2>Change Password</h2>
-
-            <form onSubmit={handlePasswordChange} className="password-form">
-              <div className="form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  value={passwordData.currentPassword}
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      currentPassword: e.target.value
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.newPassword}
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      newPassword: e.target.value
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Confirm New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.confirmPassword}
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      confirmPassword: e.target.value
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <button type="submit" className="btn-change-password">
-                Update Password
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Support Tab */}
-      {activeTab === "support" && (
-        <div className="settings-content">
-          <div className="settings-card">
-            <h2>Help & Support</h2>
-
-            <div className="support-section">
-              <div className="support-item">
-                <div className="support-icon">📖</div>
-                <div className="support-content">
-                  <h3>Documentation</h3>
-                  <p>
-                    Access our comprehensive guides and documentation for
-                    platform features
-                  </p>
-                  <a href="#" className="support-link">
-                    View Documentation →
-                  </a>
-                </div>
-              </div>
-
-              <div className="support-item">
-                <div className="support-icon">❓</div>
-                <div className="support-content">
-                  <h3>FAQ</h3>
-                  <p>
-                    Find answers to frequently asked questions about the
-                    platform
-                  </p>
-                  <a href="#" className="support-link">
-                    Browse FAQ →
-                  </a>
-                </div>
-              </div>
-
-              <div className="support-item">
-                <div className="support-icon">💬</div>
-                <div className="support-content">
-                  <h3>Contact Support</h3>
-                  <p>Get in touch with our support team for assistance</p>
-                  <a href="mailto:support@mistvault.com" className="support-link">
-                    Email Support →
-                  </a>
-                </div>
-              </div>
-
-              <div className="support-item">
-                <div className="support-icon">🐛</div>
-                <div className="support-content">
-                  <h3>Report a Bug</h3>
-                  <p>Help us improve by reporting any issues you encounter</p>
-                  <a href="#" className="support-link">
-                    Submit Bug Report →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="settings-card">
-            <h2>System Information</h2>
-            <div className="info-section">
-              <div className="info-item">
-                <span className="info-label">Platform Version:</span>
-                <span className="info-value">1.0.0</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Last Updated:</span>
-                <span className="info-value">2026-04-10</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">API Status:</span>
-                <span className="info-value status-ok">✓ Operational</span>
-              </div>
+            <div className="modal-actions">
+              <button onClick={()=>setShowPasswordModal(false)}>Cancel</button>
+              <button className="primary" onClick={handleChangePassword}>Save</button>
             </div>
           </div>
         </div>
       )}
+
+      {/* SUPPORT */}
+      {showSupportModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Contact Support</h3>
+
+            <textarea
+              className="textarea"
+              placeholder="Describe your issue..."
+              value={supportMessage}
+              onChange={(e)=>setSupportMessage(e.target.value)}
+            />
+
+            <div className="modal-actions">
+              <button onClick={()=>setShowSupportModal(false)}>Cancel</button>
+              <button className="primary" onClick={handleSupportSubmit}>Send</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REPORT */}
+      {showReportModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Report Issue</h3>
+
+            <textarea
+              className="textarea"
+              placeholder="Explain the issue..."
+              value={reportMessage}
+              onChange={(e)=>setReportMessage(e.target.value)}
+            />
+
+            <div className="modal-actions">
+              <button onClick={()=>setShowReportModal(false)}>Cancel</button>
+              <button className="primary" onClick={handleReportIssue}>Submit</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

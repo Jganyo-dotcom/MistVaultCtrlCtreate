@@ -3,7 +3,7 @@
   background: linear-gradient(180deg, #0f1c3f, #09142b);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   gap: 20px;
   color: white;
   position: sticky;
@@ -59,7 +59,7 @@
   }
 
   .navbar {
-    padding: 0 15px;
+    padding: 0 15px 0 0;
     gap: 15px;
   }
 
@@ -80,7 +80,7 @@
 @media (max-width: 480px) {
   .navbar {
     height: 60px;
-    padding: 0 10px;
+    padding: 0 10px 0 0;
     gap: 10px;
   }
 

@@ -1,31 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HospitalContext } from "../contexts/HospitalContext";
+import DeleteModal from "../components/DeleteModal";
+import toast from "react-hot-toast";
+import { FiHome } from "react-icons/fi";
+
 import "../styles/Hospitals.css";
 
 function Hospitals() {
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState(() => {
     const initial = searchParams.get("filter");
     return initial === "active" || initial === "inactive" ? initial : "all";
   });
 
-  const [selectedHospital, setSelectedHospital] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  const [toast, setToast] = useState("");
-  const { hospitals, deleteHospital } = useContext(HospitalContext);
-
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 3000);
-  };
+  const { hospitals, deleteHospital, addHospital } =
+    useContext(HospitalContext);
 
   useEffect(() => {
     const filter = searchParams.get("filter");
@@ -41,15 +38,64 @@ function Hospitals() {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
-    deleteHospital(deleteTarget.id);
-    setShowDeleteModal(false);
-    showToast("Hospital deleted successfully");
+  // 🔥 FULL DELETE FLOW (MATCHES DETAILS PAGE)
+  const handleDeleteConfirm = ({ reason, confirmText }) => {
+    if (confirmText !== "DELETE") {
+      return toast.error("Type DELETE to confirm");
+    }
+
+    try {
+      setDeleting(true);
+
+      const deletedHospital = deleteTarget;
+
+      // ✅ Close modal immediately
+      setShowDeleteModal(false);
+
+      // ✅ Optimistic UI (remove instantly)
+      deleteHospital(deletedHospital.id);
+
+      // 🔥 Toast with Undo
+      toast((t) => (
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>Hospital deleted</span>
+
+          <button
+            style={{
+              background: "#2563eb",
+              color: "#fff",
+              border: "none",
+              padding: "5px 10px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              addHospital(deletedHospital);
+              toast.success("Hospital restored");
+              toast.dismiss(t.id);
+            }}
+          >
+            Undo
+          </button>
+        </div>
+      ), { duration: 5000 });
+
+      // ⏳ Optional backend delete delay
+      setTimeout(() => {
+        console.log("Send delete request to backend with reason:", reason);
+      }, 5000);
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Delete failed");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleView = (hospital) => {
-  navigate(`/hospitals/${hospital.id}`, { state: { hospital } });
-};
+    navigate(`/hospitals/${hospital.id}`, { state: { hospital } });
+  };
 
   const filteredHospitals = hospitals.filter((hospital) => {
     const matchesSearch = hospital.name
@@ -65,15 +111,11 @@ function Hospitals() {
   return (
     <div className="hospitals-container">
 
-      {/* TOAST */}
-      {toast && <div className="toast">{toast}</div>}
-
       {/* HEADER */}
       <div className="hospitals-header">
 
-        {/* LEFT */}
         <div className="header-left">
-          <h1 className="title">Hospitals</h1>
+          <h1 className="title"><FiHome /> Hospitals</h1>
 
           <button
             className="add-btn"
@@ -83,7 +125,6 @@ function Hospitals() {
           </button>
         </div>
 
-        {/* RIGHT */}
         <div className="header-actions">
           <div className="search-bar">
             <span>🔍</span>
@@ -141,53 +182,14 @@ function Hospitals() {
         ))}
       </div>
 
-      {/* VIEW MODAL */}
-      {showModal && selectedHospital && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>{selectedHospital.name}</h2>
-            <p><strong>Email:</strong> {selectedHospital.email}</p>
-            <p><strong>Representative:</strong> {selectedHospital.representative}</p>
-            <p><strong>Status:</strong> {selectedHospital.status}</p>
+      {/* ✅ REUSABLE DELETE MODAL */}
+      <DeleteModal
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
 
-            <button
-              className="close-btn"
-              onClick={() => setShowModal(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* DELETE MODAL */}
-      {showDeleteModal && deleteTarget && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Delete Hospital</h2>
-            <p>
-              This action cannot be undone. Are you sure you want to delete{" "}
-              <strong>{deleteTarget.name}</strong>?
-            </p>
-
-            <div className="modal-actions">
-              <button
-                className="btn-cancel"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="btn-confirm-delete"
-                onClick={confirmDelete}
-              >
-                Yes, Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

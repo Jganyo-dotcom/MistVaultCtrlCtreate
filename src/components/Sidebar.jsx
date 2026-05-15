@@ -11,6 +11,7 @@ import {
   FiChevronRight
 } from "react-icons/fi";
 import "../styles/Sidebar.css";
+import logo from "../assets/logo.png"; // ✅ make sure this exists
 
 export default function Sidebar({
   isOpen,
@@ -33,31 +34,37 @@ export default function Sidebar({
         isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
       }`}
     >
+      {/* ================= HEADER ================= */}
       <div className="sidebar-header">
-        {!collapsed && <div className="logo-icon">EMR</div>}
+
+        {/* LOGO */}
+        <div className="logo">
+          <img src={logo} alt="logo" className="logo-img" />
+          {!collapsed && <span className="logo-text">MIST</span>}
+        </div>
+
+        {/* BUTTONS */}
         <div className="sidebar-buttons">
           {!isMobile && (
             <button
               className="collapse-btn"
               onClick={toggleCollapse}
-              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {collapsed ? <FiChevronRight /> : <FiChevronLeft />}
             </button>
           )}
+
           {isMobile && (
-            <button
-              className="close-btn"
-              onClick={toggleSidebar}
-              title="Close sidebar"
-            >
+            <button className="close-btn" onClick={toggleSidebar}>
               <FiX />
             </button>
           )}
         </div>
       </div>
 
+      {/* ================= NAV ================= */}
       <nav className="sidebar-nav" onClick={closeSidebar}>
+
         <NavLink to="/" className="nav-item">
           <FiGrid />
           {!collapsed && <span>Dashboard</span>}
@@ -83,10 +90,12 @@ export default function Sidebar({
           {!collapsed && <span>Settings</span>}
         </NavLink>
 
+        {/* LOGOUT */}
         <button onClick={handleLogout} className="nav-item logout">
           <FiLogOut />
           {!collapsed && <span>Logout</span>}
         </button>
+
       </nav>
     </div>
   );

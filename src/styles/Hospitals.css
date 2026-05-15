@@ -25,6 +25,14 @@
 .hospitals-header h1 {
   font-size: 22px;
   color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hospitals-header h1 svg {
+  font-size: 24px;
+  color: #4a6cf7;
 }
 
 /* HEADER ACTIONS */
