@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import toast from "react-hot-toast";
+
 import { HospitalContext } from "../contexts/HospitalContext";
+import DeleteModal from "../components/DeleteModal";
 import "../styles/HospitalDetails.css";
 
 function HospitalDetails() {
@@ -12,16 +15,15 @@ function HospitalDetails() {
   const [hospitalData, setHospitalData] = useState(null);
   const [editData, setEditData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-    fetch(`/hospitals/${id}`, {
-      headers: { Accept: "application/json" },
-      signal: controller.signal
-    })
+  useEffect(() => {
+    fetch(`http://localhost:5000/hospitals/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Hospital not found");
         return res.json();
@@ -30,14 +32,8 @@ function HospitalDetails() {
         setHospitalData(data);
         setEditData(data);
       })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          setError(err.message);
-        }
-      })
+      .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-
-    return () => controller.abort();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -52,33 +48,110 @@ function HospitalDetails() {
     }));
   };
 
-  const handleSave = () => {
-    setHospitalData(editData);
-    updateHospital(editData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/hospitals/${hospitalData._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editData)
+        }
+      );
+
+      const updated = await res.json();
+      setHospitalData(updated);
+      setIsEditing(false);
+
+      toast.success("Hospital updated successfully");
+
+    } catch (err) {
+      toast.error("Failed to update hospital");
+    }
   };
 
-  const handleCancel = () => {
-    setEditData(hospitalData);
-    setIsEditing(false);
+  // 🔥 FULL DELETE FLOW (Toast + Undo)
+  const handleDelete = async ({ reason, confirmText }) => {
+    if (confirmText !== "DELETE") {
+      return toast.error("Type DELETE to confirm");
+    }
+
+    try {
+      setDeleting(true);
+
+      const deletedHospital = hospitalData;
+
+      // ✅ Close modal immediately
+      setShowDeleteModal(false);
+
+      // ✅ Navigate instantly (optimistic UI)
+      navigate("/hospitals");
+
+      // 🔥 TOAST WITH UNDO BUTTON
+      toast((t) => (
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>Hospital deleted</span>
+
+          <button
+            style={{
+              background: "#2563eb",
+              color: "#fff",
+              border: "none",
+              padding: "5px 10px",
+              borderRadius: "6px",
+              cursor: "pointer"
+            }}
+            onClick={async () => {
+              try {
+                await fetch("http://localhost:5000/hospitals", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(deletedHospital),
+                });
+
+                toast.success("Hospital restored");
+                toast.dismiss(t.id);
+
+              } catch {
+                toast.error("Restore failed");
+              }
+            }}
+          >
+            Undo
+          </button>
+        </div>
+      ), { duration: 5000 });
+
+      // ⏳ Delay actual delete (gives undo window)
+      setTimeout(async () => {
+        await fetch(
+          `http://localhost:5000/hospitals/${deletedHospital._id}`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reason }),
+          }
+        );
+      }, 5000);
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete hospital");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   if (loading) return <div className="details-container">Loading...</div>;
 
   if (error || !hospitalData)
-    return (
-      <div className="details-container">
-        <p>{error}</p>
-        <button onClick={() => navigate(-1)}>Go Back</button>
-      </div>
-    );
+    return <div className="details-container">{error}</div>;
 
   return (
     <div className="details-container">
 
       <div className="back" onClick={() => navigate(-1)}>← Back</div>
 
-      {/* TOP CARD */}
       <div className="details-card">
         <div className="details-header">
 
@@ -87,100 +160,59 @@ function HospitalDetails() {
           </div>
 
           <div className="info">
-
-            {isEditing ? (
-              <div className="details-form">
-
-                {["name", "representative", "location", "email", "contact"].map((field) => (
-                  <div className="form-group" key={field}>
-                    <input
-                      name={field}
-                      value={editData[field]}
-                      onChange={handleInputChange}
-                      required
-                      placeholder=" "
-                    />
-                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                  </div>
-                ))}
-
-              </div>
-            ) : (
-              <>
-                <h2>
-                  {hospitalData.name}
-                  <span
-                    className="status-dot"
-                    style={{
-                      background:
-                        hospitalData.status === "active"
-                          ? "#22c55e"
-                          : "#ef4444"
-                    }}
-                  ></span>
-                </h2>
-                <p>👤 {hospitalData.representative}</p>
-                <p>📍 {hospitalData.location}</p>
-                <p>✉️ {hospitalData.email}</p>
-                <p>📞 {hospitalData.contact}</p>
-              </>
-            )}
-
+            <h2>{hospitalData.name}</h2>
+            <p>👤 {hospitalData.representative}</p>
+            <p>📍 {hospitalData.location}</p>
+            <p>✉️ {hospitalData.email}</p>
+            <p>📞 {hospitalData.contact}</p>
           </div>
 
-          <div className="actions">
-            {isEditing ? (
-              <>
-                <button className="btn primary" onClick={handleSave}>Save</button>
-                <button className="btn ghost" onClick={handleCancel}>Cancel</button>
-              </>
-            ) : (
-              <button className="btn ghost" onClick={() => setIsEditing(true)}>Edit</button>
-            )}
-          </div>
-
+          <button className="btn ghost" onClick={() => setIsEditing(true)}>
+            Edit
+          </button>
         </div>
 
         <div className="action-buttons">
           <button className="btn success">Revoke Admin</button>
           <button className="btn warning">Deactivate</button>
-          <button className="btn danger">Delete</button>
+
+          <button
+            className="btn danger"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            Delete
+          </button>
         </div>
       </div>
 
-      {/* GRID */}
       <div className="details-grid">
 
-        {/* LEFT */}
         <div className="details-box">
           <h3>Hospital Details</h3>
-
           <div className="details-field"><span>ID</span>{hospitalData.accessId}</div>
           <div className="details-field"><span>Registered</span>{hospitalData.date}</div>
           <div className="details-field"><span>Website</span>{hospitalData.website}</div>
           <div className="details-field"><span>Departments</span>{hospitalData.departments}</div>
           <div className="details-field"><span>Staff</span>{hospitalData.staff}</div>
-
+          <div className="details-field"><span>Engagement</span>{hospitalData.engagement}%</div>
         </div>
 
-        {/* RIGHT */}
         <div className="details-box center">
-          <h3>Performance (since registration)</h3>
+          <h3>Performance</h3>
 
           <div className="chart-wrapper">
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie
                   data={[
-                    { name: "Engagement", value: hospitalData.engagement },
-                    { name: "Remaining", value: 100 - hospitalData.engagement }
+                    { value: hospitalData.engagement },
+                    { value: 100 - hospitalData.engagement }
                   ]}
                   dataKey="value"
                   innerRadius={80}
                   outerRadius={100}
                   startAngle={90}
                   endAngle={-270}
-                  stroke="none"
                 >
                   <Cell fill="#ef4444" />
                   <Cell fill="#fee2e2" />
@@ -195,8 +227,16 @@ function HospitalDetails() {
           </div>
 
         </div>
-
       </div>
+
+      {/* ✅ DELETE MODAL */}
+      <DeleteModal
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        loading={deleting}
+      />
+
     </div>
   );
 }

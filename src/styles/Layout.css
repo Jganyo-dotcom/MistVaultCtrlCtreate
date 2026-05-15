@@ -14,14 +14,20 @@
   flex-direction: column;
   overflow: hidden;
   width: 100%;
+  min-width: 0;
   height: 100vh;
   transition: all 0.3s ease;
 }
 
-/* Main Content when Sidebar Collapsed (Desktop) */
 @media (min-width: 769px) {
+  .layout-main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
+
   .layout-main.collapsed {
-    margin-left: -180px;
+    margin-left: 80px;
+    width: calc(100% - 80px);
   }
 }
 
