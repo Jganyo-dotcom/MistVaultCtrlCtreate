@@ -4,11 +4,11 @@
 .dashboard-container {
   flex: 1;
   background: #f6f8fc;
-  padding: 80px;
+  margin-left: 50px;
   font-family: 'Inter', sans-serif;
   min-height: calc(100vh - 70px);
   overflow-y: auto;
-  margin-left: 250px;
+  padding: 24px;
 }
 
 /* HEADER */
@@ -62,13 +62,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
   background: #ffffff;
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  width: 220px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 300px;
   transition: all 0.2s ease;
 }
 

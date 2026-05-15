@@ -1,20 +1,18 @@
 /* Audit Logs Page Styles */
 .auditlogs-container {
-  padding: 60px;
   background-color: #f8f9fa;
   min-height: 100vh;
   overflow-y: auto;
-  margin-left: 250px;
-  border: 1px solid black;
+  border: 1px solid whitesmoke;
   border-radius: 8px;
+  margin-left: 50px;
+  padding: 24px;
 }
-
 
 .auditlogs-header {
   margin-bottom: 30px;
   justify-content: space-between;
   display: flex;
-
 }
 
 .auditlogs-title {
@@ -33,7 +31,6 @@
   gap: 10px;
   align-items: center;
   flex-direction: row;
-
 }
 
 .auditlogs-calendar {
@@ -60,15 +57,11 @@
   font-size: 18px;
   width: 20%;
   cursor: pointer;
-
-
-
 }
 
-
 .auditlogs-dot {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -96,14 +89,16 @@
   display: flex;
 }
 
-
+.auditlogs-card:hover{
+  background: #f9fafb;
+}
 
 .auditlogs-message {
   flex: 1;
-  font-size: 20px;
+  font-size: 14px;
   margin: 0;
   text-align: left;
-
+  color: #374151;
 }
 
 .auditlogs-right {
@@ -115,8 +110,8 @@
 }
 
 .auditlogs-time {
-  font-size: 13px;
-  color: #888;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 .auditlogs-export {
@@ -131,8 +126,6 @@
   cursor: pointer;
   font-size: 13px;
 }
-
-
 
 .search-bar {
   flex: 1;
@@ -301,9 +294,6 @@
     padding: 2px 8px;
     font-size: 11px;
   }
-
-
-
 
   .search-bar input {
     flex: 1;

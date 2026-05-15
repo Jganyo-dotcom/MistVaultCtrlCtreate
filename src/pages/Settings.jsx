@@ -131,40 +131,18 @@ function Settings() {
       </div>
 
       {/* PROFILE */}
-      {/* <div className="settings-card">
-        <div className="card-header">
-          <h3>Profile</h3>
-          <button onClick={() => setShowEditModal(true)}>Edit</button>
-        </div>
+    <div className="settings-card">
+      <div className="card-header">
+        <h3>Profile</h3>
+        <button onClick={() => setShowEditModal(true)}>Edit</button>
+      </div>
 
-        <div className="profile-content">
-          <img
-            src={formData.avatar || "https://via.placeholder.com/80"}
-            alt=""
-            className="avatar"
-          />
-
-          <div>
-            <p>{user?.name}</p>
-            <p>{user?.email}</p>
-            <p>{user?.phone}</p>
-          </div>
-        </div>
-      </div> */}
-
-      {/* PROFILE */}
-<div className="settings-card">
-  <div className="card-header">
-    <h3>Profile</h3>
-    <button onClick={() => setShowEditModal(true)}>Edit</button>
-  </div>
-
-  <div className="profile-content">
-    <img
-      src={formData.avatar || "https://via.placeholder.com/80"}
-      alt=""
-      className="avatar"
-    />
+      <div className="profile-content">
+        <img
+          src={formData.avatar || "https://via.placeholder.com/80"}
+          alt=""
+          className="avatar"
+        />
 
     <div className="profile-details">
 
