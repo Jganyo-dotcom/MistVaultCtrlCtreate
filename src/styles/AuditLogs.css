@@ -1,35 +1,138 @@
 /* Audit Logs Page Styles */
 .auditlogs-container {
-  padding: 80px;
+  padding: 60px;
   background-color: #f8f9fa;
   min-height: 100vh;
   overflow-y: auto;
   margin-left: 250px;
+  border: 1px solid black;
+  border-radius: 8px;
 }
+
 
 .auditlogs-header {
   margin-bottom: 30px;
+  justify-content: space-between;
+  display: flex;
+
 }
 
-.auditlogs-header h1 {
+.auditlogs-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.auditlogs-title h1 {
   font-size: 28px;
   color: #1a1a2e;
   margin-bottom: 5px;
-  margin-top: 0;
-}
-
-.subtitle {
-  color: #666;
-  font-size: 14px;
   margin: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-direction: row;
+
 }
 
-.auditlogs-controls {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+.auditlogs-calendar {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 100;
 }
+
+.auditlogs-calendar input {
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.auditlogs-dropdown {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  font-size: 18px;
+  width: 20%;
+  cursor: pointer;
+
+
+
+}
+
+
+.auditlogs-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.auditlogs-dot.green {
+  background: #22c55e;
+}
+
+.auditlogs-dot.blue {
+  background: #3b82f6;
+}
+
+.auditlogs-dot.red {
+  background: #ef4444;
+}
+
+.auditlogs-card {
+  border-radius: 12px;
+  margin-bottom: 10px;
+  gap: 12px;
+  color: black;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 12px 16px;
+  display: flex;
+}
+
+
+
+.auditlogs-message {
+  flex: 1;
+  font-size: 20px;
+  margin: 0;
+  text-align: left;
+
+}
+
+.auditlogs-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.auditlogs-time {
+  font-size: 13px;
+  color: #888;
+}
+
+.auditlogs-export {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+
 
 .search-bar {
   flex: 1;
