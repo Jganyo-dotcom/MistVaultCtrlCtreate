@@ -3,6 +3,7 @@ import "../styles/Analytics.css";
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend
 } from "recharts";
+import { FiBarChart2, FiTrendingUp, FiTrendingDown } from "react-icons/fi"
 
 
 const Analytics = () => {
@@ -41,7 +42,7 @@ const Analytics = () => {
 
             {/* Header */}
             <div className="analytics-header">
-                <h3>EMR Analytics</h3>
+                <h3><FiBarChart2 size={20} color="#4a6cf7" /> EMR Analytics</h3>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option>Last 6 months</option>
                     <option>Last 3 months</option>
@@ -52,23 +53,27 @@ const Analytics = () => {
             {/* Stats Cards */}
             <div className="stats-row">
                 <div className="stats-card">
-                    <h1>78%</h1>
-                    <p>Average Platform Engagement</p>
+                    <span className="stats-value">78%</span>
+                    <span className="stats-label">Average Platform Engagement</span>
                 </div>
                 <div className="stats-card">
-                    <h1>Sunrise Clinic ↑</h1>
-                    <p>Highest Engagement</p>
+                    <span className="stats-value">
+                        Sunrise Clinic <FiTrendingUp size={16} color="blue" />
+                    </span>
+                    <span className="stats-label badge">Highest Engagement</span>
                 </div>
                 <div className="stats-card">
-                    <h1>Lifeline Clinic ↓</h1>
-                    <p>Lowest Engagement</p>
+                    <span className="stats-value">
+                        Lifeline Clinic <FiTrendingDown size={16} color="red" />
+                    </span>
+                    <span className="stats-label  badge">Lowest Engagement</span>
                 </div>
             </div>
 
             {/* Area Chart */}
             <div className="chart-section">
                 <h3>EMR Usage Trend</h3>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={200}>
                     <AreaChart data={trendData}>
                         <defs>
                             <linearGradient id="colorUsage" x1="0" y1="0" x2="0" y2="1">
@@ -98,14 +103,14 @@ const Analytics = () => {
                 {/* Bar Chart */}
                 <div className="chart-card">
                     <h3>Hospital Engagement Comparison</h3>
-                    <ResponsiveContainer width="100%" height={250}>
+                    <ResponsiveContainer width="100%" height={200}>
                         <BarChart data={hospitalData} layout="vertical">
                             <XAxis type="number" hide />
                             <YAxis
                                 type="category"
                                 dataKey="name"
-                                width={120}
-                                tick={{ fontSize: 12 }}
+                                width={150}
+                                tick={{ fontSize: 13, textAnchor: 'end' }}
                             />
                             <Tooltip />
                             <Bar dataKey="value" fill="#2563eb" radius={[0, 4, 4, 0]} />
@@ -116,14 +121,14 @@ const Analytics = () => {
                 {/* Donut Chart */}
                 <div className="chart-card">
                     <h3>Platform Feature Usage</h3>
-                    <ResponsiveContainer width="100%" height={250}>
+                    <ResponsiveContainer width="100%" height={200}>
                         <PieChart>
                             <Pie
                                 data={featureData}
                                 cx="40%"
-                                cy="50%"
-                                innerRadius={70}
-                                outerRadius={100}
+                                cy="60%"
+                                innerRadius={50}
+                                outerRadius={70}
                                 dataKey="value"
                             >
                                 {featureData.map((entry, index) => (
@@ -137,6 +142,11 @@ const Analytics = () => {
                                 layout="vertical"
                                 align="right"
                                 verticalAlign="middle"
+                                iconType="square"
+                                iconSize={12}
+                                formatter={(value) => (
+                                    <span style={{ fontSize: '10px', color: '#444' }}>{value}</span>
+                                )}
                             />
                             <Tooltip />
                         </PieChart>
@@ -145,7 +155,7 @@ const Analytics = () => {
 
             </div>
 
-        </div>
+        </div >
     );
 };
 

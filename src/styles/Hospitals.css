@@ -1,10 +1,15 @@
-*{
+* {
   font-family: inherit;
 }
+
 .hospitals-container {
-  padding: 25px;
+  padding: 80px;
   background: #f9fafb;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
+  margin-left: 250px;
+  overflow-y: auto;
+
+
 }
 
 /* HEADER */
@@ -295,6 +300,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -315,10 +321,23 @@
 }
 
 @keyframes fadeInOut {
-  0% {opacity: 0; transform: translateY(-10px);}
-  10% {opacity: 1;}
-  90% {opacity: 1;}
-  100% {opacity: 0; transform: translateY(-10px);}
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 /* NEW: LEFT HEADER STRUCTURE */
@@ -339,7 +358,8 @@
 
 /* FIX HEADER ALIGNMENT */
 .hospitals-header {
-  align-items: flex-start; /* IMPORTANT */
+  align-items: flex-start;
+  /* IMPORTANT */
 }
 
 /* RESPONSIVE */
