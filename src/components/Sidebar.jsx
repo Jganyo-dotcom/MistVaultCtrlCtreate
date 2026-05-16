@@ -11,7 +11,7 @@ import {
   FiChevronRight
 } from "react-icons/fi";
 import "../styles/Sidebar.css";
-import logo from "../assets/logo.png"; // ✅ make sure this exists
+import logo from "../assets/logoo.jpeg"; //
 
 export default function Sidebar({
   isOpen,
