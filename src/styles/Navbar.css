@@ -3,7 +3,7 @@
   background: linear-gradient(180deg, #0f1c3f, #09142b);
   display: flex;
   align-items: center;
-  padding: 0 20px 0 0;
+  padding: 0 20px 0 20px;
   gap: 20px;
   color: white;
   position: sticky;
@@ -128,7 +128,7 @@
   width: 280px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   padding: 15px;
   z-index: 1000;
   animation: fadeIn 0.2s ease;
