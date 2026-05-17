@@ -1,97 +1,124 @@
 /* ================= SIDEBAR ================= */
 .sidebar {
-  width: 260px;
+  width: 210px;
   height: 100vh;
-  background: linear-gradient(180deg, #0f1c3f, #09142b);
+  background: linear-gradient(180deg, #0f1c3f 0%, #09142b 100%);
   position: fixed;
   top: 0;
   left: 0;
-  transition: all 0.3s ease;
-  overflow-y: auto;
+  transition: width 0.3s ease, left 0.3s ease;
+  overflow: hidden;
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  border-right: none;
 }
 
-/* COLLAPSED */
+/* COLLAPSED (desktop only) */
 .sidebar.collapsed {
-  width: 80px;
+  width: 72px;
 }
 
 /* ================= HEADER ================= */
 .sidebar-header {
-  padding: 20px;
+  padding: 16px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 /* LOGO */
 .logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  gap: 4px;
 }
 
+/* Crop the jpeg to show only the heart icon (left portion of the image) */
 .logo-img {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  object-position: left center;
+  flex-shrink: 0;
+  border-radius: 3px;
 }
 
 .logo-text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: white;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 120px;
+  transition: opacity 0.25s ease, max-width 0.3s ease;
 }
 
 /* COLLAPSED LOGO */
 .sidebar.collapsed .logo-text {
-  display: none;
+  opacity: 0;
+  max-width: 0;
 }
 
 .sidebar.collapsed .logo {
   justify-content: center;
-  padding: 10px;
 }
 
 /* ================= BUTTONS ================= */
 .sidebar-buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .collapse-btn,
 .close-btn {
   background: none;
   border: none;
-  color: white;
-  font-size: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
   cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.collapse-btn:hover,
+.close-btn:hover {
+  color: white;
 }
 
 /* ================= NAV ================= */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
   flex: 1;
+  padding: 8px 10px;
+  gap: 4px;
 }
 
 /* NAV ITEM */
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 14px 20px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  gap: 12px;
+  padding: 11px 14px;
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
-  transition: all 0.25s ease;
-  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  white-space: nowrap;
 }
 
 /* HOVER */
@@ -100,59 +127,68 @@
   color: white;
 }
 
-/* ACTIVE */
+/* ACTIVE — filled blue pill matching the design */
 .nav-item.active {
-  background: rgba(74, 108, 247, 0.15);
-  color: #4a6cf7;
-  border-left: 4px solid #4a6cf7;
-}
-
-/* COLLAPSED ACTIVE */
-.sidebar.collapsed .nav-item.active {
-  border-left: none;
-  border-bottom: 4px solid #4a6cf7;
-  justify-content: center;
+  background: rgba(59, 100, 220, 0.85);
+  color: white;
+  border-radius: 8px;
 }
 
 /* ICON */
 .nav-item svg {
-  font-size: 20px;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
-/* HIDE TEXT WHEN COLLAPSED */
+/* ======= COLLAPSED NAV ======= */
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 11px;
+}
+
 .sidebar.collapsed .nav-item span {
   display: none;
 }
 
-.sidebar.collapsed .nav-item {
-  justify-content: center;
+.sidebar.collapsed .nav-item.active {
+  border-radius: 8px;
 }
 
 /* ================= LOGOUT ================= */
 .nav-item.logout {
   margin-top: auto;
-  color: rgba(255, 255, 255, 0.8);
-  background: transparent;
-  border-left-color: transparent;
+  color: rgba(239, 68, 68, 0.85);
 }
 
 .nav-item.logout:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }
 
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .sidebar {
-    left: -260px;
+    left: -210px;
+    width: 210px;
   }
 
   .sidebar.open {
     left: 0;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 240px;
   }
 
-  .close-btn {
-    display: block;
+  .sidebar-nav {
+    padding: 10px;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    padding: 10px 12px;
   }
 }

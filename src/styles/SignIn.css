@@ -42,10 +42,17 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Title */
-.title {
-  text-align: center;
-  margin-bottom: 20px;
+/* Logo */
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logo-img {
+  width: 200px;
+  height: auto;
+  object-fit: contain;
 }
 
 /* Form */
@@ -136,8 +143,8 @@
     width: 280px;
   }
 
-  .title {
-    margin-bottom: 18px;
+  .logo-img {
+    width: 170px;
   }
 
   .form-group {
@@ -187,12 +194,8 @@
     border-radius: 10px;
   }
 
-  .title {
-    margin-bottom: 15px;
-  }
-
-  .title h1 {
-    font-size: 22px;
+  .logo-img {
+    width: 150px;
   }
 
   .form-group {

@@ -2,32 +2,35 @@
 .layout {
   display: flex;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
+  overflow: hidden;
   position: relative;
-  align-items: flex-start;
+  /* Match sidebar color on the left so no gap strip appears */
+  background: #09142b;
 }
 
 /* Main Content Area */
 .layout-main {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  width: 100%;
-  min-width: 0;
   height: 100vh;
-  transition: all 0.3s ease;
+  min-width: 0;
+  flex-grow: 1;
+  background: #f5f7fb;
+  transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
+/* Desktop: offset matches sidebar width (210px) */
 @media (min-width: 769px) {
   .layout-main {
-    margin-left: 260px;
-    width: calc(100% - 260px);
+    margin-left: 210px;
+    width: calc(100% - 210px);
   }
 
+  /* When sidebar is collapsed */
   .layout-main.collapsed {
-    margin-left: 80px;
-    width: calc(100% - 80px);
+    margin-left: 72px;
+    width: calc(100% - 72px);
   }
 }
 
@@ -35,13 +38,38 @@
 .page-content {
   flex: 1;
   overflow-y: auto;
-  width: 100%;
-  background: #f5f7fb;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .layout-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout {
+    min-height: 100vh;
+  }
+
+  .layout-main {
+    min-height: 100vh;
+  }
+
+  .page-content {
+    padding: 0 12px 20px;
+  }
 }
 
 /* Mobile Overlay */
 .overlay {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -49,23 +77,4 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 900;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .overlay {
-    display: block;
-  }
-
-  .layout {
-    flex-direction: column;
-  }
-
-  .layout-main {
-    width: 100%;
-  }
-
-  .layout-main.collapsed {
-    margin-left: 0;
-  }
 }

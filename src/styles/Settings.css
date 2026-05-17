@@ -2,11 +2,11 @@
    GLOBAL CONTAINER
 ========================= */
 .settings-container {
-  padding: 30px;
   background-color: #f8f9fa;
   min-height: calc(100vh - 70px);
   overflow-y: auto;
-  margin-left: 250px;
+  margin-left: 50px;
+  padding: 24px;
 }
 
 /* =========================
@@ -119,9 +119,10 @@
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(14px);
   padding: 20px;
+  font-size: 14px;
   border-radius: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   transition: all 0.25s ease;
 }
 
