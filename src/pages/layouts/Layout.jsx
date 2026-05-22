@@ -15,8 +15,13 @@ export default function Layout() {
       setIsMobile(mobile);
       if (!mobile) {
         setSidebarOpen(false);
+        setSidebarCollapsed(false);
       }
     };
+
+    if (isMobile) {
+      setSidebarCollapsed(false);
+    } [isMobile];
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -27,7 +32,8 @@ export default function Layout() {
   };
 
   const toggleSidebarCollapse = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
+    if (isMobile)
+    setSidebarCollapsed(prev => !prev);
   };
 
   const closeSidebar = () => {
