@@ -1,22 +1,47 @@
 import React, { useState } from "react";
 import "../styles/Analytics.css";
 import {
-    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    BarChart, Bar, PieChart, Pie, Cell, Legend
 } from "recharts";
-import { FiBarChart2, FiTrendingUp, FiTrendingDown } from "react-icons/fi"
+import { FiBarChart2, FiTrendingUp, FiTrendingDown } from "react-icons/fi";
 
-
-const Analytics = () => {
-    const [timeRange, setTimeRange] = useState("Last 6 months");
-
-    const trendData = [
+// Data sets keyed to each dropdown option
+const TREND_DATA = {
+    "Last 3 months": [
+        { month: "DEC", usage: 40 },
+        { month: "JAN", usage: 60 },
+        { month: "FEB", usage: 100 },
+    ],
+    "Last 6 months": [
         { month: "SEP", usage: 0 },
         { month: "OCT", usage: 40 },
         { month: "NOV", usage: 20 },
         { month: "DEC", usage: 40 },
         { month: "JAN", usage: 60 },
         { month: "FEB", usage: 100 },
-    ];
+    ],
+    "Last 12 months": [
+        { month: "MAR", usage: 10 },
+        { month: "APR", usage: 25 },
+        { month: "MAY", usage: 30 },
+        { month: "JUN", usage: 45 },
+        { month: "JUL", usage: 35 },
+        { month: "AUG", usage: 50 },
+        { month: "SEP", usage: 0 },
+        { month: "OCT", usage: 40 },
+        { month: "NOV", usage: 20 },
+        { month: "DEC", usage: 40 },
+        { month: "JAN", usage: 60 },
+        { month: "FEB", usage: 100 },
+    ],
+};
+
+const Analytics = () => {
+    const [timeRange, setTimeRange] = useState("Last 6 months");
+
+    // Automatically picks the right dataset when timeRange changes
+    const trendData = TREND_DATA[timeRange];
 
     const hospitalData = [
         { name: "Sunrise Clinic", value: 90 },
@@ -24,7 +49,6 @@ const Analytics = () => {
         { name: "Promise Land..", value: 65 },
         { name: "Bloom Private...", value: 60 },
         { name: "RiverLand Hos..", value: 50 },
-
     ];
 
     const featureData = [
@@ -43,9 +67,12 @@ const Analytics = () => {
             {/* Header */}
             <div className="analytics-header">
                 <h3><FiBarChart2 size={20} color="#4a6cf7" /> EMR Analytics</h3>
-                <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
-                    <option>Last 6 months</option>
+                <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value)}
+                >
                     <option>Last 3 months</option>
+                    <option>Last 6 months</option>
                     <option>Last 12 months</option>
                 </select>
             </div>
@@ -66,13 +93,13 @@ const Analytics = () => {
                     <span className="stats-value">
                         Lifeline Clinic <FiTrendingDown size={16} color="red" />
                     </span>
-                    <span className="stats-label  badge">Lowest Engagement</span>
+                    <span className="stats-label badge">Lowest Engagement</span>
                 </div>
             </div>
 
             {/* Area Chart */}
             <div className="chart-section">
-                <h3>EMR Usage Trend</h3>
+                <h3>EMR Usage Trend — {timeRange}</h3>
                 <ResponsiveContainer width="100%" height={200}>
                     <AreaChart data={trendData}>
                         <defs>
@@ -110,7 +137,7 @@ const Analytics = () => {
                                 type="category"
                                 dataKey="name"
                                 width={150}
-                                tick={{ fontSize: 13, textAnchor: 'end' }}
+                                tick={{ fontSize: 13, textAnchor: "end" }}
                             />
                             <Tooltip />
                             <Bar dataKey="value" fill="#2563eb" radius={[0, 4, 4, 0]} />
@@ -145,7 +172,7 @@ const Analytics = () => {
                                 iconType="square"
                                 iconSize={12}
                                 formatter={(value) => (
-                                    <span style={{ fontSize: '10px', color: '#444' }}>{value}</span>
+                                    <span style={{ fontSize: "10px", color: "#444" }}>{value}</span>
                                 )}
                             />
                             <Tooltip />
@@ -154,8 +181,7 @@ const Analytics = () => {
                 </div>
 
             </div>
-
-        </div >
+        </div>
     );
 };
 
