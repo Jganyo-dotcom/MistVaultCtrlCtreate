@@ -2,6 +2,13 @@ import React, { useState, useContext } from "react";
 import "../styles/Settings.css";
 import { SettingsContext } from "../contexts/SettingsContext";
 import toast from "react-hot-toast";
+import {
+  FiLock,
+  FiShield,
+  FiLogOut,
+  FiHelpCircle,
+  FiMail
+} from "react-icons/fi";
 
 function Settings() {
   const { user, updateUser } = useContext(SettingsContext);
@@ -12,13 +19,11 @@ function Settings() {
   const [showReportModal, setShowReportModal] = useState(false);
 
   const [twoFA, setTwoFA] = useState(user?.twoFA || false);
-  const [darkMode, setDarkMode] = useState(false);
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
-    avatar: user?.avatar || ""
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -31,6 +36,12 @@ function Settings() {
   const [reportMessage, setReportMessage] = useState("");
 
   const [errors, setErrors] = useState({});
+
+  const [showPassword, setShowPassword] = useState({
+  current: false,
+  new: false,
+  confirm: false,
+});
 
   // ================= VALIDATION =================
   const validate = () => {
@@ -47,54 +58,74 @@ function Settings() {
     if (!validate()) return;
 
     updateUser({ ...user, ...formData, twoFA });
-    toast.success("Profile updated 🚀");
+    toast.success("Profile updated");
     setShowEditModal(false);
   };
 
   // ================= 2FA =================
   const handleToggle2FA = () => {
     setTwoFA(prev => !prev);
-    toast.success(`2FA ${!twoFA ? "enabled 🔐" : "disabled"}`);
-  };
-
-  // ================= AVATAR =================
-  const handleAvatar = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({
-        ...formData,
-        avatar: URL.createObjectURL(file)
-      });
-    }
+    toast.success(`2FA ${!twoFA ? "enabled" : "disabled"}`);
   };
 
   // ================= CHANGE PASSWORD =================
   const handleChangePassword = () => {
-    const { current, new: newPass, confirm } = passwordData;
+  const { current, new: newPass, confirm } = passwordData;
 
-    if (!current || !newPass || !confirm) {
-      return toast.error("All fields required");
-    }
+  if (!current.trim()) {
+    return toast.error("Current password is required");
+  }
 
-    if (newPass.length < 6) {
-      return toast.error("Min 6 characters required");
-    }
+  if (newPass.length < 8) {
+    return toast.error("Password must be at least 8 characters");
+  }
 
-    if (newPass !== confirm) {
-      return toast.error("Passwords do not match");
-    }
+  if (!/[A-Z]/.test(newPass)) {
+    return toast.error("Include at least one uppercase letter");
+  }
 
-    setTimeout(() => {
-      toast.success("Password changed 🔐");
-      setShowPasswordModal(false);
-      setPasswordData({ current: "", new: "", confirm: "" });
-    }, 800);
-  };
+  if (!/[0-9]/.test(newPass)) {
+    return toast.error("Include at least one number");
+  }
+
+  if (newPass !== confirm) {
+    return toast.error("Passwords do not match");
+  }
+
+  // simulate API
+  setTimeout(() => {
+    toast.success("Password updated successfully");
+    setShowPasswordModal(false);
+    setPasswordData({ current: "", new: "", confirm: "" });
+  }, 800);
+};
+
+  const getPasswordStrength = (password) => {
+  let strength = 0;
+
+  if (password.length >= 8) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+  switch (strength) {
+    case 0:
+    case 1:
+      return { label: "Weak", level: 1 };
+    case 2:
+      return { label: "Medium", level: 2 };
+    case 3:
+    case 4:
+      return { label: "Strong", level: 3 };
+    default:
+      return { label: "", level: 0 };
+  }
+};
 
   // ================= LOGOUT ALL =================
   const handleLogoutAll = () => {
     setTimeout(() => {
-      toast.success("Logged out from all devices 🚪");
+      toast.success("Logged out from all devices");
     }, 700);
   };
 
@@ -103,7 +134,7 @@ function Settings() {
     if (!supportMessage.trim()) return toast.error("Message required");
 
     setTimeout(() => {
-      toast.success("Support message sent 🎉");
+      toast.success("Support message sent");
       setSupportMessage("");
       setShowSupportModal(false);
     }, 800);
@@ -113,21 +144,18 @@ function Settings() {
     if (!reportMessage.trim()) return toast.error("Describe issue");
 
     setTimeout(() => {
-      toast.success("Issue reported 🚀");
+      toast.success("Issue reported");
       setReportMessage("");
       setShowReportModal(false);
     }, 800);
   };
 
   return (
-    <div className={`settings-container ${darkMode ? "dark" : ""}`}>
+    <div className="settings-container">
 
       {/* HEADER */}
       <div className="settings-header">
         <h2>Settings</h2>
-        <button onClick={() => setDarkMode(!darkMode)} className="toggle-dark">
-          {darkMode ? "☀ Light" : "🌙 Dark"}
-        </button>
       </div>
 
       {/* PROFILE */}
@@ -138,11 +166,9 @@ function Settings() {
       </div>
 
       <div className="profile-content">
-        <img
-          src={formData.avatar || "https://via.placeholder.com/80"}
-          alt=""
-          className="avatar"
-        />
+       <div className="avatar-placeholder">
+        {user?.name?.charAt(0)}
+      </div>
 
     <div className="profile-details">
 
@@ -169,56 +195,94 @@ function Settings() {
     </div>
   </div>
 </div>
+     
+      {/* SECURITY CARD */}
+<div className="settings-card">
+  <h3 className="card-title">Security</h3>
 
-      {/* SECURITY */}
-      <div className="settings-card">
-        <h3>Security</h3>
-
-        <div className="settings-item">
-          <span>Two-Factor Authentication</span>
-          <div
-            className={`switch ${twoFA ? "active" : ""}`}
-            onClick={handleToggle2FA}
-          />
-        </div>
-
-        <div className="settings-item">
-          <span>Change Password</span>
-          <button onClick={() => setShowPasswordModal(true)}>Update</button>
-        </div>
-
-        <div className="settings-item">
-          <span>Logout from all devices</span>
-          <button onClick={handleLogoutAll}>Logout</button>
-        </div>
+  <div className="settings-item">
+    <div className="settings-left">
+      <div className="icon-box">
+        <FiLock />
       </div>
-
-      {/* SUPPORT */}
-      <div className="settings-card">
-        <h3>Support</h3>
-
-        <div className="settings-item">
-          <span>Contact Support</span>
-          <button onClick={() => setShowSupportModal(true)}>Open</button>
-        </div>
-
-        <div className="settings-item">
-          <span>Support Email</span>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText("support@yourapp.com");
-              toast.success("Email copied 📧");
-            }}
-          >
-            Copy
-          </button>
-        </div>
-
-        <div className="settings-item">
-          <span>Report Issue</span>
-          <button onClick={() => setShowReportModal(true)}>Report</button>
-        </div>
+      <div>
+        <p className="item-title">Change Password</p>
+        <p className="item-sub">Update your account password</p>
       </div>
+    </div>
+    {/*<button className="btn-secondary">Update</button> */}
+
+      <button 
+        className="btn-secondary"
+        onClick={() => setShowPasswordModal(true)}
+      >
+        Update
+    </button>
+  </div>
+
+  <div className="settings-item">
+    <div className="settings-left">
+      <div className="icon-box">
+        <FiShield />
+      </div>
+      <div>
+        <p className="item-title">Two-Factor Authentication</p>
+        <p className="item-sub">Add extra security to your account</p>
+      </div>
+    </div>
+
+    {/* REAL TOGGLE */}
+    <label className="switch">
+      <input type="checkbox" />
+      <span className="slider"></span>
+    </label>
+  </div>
+
+  <div className="settings-item danger">
+    <div className="settings-left">
+      <div className="icon-box danger">
+        <FiLogOut />
+      </div>
+      <div>
+        <p className="item-title">Logout from all devices</p>
+        <p className="item-sub">End all active sessions</p>
+      </div>
+    </div>
+    <button className="btn-danger">Logout</button>
+  </div>
+</div>
+
+{/* SUPPORT CARD */}
+<div className="settings-card">
+  <h3 className="card-title">Support</h3>
+
+  <div className="settings-item">
+    <div className="settings-left">
+      <div className="icon-box">
+        <FiMail />
+      </div>
+      <div>
+        <p className="item-title">Contact Support</p>
+        <p className="item-sub">Reach out to our team</p>
+      </div>
+    </div>
+    <button className="btn-secondary">Email</button>
+  </div>
+
+  <div className="settings-item">
+    <div className="settings-left">
+      <div className="icon-box">
+        <FiHelpCircle />
+      </div>
+      <div>
+        <p className="item-title">Help Center</p>
+        <p className="item-sub">Browse documentation</p>
+      </div>
+    </div>
+    <button className="btn-secondary">Visit</button>
+  </div>
+</div>
+
 
       {/* ================= MODALS ================= */}
 
@@ -227,8 +291,6 @@ function Settings() {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Edit Profile</h2>
-
-            <input type="file" onChange={handleAvatar} />
 
             <input
               value={formData.name}
@@ -263,27 +325,122 @@ function Settings() {
       )}
 
       {/* PASSWORD */}
-      {showPasswordModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Change Password</h3>
+    {showPasswordModal && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3 className="modal-title">Change Password</h3>
 
-            <input type="password" placeholder="Current Password"
-              onChange={(e)=>setPasswordData({...passwordData,current:e.target.value})}/>
+        {/* CURRENT PASSWORD */}
+  <div className="form-group">
+    <label>Current Password</label>
+    <div className="password-field">
+      <input
+        type={showPassword.current ? "text" : "password"}
+        placeholder="Enter current password"
+        value={passwordData.current}
+        onChange={(e) =>
+          setPasswordData({ ...passwordData, current: e.target.value })
+        }
+      />
+      <span
+        className="toggle-icon"
+        onClick={() =>
+          setShowPassword({
+            ...showPassword,
+            current: !showPassword.current,
+          })
+        }
+      >
+        👁
+      </span>
+    </div>
+  </div>
 
-            <input type="password" placeholder="New Password"
-              onChange={(e)=>setPasswordData({...passwordData,new:e.target.value})}/>
+  {/* NEW PASSWORD */}
+  <div className="form-group">
+    <label>New Password</label>
+    <div className="password-field">
+      <input
+        type={showPassword.new ? "text" : "password"}
+        placeholder="Enter new password"
+        value={passwordData.new}
+        onChange={(e) =>
+          setPasswordData({ ...passwordData, new: e.target.value })
+        }
+      />
+      <span
+        className="toggle-icon"
+        onClick={() =>
+          setShowPassword({
+            ...showPassword,
+            new: !showPassword.new,
+          })
+        }
+      >
+        👁
+      </span>
+    </div>
 
-            <input type="password" placeholder="Confirm Password"
-              onChange={(e)=>setPasswordData({...passwordData,confirm:e.target.value})}/>
+    {/* PASSWORD STRENGTH */}
+    {passwordData.new && (
+      <div className="strength-wrapper">
+        <div className={`strength-bar level-${getPasswordStrength(passwordData.new).level}`} />
+        <span className="strength-text">
+          {getPasswordStrength(passwordData.new).label}
+        </span>
+      </div>
+    )}
+  </div>
 
-            <div className="modal-actions">
-              <button onClick={()=>setShowPasswordModal(false)}>Cancel</button>
-              <button className="primary" onClick={handleChangePassword}>Save</button>
-            </div>
-          </div>
-        </div>
-      )}
+    {/* CONFIRM PASSWORD */}
+    <div className="form-group">
+      <label>Confirm Password</label>
+      <div className="password-field">
+        <input
+          type={showPassword.confirm ? "text" : "password"}
+          placeholder="Confirm new password"
+          value={passwordData.confirm}
+          onChange={(e) =>
+            setPasswordData({ ...passwordData, confirm: e.target.value })
+          }
+        />
+        <span
+          className="toggle-icon"
+          onClick={() =>
+            setShowPassword({
+              ...showPassword,
+              confirm: !showPassword.confirm,
+            })
+          }
+        >
+          👁
+        </span>
+      </div>
+    </div>
+
+      <div className="modal-actions">
+        <button
+          className="btn-secondary"
+          onClick={() => setShowPasswordModal(false)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="primary"
+          onClick={handleChangePassword}
+          disabled={
+            !passwordData.current ||
+            !passwordData.new ||
+            !passwordData.confirm
+          }
+        >
+          Update Password
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* SUPPORT */}
       {showSupportModal && (

@@ -17,6 +17,10 @@ function AppRoutes() {
       <Route path="/signin" element={<SignIn />} />
 
       <Route element={<ProtectedRoute />}>
+        <Route path="/add-hospital" element={<AddHospital />} />
+      </Route>
+
+      <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -25,7 +29,6 @@ function AppRoutes() {
           <Route path="/auditlogs" element={<AuditLogs />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/add" element={<Add />} />
-          <Route path="/add-hospital" element={<AddHospital />} />
           <Route path="/hospitals/:id" element={<HospitalDetails />} />
         </Route>
       </Route>

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 import { HospitalContext } from "../contexts/HospitalContext";
 import DeleteModal from "../components/DeleteModal";
+import {getHospitalById} from "../services/hospitalService";
 import "../styles/HospitalDetails.css";
 
 function HospitalDetails() {
@@ -23,35 +24,27 @@ function HospitalDetails() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/hospitals/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Hospital not found");
-        return res.json();
-      })
-      .then((data) => {
+    const fetchHospital = async () => {
+      try {
+        const data = await getHospitalById(id);
+
         setHospitalData(data);
         setEditData(data);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+
+      } catch (err) {
+        setError("Failed to fetch hospital");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchHospital();
   }, [id]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setEditData((prev) => ({
-      ...prev,
-      [name]:
-        ["departments", "staff", "engagement"].includes(name)
-          ? Number(value)
-          : value
-    }));
-  };
-
+  
   const handleSave = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/hospitals/${hospitalData._id}`,
+        `http://medsec.onrender.com/api/update-hospitals`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -103,7 +96,7 @@ function HospitalDetails() {
             }}
             onClick={async () => {
               try {
-                await fetch("http://localhost:5000/hospitals", {
+                await fetch("http://medsec.onrender.com/api/get-hospitals", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(deletedHospital),
@@ -125,7 +118,7 @@ function HospitalDetails() {
       // ⏳ Delay actual delete (gives undo window)
       setTimeout(async () => {
         await fetch(
-          `http://localhost:5000/hospitals/${deletedHospital._id}`,
+          `http://medsec.onrender.com/api/update-hospitals`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },

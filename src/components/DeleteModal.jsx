@@ -41,9 +41,12 @@ export default function DeleteModal({ open, onClose, onConfirm, loading }) {
     <div className="modal-overlay">
       <div className="modal-card large">
 
-        <h2>Delete Hospital Account</h2>
+        <h2>Archive Hospital Account</h2>
         <p className="subtitle">
-          Please tell us why you are deleting this hospital account
+          {/* Please tell us why you are archiving this hospital account */}
+          {/* This action will archive the hospital account and all associated data. 
+          Please provide a reason for archiving to help us improve our services. */}
+          This will archive the hospital account and remove it from active records.
         </p>
 
         {/* ✅ RADIO OPTIONS */}
@@ -74,11 +77,11 @@ export default function DeleteModal({ open, onClose, onConfirm, loading }) {
 
         {/* 🔥 CONFIRM DELETE INPUT */}
         <div className="confirm-box">
-          <p>Type <strong>DELETE</strong> to confirm</p>
+          <p>Type <strong>ARCHIVE</strong> to confirm</p>
           <input
             type="text"
             className="input"
-            placeholder="DELETE"
+            placeholder="ARCHIVE"
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
           />
@@ -97,10 +100,10 @@ export default function DeleteModal({ open, onClose, onConfirm, loading }) {
               loading ||
               !reason ||
               (reason === "Other" && !otherText) ||
-              confirmText !== "DELETE"
+              confirmText !== "ARCHIVE"
             }
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading ? "Archiving..." : "Archive"}
           </button>
         </div>
 
