@@ -23,7 +23,7 @@
 }
 
 .auditlogs-title h1 {
-  font-size: 28px;
+  font-size: 30px;
   color: #1a1a2e;
   margin-bottom: 5px;
   margin: 0;
@@ -60,10 +60,11 @@
 }
 
 .auditlogs-dot {
-  width: 10px;
-  height: 10px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   flex-shrink: 0;
+
 }
 
 .auditlogs-dot.green {
@@ -89,13 +90,13 @@
   display: flex;
 }
 
-.auditlogs-card:hover{
+.auditlogs-card:hover {
   background: #f9fafb;
 }
 
 .auditlogs-message {
   flex: 1;
-  font-size: 14px;
+  font-size: 20px;
   margin: 0;
   text-align: left;
   color: #374151;
@@ -110,7 +111,7 @@
 }
 
 .auditlogs-time {
-  font-size: 12px;
+  font-size: 11px;
   color: #9ca3af;
 }
 
@@ -124,7 +125,7 @@
   border-radius: 8px;
   padding: 8px 16px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .search-bar {
