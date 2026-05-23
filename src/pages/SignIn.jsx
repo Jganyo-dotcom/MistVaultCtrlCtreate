@@ -16,7 +16,7 @@ function SignIn() {
     }
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -24,15 +24,39 @@ function SignIn() {
       return;
     }
 
-    localStorage.setItem("authenticated", "true");
-    navigate("/dashboard");
+    try {
+      //const BaseApi = "http://127.0.0.1:4444/api/user";
+      const BaseApi = "https://medsec.onrender.com/api";
+      const response = await fetch(`${BaseApi}/login-manager`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // ensures cookies/JWT are sent
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save token or flag
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("authenticated", "true");
+        localStorage.setItem("username", data.manager.name);
+
+        // Redirect
+        navigate("/dashboard");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Connection failed. Please try again.");
+    }
   };
 
   return (
     <div className="signin-container">
       <div className="signin-card">
         <form onSubmit={handleSubmit}>
-
           {/* LOGO */}
           <div className="logo-wrapper">
             <img src={logo} alt="MIST logo" className="logo-img" />
@@ -41,7 +65,7 @@ function SignIn() {
           <div className="form-group">
             <label></label>
             <input
-              type="email"
+              type="text"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

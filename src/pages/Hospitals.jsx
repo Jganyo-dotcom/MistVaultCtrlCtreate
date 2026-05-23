@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { HospitalContext } from "../contexts/HospitalContext";
 import DeleteModal from "../components/DeleteModal";
 import toast from "react-hot-toast";
 import { FiHome } from "react-icons/fi";
@@ -20,9 +19,34 @@ function Hospitals() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [hospitals, setHospitals] = useState([]);
 
-  const { hospitals, deleteHospital, addHospital } =
-    useContext(HospitalContext);
+  // 🔥 Fetch hospitals from backend
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const token = localStorage.getItem("authToken"); // 🔑 get token from localStorage
+
+        const res = await fetch("https://medsec.onrender.com/api/get-hospitals", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // attach token
+          },
+          credentials: "include", // only if backend also sets cookies
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch hospitals");
+
+        const data = await res.json();
+        setHospitals(data.hospitals); // backend returns { message, hospitals }
+      } catch (err) {
+        console.error("Error fetching hospitals:", err);
+        toast.error("Failed to load hospitals");
+      }
+    };
+    fetchHospitals();
+  }, []);
 
   useEffect(() => {
     const filter = searchParams.get("filter");
@@ -38,7 +62,6 @@ function Hospitals() {
     setShowDeleteModal(true);
   };
 
-  // 🔥 FULL DELETE FLOW (MATCHES DETAILS PAGE)
   const handleDeleteConfirm = ({ reason, confirmText }) => {
     if (confirmText !== "DELETE") {
       return toast.error("Type DELETE to confirm");
@@ -46,45 +69,52 @@ function Hospitals() {
 
     try {
       setDeleting(true);
-
       const deletedHospital = deleteTarget;
 
       // ✅ Close modal immediately
       setShowDeleteModal(false);
 
-      // ✅ Optimistic UI (remove instantly)
-      deleteHospital(deletedHospital.id);
+      // ✅ Optimistic UI
+      setHospitals((prev) => prev.filter((h) => h._id !== deletedHospital._id));
 
       // 🔥 Toast with Undo
-      toast((t) => (
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <span>Hospital deleted</span>
+      toast(
+        (t) => (
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span>Hospital deleted</span>
+            <button
+              style={{
+                background: "#2563eb",
+                color: "#fff",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setHospitals((prev) => [...prev, deletedHospital]);
+                toast.success("Hospital restored");
+                toast.dismiss(t.id);
+              }}
+            >
+              Undo
+            </button>
+          </div>
+        ),
+        { duration: 5000 },
+      );
 
-          <button
-            style={{
-              background: "#2563eb",
-              color: "#fff",
-              border: "none",
-              padding: "5px 10px",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              addHospital(deletedHospital);
-              toast.success("Hospital restored");
-              toast.dismiss(t.id);
-            }}
-          >
-            Undo
-          </button>
-        </div>
-      ), { duration: 5000 });
-
-      // ⏳ Optional backend delete delay
+      // ⏳ Backend delete request
       setTimeout(() => {
-        console.log("Send delete request to backend with reason:", reason);
+        fetch(
+          `https://medsec.onrender.com/api/delete-hospital/${deletedHospital._id}`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reason }),
+          },
+        );
       }, 5000);
-
     } catch (err) {
       console.error(err);
       toast.error("Delete failed");
@@ -94,33 +124,31 @@ function Hospitals() {
   };
 
   const handleView = (hospital) => {
-    navigate(`/hospitals/${hospital.id}`, { state: { hospital } });
+    navigate(`/hospitals/${hospital._id}`, { state: { hospital } });
   };
 
+  // 🔎 Filtering logic
   const filteredHospitals = hospitals.filter((hospital) => {
-    const matchesSearch = hospital.name
+    const matchesSearch = hospital.hospitalDetails.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
     const matchesStatus =
-      filterStatus === "all" || hospital.status === filterStatus;
+      filterStatus === "all" ||
+      (hospital.active ? "active" : "inactive") === filterStatus;
 
     return matchesSearch && matchesStatus;
   });
 
   return (
     <div className="hospitals-container">
-
       {/* HEADER */}
       <div className="hospitals-header">
-
         <div className="header-left">
-          <h1 className="title"><FiHome /> Hospitals</h1>
-
-          <button
-            className="add-btn"
-            onClick={() => navigate("/add-hospital")}
-          >
+          <h1 className="title">
+            <FiHome /> Hospitals
+          </h1>
+          <button className="add-btn" onClick={() => navigate("/add-hospital")}>
             Add Hospital
           </button>
         </div>
@@ -151,23 +179,27 @@ function Hospitals() {
       {/* GRID */}
       <div className="hospitals-grid">
         {filteredHospitals.map((hospital) => (
-          <div key={hospital.id} className="hospital-card">
-            <h3 className="hospital-name">{hospital.name}</h3>
-            <p className="hospital-email">{hospital.email}</p>
+          <div key={hospital._id} className="hospital-card">
+            <h3 className="hospital-name">{hospital.hospitalDetails.name}</h3>
+            <p className="hospital-email">
+              {hospital.hospitalDetails.contact.email}
+            </p>
             <p className="hospital-rep">
-              Representative: <strong>{hospital.representative}</strong>
+              Representative: <strong>{hospital.hospitalRep.name}</strong>
+            </p>
+            <p className="hospital-rep">
+              ID: <strong>{hospital.hospitalDetails.code}</strong>
             </p>
 
-            <div className={`status ${hospital.status}`}>
+            <div
+              className={`status ${hospital.active ? "active" : "inactive"}`}
+            >
               <span className="dot"></span>
-              {hospital.status}
+              {hospital.active ? "active" : "inactive"}
             </div>
 
             <div className="hospital-actions">
-              <button
-                className="btn-view"
-                onClick={() => handleView(hospital)}
-              >
+              <button className="btn-view" onClick={() => handleView(hospital)}>
                 View Details
               </button>
 
@@ -189,7 +221,6 @@ function Hospitals() {
         onConfirm={handleDeleteConfirm}
         loading={deleting}
       />
-
     </div>
   );
 }
