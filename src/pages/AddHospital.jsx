@@ -199,24 +199,61 @@ const isValidPhone = (val) => {
 
 // Validation rules
 const VALIDATIONS = {
-  name: (val) => val.trim() !== "" ? "" : "Hospital name is required",
-  email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
-  contact: (val) => val === "" || isValidPhone(val) ? "" : "Valid phone required",
-  address: (val) => val.trim() !== "" ? "" : "Address is required",
-  city: (val) => val.trim() !== "" ? "" : "City is required",
-  state: (val) => val.trim() !== "" ? "" : "State is required",
-  postalCode: (val) => val.trim() !== "" ? "" : "Postal code is required",
-  representative: (val) => val.trim() !== "" ? "" : "Representative name is required",
-  repEmail: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
-  repContact: (val) => val === "" || isValidPhone(val) ? "" : "Valid phone required"
+  name: (val) =>
+    val.trim() !== "" ? "" : "Hospital name is required",
+
+  email: (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
+      ? ""
+      : "Valid email required",
+
+  contact: (val) =>
+    val === "" || isValidPhone(val)
+      ? ""
+      : "Valid phone required",
+
+  address: (val) =>
+    val.trim() !== "" ? "" : "Address is required",
+
+  city: (val) =>
+    val.trim() !== "" ? "" : "City is required",
+
+  state: (val) =>
+    val.trim() !== "" ? "" : "State is required",
+
+  postalCode: (val) =>
+    val.trim() !== "" ? "" : "Postal code is required",
+
+  representative: (val) =>
+    val.trim() !== "" ? "" : "Representative name is required",
+
+  repEmail: (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
+      ? ""
+      : "Valid representative email required",
+
+  repContact: (val) =>
+    val === "" || isValidPhone(val)
+      ? ""
+      : "Valid representative phone required",
+
+  password: (val) =>
+    val.length >= 6
+      ? ""
+      : "Password must be at least 6 characters",
+
+  // FIXED HERE
+  confirmPassword: (val, data) =>
+    val === data.password
+      ? ""
+      : "Passwords do not match",
 };
 
 const generateId = () =>
   `hosp_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
 const extractPhoneCode = (codeValue) => {
-  // Extract just the numeric code part (e.g., "+1" from "+1-CA")
-  return codeValue.split('-')[0];
+  return codeValue.split("-")[0];
 };
 
 export function AddHospital() {
@@ -232,15 +269,19 @@ export function AddHospital() {
     city: "",
     state: "",
     postalCode: "",
+
     representative: "",
     repEmail: "",
     repContactCode: "+234",
-    repContact: ""
+    repContact: "",
+    
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-    const [toast, setToast] = useState({ message: "", type: "" });
+    const [uiToast, setUiToast] = useState({ message: "", type: "" });
   
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -263,64 +304,121 @@ export function AddHospital() {
   const validateForm = () => {
     const newErrors = {};
     Object.keys(VALIDATIONS).forEach((field) => {
-      const error = VALIDATIONS[field](formData[field]);
-      if (error) newErrors[field] = error;
+     if (VALIDATIONS[field]) {
+       newErrors[field] = VALIDATIONS[field](
+        formData[field],
+       formData
+       );
+      }
     });
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return !Object.values(newErrors).some((err) => err !== "");
   };
 
    const showToast = (message, type = "info") => {
-    setToast({ message, type });
-    setTimeout(() => setToast({ message: "", type: "" }), 3000);
+    setUiToast({ message, type });
+    setTimeout(() => setUiToast({ message: "", type: "" }), 3000);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!validateForm()) {
-      showToast("Please fix errors before submitting");
-      return;
+  // Run validation first
+  let newErrors = {};
+
+  Object.keys(VALIDATIONS).forEach((field) => {
+    if (VALIDATIONS[field]) {
+      newErrors[field] = VALIDATIONS[field](formData[field], formData);
     }
+  });
 
+  setErrors(newErrors);
+
+  // Stop if errors exist
+  const hasErrors = Object.values(newErrors).some(
+    (error) => error !== ""
+  );
+
+  if (hasErrors) {
+    toast.error("Please fix validation errors");
+    return;
+  }
+
+  try {
     setLoading(true);
+    const payload = {
+      h_name: formData.name,
 
-    try {
-      // Create hospital object with all details
-      const newHospital = {
-        id: generateId(),
-        name: formData.name,
-        email: formData.email,
-        contact: `${extractPhoneCode(formData.contactCode)} ${formData.contact}`,
-        representative: formData.representative,
-        repEmail: formData.repEmail,
-        repContact: `${extractPhoneCode(formData.repContactCode)} ${formData.repContact}`,
-        location: `${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}`,
-        website: "",
-        departments: 0,
-        staff: 0,
-        engagement: 0,
-        status: "active",
-        createdAt: new Date().toISOString()
-      };
+      address: formData.address,
 
-      // Add hospital to context
-      addHospital(newHospital);
-      
-      showToast("Hospital registered successfully!");
-      setTimeout(() => navigate("/hospitals"), 1500);
-    } catch (error) {
-      console.error("Error:", error);
-      showToast("Failed to register hospital", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+      h_phone: `${extractPhoneCode(formData.contactCode)}${formData.contact}`,
+
+      h_email: formData.email,
+
+      r_name: formData.representative,
+
+      r_phone: `${extractPhoneCode(formData.repContactCode)}${formData.repContact}`,
+
+      r_email: formData.repEmail,
+
+      r_password: formData.password,
+
+      r_confirm_password: formData.confirmPassword,
+    };
+
+    const response = await axios.post(
+      "https://medsec.onrender.com/api/register-hospital",
+      payload
+    );
+
+    console.log("Backend Response:", response.data);
+
+    toast.success("Hospital created successfully!");
+
+    // Optional: Save locally in context too
+    addHospital({
+      id: generateId(),
+      ...formData,
+    });
+
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      contactCode: "+234",
+      contact: "",
+      address: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      representative: "",
+      repEmail: "",
+      repContactCode: "+234",
+      repContact: "",
+      password: "",
+      confirmPassword: "",
+    });
+
+    navigate("/hospitals");
+  } catch (error) {
+    console.error("API Error:", error);
+
+    toast.error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to create hospital"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+  
 
   return (
       <div className="add-hospital-page">
-        {toast.message && (
-          <div className={`toast toast--${toast.type}`}>{toast.message}</div>
+        {uiToast.message && (
+          <div className={`toast toast--${uiToast.type}`}>{uiToast.message}</div>
         )}
   
         <div className="back-btn" onClick={() => navigate(-1)}>
@@ -472,9 +570,13 @@ const PhoneInput = ({
         onChange={onChange}
         className="country-code"
       >
-        {COUNTRY_CODES.map((c, idx) => (
-          <option key={`${idx}-${c.code}`} value={c.code}>
-            {c.flag} {extractPhoneCode(c.code)} - {c.name}
+       
+        {COUNTRY_CODES.map((country) => (
+          <option 
+           key={`${country.name}-${country.code}`}
+           value={country.code}
+          >
+            {country.flag} {country.name} ({extractPhoneCode(country.code)})
           </option>
         ))}
       </select>

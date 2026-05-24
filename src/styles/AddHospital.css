@@ -214,15 +214,20 @@
   gap: 10px;
 }
 
-.country-code {
-  width: 120px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 0 10px;
-  background: #f8fafc;
-  outline: none;
-  font-size: 14px;
-  color: #000;
+.country-code,
+  .phone-input-wrapper select,
+  .input-group input {
+    color: #000;
+  }
+
+  .country-code {
+    width: 120px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0 10px;
+    background: #f8fafc;
+    outline: none;
+    font-size: 14px;
 }
 
 .phone-input-wrapper input {
@@ -247,7 +252,8 @@
 
 @media (max-width: 768px) {
   .add-hospital-page {
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     padding: 30px 12px 24px;
   }
 
@@ -284,6 +290,7 @@
 
   .country-code {
     width: 100%;
+    color: #000;
   }
 
   .grid-2,
