@@ -1,7 +1,9 @@
-const BASE_URL = "http://medsec.onrender.com/api";
+const BASE_URL = "https://medsec.onrender.com/api";
+//const BaseApi = "http://127.0.0.1:4444/api"
 
 // ✅ GET ALL
 export const getHospitals = async () => {
+  console.log("you can delete this");
   const res = await fetch(`${BASE_URL}/get-hospitals`);
   if (!res.ok) throw new Error("Failed to fetch hospitals");
   return res.json();
@@ -9,9 +11,19 @@ export const getHospitals = async () => {
 
 // ✅ GET ONE
 export const getHospitalById = async (id) => {
-  const res = await fetch(`${BASE_URL}/get-hospital/${id}`);
+  const token = localStorage.getItem("authToken");
+
+  const res = await fetch(`${BASE_URL}/hospitals/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   if (!res.ok) throw new Error("Failed to fetch hospital");
-  return res.json();
+
+  const data = await res.json();
+  return data.hospital; // 🔑 return the hospital object only
 };
 
 // ✅ UPDATE
@@ -19,9 +31,9 @@ export const updateHospital = async (id, data) => {
   const res = await fetch(`${BASE_URL}/update-hospital/${id}`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   if (!res.ok) throw new Error("Update failed");
@@ -33,9 +45,9 @@ export const deleteHospital = async (id, reason) => {
   const res = await fetch(`${BASE_URL}/update-hospital/${id}`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ reason })
+    body: JSON.stringify({ reason }),
   });
 
   if (!res.ok) throw new Error("Delete failed");

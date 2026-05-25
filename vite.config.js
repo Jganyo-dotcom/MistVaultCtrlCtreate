@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import hospitalsData from './src/data/hospitalsData.js'
+import {hospitalsData} from './src/data/hospitalsData.js'
 
 // https://vite.dev/config/
 export default defineConfig({
