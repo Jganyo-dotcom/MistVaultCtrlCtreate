@@ -3,6 +3,7 @@ const BASE_URL = "https://medsec.onrender.com/api";
 
 // ✅ GET ALL
 export const getHospitals = async () => {
+  console.log("you can delete this");
   const res = await fetch(`${BASE_URL}/get-hospitals`);
   if (!res.ok) throw new Error("Failed to fetch hospitals");
   return res.json();
