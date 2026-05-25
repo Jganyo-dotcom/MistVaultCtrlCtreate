@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 import { HospitalContext } from "../contexts/HospitalContext";
 import DeleteModal from "../components/DeleteModal";
-import { getHospitalById } from "../services/hospitalService";
+import { getHospitalById, sendNotification } from "../services/hospitalService";
 import "../styles/HospitalDetails.css";
 
 function HospitalDetails() {
@@ -72,6 +72,14 @@ function HospitalDetails() {
 
         <div className="action-buttons">
           <button className="btn success">Revoke Admin</button>
+          <button
+            className="btn success"
+            onClick={() =>
+              sendNotification(hospitalData.id || hospitalData._id)
+            }
+          >
+            Launch
+          </button>
           <button className="btn warning">Deactivate</button>
           <button
             className="btn danger"

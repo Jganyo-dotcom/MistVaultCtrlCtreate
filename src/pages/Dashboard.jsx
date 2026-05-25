@@ -16,7 +16,7 @@ function Dashboard() {
   const { logs } = useContext(ActivityContext);
 
   const handleStatClick = (filter) => {
-    navigate(`/hospitals?filter=${filter}`);
+    navigate(`/hospitals?filte=${filter}`);
   };
 
   const activities = logs
