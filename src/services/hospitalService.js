@@ -86,3 +86,64 @@ export const sendNotification = async (hospitalId) => {
     return null;
   }
 };
+
+export const suspendHospital = async (hospitalId) => {
+  // ✅ Ask for confirmation (browser confirm dialog)
+  const confirmed = window.confirm("Do you want to suspend this hospital?");
+  if (!confirmed) return;
+
+  try {
+    const response = await fetch(`${BASE_URL}/disable-hospital/${hospitalId}`, {
+      method: "PATCH", // or "PATCH"/"POST" depending on your backend
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Suspension failed");
+    }
+
+    const data = await response.json();
+
+    // ✅ Success toast
+    toast.success(data.message || "Hospital suspended successfully");
+    return data;
+  } catch (err) {
+    console.error("Error suspending hospital:", err);
+
+    // ❌ Error toast
+    toast.error(err.message || "Failed to suspend hospital");
+    return null;
+  }
+};
+
+export const reEnableHospital = async (hospitalId) => {
+  const confirmed = window.confirm("Do you want to re-enable this hospital?");
+  if (!confirmed) return;
+
+  try {
+    const response = await fetch(`${BASE_URL}/enable-hospital/${hospitalId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to re-enable hospital");
+    }
+
+    const data = await response.json();
+    toast.success(data.message || "Hospital re-enabled successfully");
+    return data;
+  } catch (err) {
+    console.error("Error re-enabling hospital:", err);
+    toast.error(err.message || "Something went wrong");
+    return null;
+  }
+};

@@ -5,7 +5,12 @@ import toast from "react-hot-toast";
 
 import { HospitalContext } from "../contexts/HospitalContext";
 import DeleteModal from "../components/DeleteModal";
-import { getHospitalById, sendNotification } from "../services/hospitalService";
+import {
+  getHospitalById,
+  reEnableHospital,
+  sendNotification,
+  suspendHospital,
+} from "../services/hospitalService";
 import "../styles/HospitalDetails.css";
 
 function HospitalDetails() {
@@ -71,7 +76,12 @@ function HospitalDetails() {
         </div>
 
         <div className="action-buttons">
-          <button className="btn success">Revoke Admin</button>
+          <button
+            onClick={() => suspendHospital(hospitalData.id || hospitalData._id)}
+            className="btn success"
+          >
+            suspend
+          </button>
           <button
             className="btn success"
             onClick={() =>
@@ -80,12 +90,19 @@ function HospitalDetails() {
           >
             Launch
           </button>
-          <button className="btn warning">Deactivate</button>
+          <button
+            onClick={() =>
+              reEnableHospital(hospitalData.id || hospitalData._id)
+            }
+            className="btn warning"
+          >
+            Activate
+          </button>
           <button
             className="btn danger"
             onClick={() => setShowDeleteModal(true)}
           >
-            Delete
+            Archieve
           </button>
         </div>
       </div>
