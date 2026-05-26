@@ -5,7 +5,7 @@ const token = localStorage.getItem("authToken");
 
 // ✅ GET ALL
 export const getHospitals = async () => {
-  console.log("you can delete this");
+  console.log("you can delete this okay");
   const res = await fetch(`${BASE_URL}/get-hospitals`);
   if (!res.ok) throw new Error("Failed to fetch hospitals");
   return res.json();
