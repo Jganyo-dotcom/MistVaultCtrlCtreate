@@ -28,6 +28,7 @@ body {
   cursor: pointer;
   margin-bottom: 18px;
   transition: 0.2s;
+  text-align: left;
 }
 
 .back:hover {
@@ -68,6 +69,7 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
+  margin-top: -70px;
   font-weight: 600;
   font-size: 18px;
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
@@ -76,6 +78,7 @@ body {
 /* INFO */
 .info {
   flex: 1;
+  text-align: left;
 }
 
 .info h2 {
@@ -102,6 +105,10 @@ body {
   transform: translateY(-1px);
 }
 
+.edit-btn {
+  margin-top: -100px;
+}
+
 /* BUTTON VARIANTS */
 .btn.primary {
   background: var(--primary);
@@ -113,7 +120,8 @@ body {
 }
 
 .btn.ghost {
-  background: #f1f5f9;
+  background: #f1f5f9; 
+  align-items: start;
 }
 
 .btn.success {
@@ -138,7 +146,7 @@ body {
 /* ACTION BUTTONS */
 .action-buttons {
   margin-top: 18px;
-  display: flex;
+  text-align: right;
   gap: 12px;
   flex-wrap: wrap;
 }

@@ -178,7 +178,7 @@
 }
 
 .btn-secondary:hover {
-  background: grey;
+  background: #808080;
 }
 
 .btn-danger {
@@ -345,6 +345,10 @@
 .strength-text {
   font-size: 12px;
   color: #6b7280;
+}
+
+.profile-details {
+  text-align: left;
 }
 
 /* Responsive */

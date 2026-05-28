@@ -63,7 +63,7 @@ function Hospitals() {
   };
 
   const handleDeleteConfirm = ({ reason, confirmText }) => {
-    if (confirmText !== "DELETE") {
+    if (confirmText !== "ARCHIVE") {
       return toast.error("Type DELETE to confirm");
     }
 
@@ -81,7 +81,7 @@ function Hospitals() {
       toast(
         (t) => (
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span>Hospital deleted</span>
+            <span>Hospital archived</span>
             <button
               style={{
                 background: "#2563eb",

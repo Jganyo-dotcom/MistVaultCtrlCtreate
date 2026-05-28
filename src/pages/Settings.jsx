@@ -192,12 +192,12 @@ function Settings() {
           </div>
 
           <div className="profile-details">
-            <div className="profile-role">{user?.role || "EMR ADMIN"}</div>
-            <p>
-              <span className="label">Name:</span> {user?.name}
+            <p><span className="label">Name:</span> {user?.name}
             </p>
             <p>
               <span className="label">Email:</span> {user?.email}
+            </p>
+            <p><span className="label">Role:</span> {user?.role || "EMR ADMIN"}
             </p>
             <p>
               <span className="label">Contact:</span> {user?.phone}
@@ -220,7 +220,6 @@ function Settings() {
               <p className="item-sub">Update your account password</p>
             </div>
           </div>
-          {/*<button className="btn-secondary">Update</button> */}
 
           <button
             className="btn-secondary"
@@ -243,7 +242,10 @@ function Settings() {
 
           {/* REAL TOGGLE */}
           <label className="switch">
-            <input type="checkbox" />
+            <input type="checkbox" 
+            checked={twoFA}
+            onChange={handleToggle2FA}
+            />
             <span className="slider"></span>
           </label>
         </div>
@@ -258,7 +260,9 @@ function Settings() {
               <p className="item-sub">End all active sessions</p>
             </div>
           </div>
-          <button className="btn-danger">Logout</button>
+          <button className="btn-danger" onClick={handleLogoutAll}>
+            Logout
+          </button>
         </div>
       </div>
 
@@ -276,7 +280,8 @@ function Settings() {
               <p className="item-sub">Reach out to our team</p>
             </div>
           </div>
-          <button className="btn-secondary">Email</button>
+          <button className="btn-secondary" onClick={() => setShowSupportModal(true)}>
+            Email</button>
         </div>
 
         <div className="settings-item">
@@ -289,7 +294,8 @@ function Settings() {
               <p className="item-sub">Browse documentation</p>
             </div>
           </div>
-          <button className="btn-secondary">Visit</button>
+          <button className="btn-secondary" onClick={() => setShowReportModal(true)}>
+            Visit</button>
         </div>
       </div>
 

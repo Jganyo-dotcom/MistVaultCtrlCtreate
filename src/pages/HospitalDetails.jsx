@@ -64,15 +64,17 @@ function HospitalDetails() {
 
           <div className="info">
             <h2>{hospitalData.hospitalDetails?.name}</h2>
-            <p>👤 {hospitalData.hospitalRep?.name}</p>
-            <p>📍 {hospitalData.hospitalDetails?.addresse}</p>
-            <p>✉️ {hospitalData.hospitalDetails?.contact?.email}</p>
-            <p>📞 {hospitalData.hospitalDetails?.contact?.phone}</p>
+            <p>👤 Representative: {hospitalData.hospitalRep?.name}</p>
+            <p>📍 Location: {hospitalData.hospitalDetails?.addresse}</p>
+            <p>✉️ Email: {hospitalData.hospitalDetails?.contact?.email}</p>
+            <p>📞 Contact{hospitalData.hospitalDetails?.contact?.phone}</p>
           </div>
 
-          <button className="btn ghost" onClick={() => setIsEditing(true)}>
-            Edit
-          </button>
+          <div className="edit-btn">
+            <button className="btn ghost" onClick={() => setIsEditing(true)}>
+              Edit
+            </button>
+          </div>
         </div>
 
         <div className="action-buttons">
@@ -102,7 +104,7 @@ function HospitalDetails() {
             className="btn danger"
             onClick={() => setShowDeleteModal(true)}
           >
-            Archieve
+            Archive
           </button>
         </div>
       </div>
@@ -111,11 +113,11 @@ function HospitalDetails() {
         <div className="details-box">
           <h3>Hospital Details</h3>
           <div className="details-field">
-            <span>ID</span>
+            <span>Access ID</span>
             {hospitalData._id}
           </div>
           <div className="details-field">
-            <span>Registered</span>
+            <span>Date Registered</span>
             {new Date(hospitalData.createdAt).toLocaleDateString()}
           </div>
           <div className="details-field">
