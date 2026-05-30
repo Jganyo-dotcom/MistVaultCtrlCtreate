@@ -19,7 +19,7 @@ export const hospitalsData = async () => {
   if (!res.ok) throw new Error("Failed to fetch hospitals");
 
   const data = await res.json();
-  console.log(data);
+  console.log(data.message || data.error);
 
   return data.hospitals; // 🔑 return only the hospitals array
 };
