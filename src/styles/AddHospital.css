@@ -1,18 +1,59 @@
 /* FONT */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
 .add-hospital-page {
   min-height: 100vh;
+  width: 100%;
   background: #0b1b34;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  position: relative;
   font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 40px 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.form-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 25px;
   position: relative;
 }
 
 /* BACKGROUND CIRCLES */
-.add-hospital-page::before,
+.add-hospital-page::before {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 50%;
+  top: -120px;
+  left: -120px;
+  z-index: 0;
+}
+
 .add-hospital-page::after {
   content: "";
   position: absolute;
@@ -20,40 +61,40 @@
   height: 350px;
   background: rgba(59, 130, 246, 0.15);
   border-radius: 50%;
-}
-
-.add-hospital-page::before {
-  top: -100px;
-  left: -100px;
-}
-
-.add-hospital-page::after {
-  bottom: -100px;
-  right: -100px;
+  bottom: -120px;
+  right: -120px;
+  top: auto;
+  left: auto;
+  transform: none;
+  z-index: 0;
 }
 
 /* BACK BUTTON */
 .back-btn {
-  position: absolute;
-  top: 30px;
-  left: 40px;
+  /* position: absolute; */
+  top: 20px;
+  left: 24px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
-  color: #cbd5e1;
+  color: #64748b;
   font-size: 12px;
   cursor: pointer;
+  font-weight: 500;
 }
 
 /* CARD */
 .form-card {
   position: relative;
   background: white;
-  padding: 40px;
+  padding: 30px;
+  padding-top: 30px;
   border-radius: 16px;
   width: 100%;
   max-width: 720px;
+  align-items: flex-start;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .toast {
@@ -71,10 +112,18 @@
 
 /* TITLE */
 .title {
-  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 25px;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+.header-spacer {
+  width: 60px; /* Adjust this width to match the back button's width */
 }
 
 /* SECTION */
@@ -84,9 +133,9 @@
 
 .section h2 {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 14px;
-  color: #0c2056; 
+  text-align: left;
 }
 
 .section h2 span {
@@ -98,6 +147,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  align-items: flex-start;
 }
 
 .input-group label {
@@ -257,18 +307,16 @@
     padding: 30px 12px 24px;
   }
 
-  .add-hospital-page::before,
-  .add-hospital-page::after {
+  .add-hospital-page::before {
     width: 260px;
     height: 260px;
-  }
-
-  .add-hospital-page::before {
     top: -70px;
     left: -70px;
   }
 
   .add-hospital-page::after {
+    width: 260px;
+    height: 260px;
     bottom: -70px;
     right: -70px;
   }

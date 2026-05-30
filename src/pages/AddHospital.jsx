@@ -317,18 +317,21 @@ export function AddHospital() {
 
   return (
     <div className="add-hospital-page">
+      <div className="form-container">
       {toast.message && (
         <div className={`toast toast--${toast.type}`}>{toast.message}</div>
       )}
 
-      <div className="back-btn" onClick={() => navigate(-1)}>
-        <ArrowLeft size={18} />
-        <span>BACK</span>
-      </div>
-
       <div className="form-card">
-        <h1 className="title">Register New Hospital</h1>
+        <div className="form-header">
+          <div className="back-btn" onClick={() => navigate(-1)}>
+            <ArrowLeft size={18} />
+            <span>BACK</span>
+          </div>
 
+          <h1 className="title">Register New Hospital</h1>
+          <div className="header-spacer"></div>
+        </div>
         <form onSubmit={handleSubmit}>
 
           {/* HOSPITAL INFO */}
@@ -446,6 +449,7 @@ export function AddHospital() {
           </div>
 
         </form>
+      </div>
       </div>
     </div>
   );
