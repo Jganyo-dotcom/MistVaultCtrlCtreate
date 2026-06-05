@@ -15,6 +15,7 @@ const AuditLogs = () => {
 
   // Today's date in YYYY-MM-DD format dynamically
   const TODAY = new Date().toISOString().split("T")[0];
+  const token = localStorage.getItem("token")
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -22,7 +23,15 @@ const AuditLogs = () => {
         setLoading(true);
         // Appends date filter query parameter if selected, otherwise defaults to today
         const targetDate = selectedDate || TODAY;
-        const response = await fetch(`${API_URL}/api/get-all-logs?date=${targetDate}`);
+        const response = await fetch(`${API_URL}/api/get-all-logs?date=${targetDate}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, // standard format for sending tokens
+          "Content-Type": "application/json"
+        }
+      });
+
+
         
         if (!response.ok) {
           throw new Error("Failed to fetch audit logs");
