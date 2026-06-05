@@ -38,6 +38,7 @@ const AuditLogs = () => {
         }
         
         const data = await response.json();
+        console.log(data)
         setLogs(data);
       } catch (err) {
         setError(err.message);
