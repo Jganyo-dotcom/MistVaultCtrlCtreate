@@ -25,6 +25,7 @@ export function SettingsProvider({ children }) {
         if (!res.ok) throw new Error("Failed to fetch settings");
 
         const data = await res.json();
+        console.log(data)
         setUser(data.user); // backend should return { user: {...} }
       } catch (err) {
         console.error("Error fetching settings:", err);
