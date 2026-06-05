@@ -10,33 +10,24 @@ const AuditLogs = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedLog, setSelectedLog] = useState(null);
 
-  // Use the Vite environment variable we configured earlier
-  const API_URL =  "https://medsec.onrender.com";
-
-  // Today's date in YYYY-MM-DD format dynamically
+  const API_URL = "https://medsec.onrender.com";
   const TODAY = new Date().toISOString().split("T")[0];
-  const token = localStorage.getItem("authToken")
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         setLoading(true);
-        // Appends date filter query parameter if selected, otherwise defaults to today
         const targetDate = selectedDate || TODAY;
         const response = await fetch(`${API_URL}/api/get-all-logs?date=${targetDate}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`, // standard format for sending tokens
-          "Content-Type": "application/json"
-        }
-      });
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
 
-
-        
-        if (!response.ok) {
-          throw new Error("Failed to fetch audit logs");
-        }
-        
+        if (!response.ok) throw new Error("Failed to fetch audit logs");
         const data = await response.json();
         setLogs(data);
       } catch (err) {
@@ -47,9 +38,8 @@ const AuditLogs = () => {
     };
 
     fetchLogs();
-  }, [selectedDate, API_URL, TODAY]);
+  }, [selectedDate]);
 
-  // Maps action types to visual status dot colors
   const getColorByAction = (action) => {
     switch (action) {
       case "SENT_HOSPITAL_DETAILS": return "green";
@@ -58,13 +48,11 @@ const AuditLogs = () => {
     }
   };
 
-  // Helper to format ISO timestamps into cleanly readable times
   const formatTime = (isoString) => {
     const date = new Date(isoString);
     return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   };
 
-  // Triggers browser download of log details as a formatted JSON file
   const downloadLogJSON = (log) => {
     const fileData = JSON.stringify(log, null, 2);
     const blob = new Blob([fileData], { type: "application/json" });
@@ -126,7 +114,6 @@ const AuditLogs = () => {
         )}
       </div>
 
-      {/* Details Preview & Export Modal */}
       {selectedLog && (
         <div className="modal-overlay" onClick={() => setSelectedLog(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -144,13 +131,11 @@ const AuditLogs = () => {
               </div>
               <div className="detail-group">
                 <label>Performed By:</label>
-<p>
-  {selectedLog.user?.name || selectedLog.user.hospitalRep.name}
-  (
-    {selectedLog.user?.email || selectedLog.user.hospitalRep.email}
-  )
-</p>
-
+                <p>
+                  {selectedLog.user?.name 
+                    ? `${selectedLog.user.name} (${selectedLog.user.email})`
+                    : `${selectedLog.user?.hospitalRep?.name} (${selectedLog.user?.hospitalRep?.email})`}
+                </p>
               </div>
               <div className="detail-group">
                 <label>Entity Impacted:</label>
@@ -163,8 +148,8 @@ const AuditLogs = () => {
                   <p><strong>Name:</strong> {selectedLog.hospitalDetails.name}</p>
                   <p><strong>System Code:</strong> {selectedLog.hospitalDetails.code}</p>
                   <p><strong>Address:</strong> {selectedLog.hospitalDetails.address}</p>
-                  <p><strong>Phone:</strong> {selectedLog.hospitalDetails.contact?.phone}</p>
-                  <p><strong>Email:</strong> {selectedLog.hospitalDetails.contact?.email}</p>
+                  <p><strong>Phone:</strong> {selectedLog.hospitalDetails.phone}</p>
+                  <p><strong>Email:</strong> {selectedLog.hospitalDetails.email}</p>
                 </div>
               )}
             </div>
