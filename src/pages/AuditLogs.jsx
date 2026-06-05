@@ -15,7 +15,7 @@ const AuditLogs = () => {
 
   // Today's date in YYYY-MM-DD format dynamically
   const TODAY = new Date().toISOString().split("T")[0];
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("authToken")
 
   useEffect(() => {
     const fetchLogs = async () => {
