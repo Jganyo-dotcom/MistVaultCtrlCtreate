@@ -144,7 +144,13 @@ const AuditLogs = () => {
               </div>
               <div className="detail-group">
                 <label>Performed By:</label>
-                <p>{selectedLog.user?.name} ({selectedLog.user?.email})</p>
+<p>
+  {selectedLog.user?.name || selectedLog.user.hospitalRep.name}
+  (
+    {selectedLog.user?.email || selectedLog.user.hospitalRep.email}
+  )
+</p>
+
               </div>
               <div className="detail-group">
                 <label>Entity Impacted:</label>
