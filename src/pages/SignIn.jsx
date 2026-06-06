@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react"; // Imported Loader2 for a sleek look
+import toast from "react-hot-toast"; // Integrated unified toast messages
 import logo from "../assets/logo.jpeg";
 import "../styles/SignIn.css";
 
@@ -8,6 +9,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // New loading state variable
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +22,11 @@ function SignIn() {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
+
+    setLoading(true); // Trigger loading animation immediately
 
     try {
       //const BaseApi = "http://127.0.0.1:4444/api";
@@ -40,16 +44,22 @@ function SignIn() {
         // Save token or flag
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("authenticated", "true");
-        localStorage.setItem("username", data.manager.name);
+        localStorage.setItem("username", data.manager?.name || "Manager");
 
-        // Redirect
-        navigate("/dashboard");
+        toast.success("Welcome back! Signing in... 🎉");
+
+        // Brief timeout gives the toast a second to breathe before redirecting
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 800);
       } else {
-        alert(data.message || "Login failed");
+        toast.error(data.message || "Invalid email or password.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("Connection failed. Please try again.");
+      toast.error("Connection failed. Server could be sleeping.");
+    } finally {
+      setLoading(false); // Stop loader regardless of success or failure
     }
   };
 
@@ -63,11 +73,12 @@ function SignIn() {
           </div>
 
           <div className="form-group">
-            <label></label>
+            {/* <label>Email Address</label> */}
             <input
               type="text"
               placeholder="Enter your email"
               value={email}
+              disabled={loading}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -79,11 +90,13 @@ function SignIn() {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
+                disabled={loading}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
                 className="eye-btn"
+                disabled={loading}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -93,8 +106,15 @@ function SignIn() {
 
           <p className="forgot-password">Forgot password?</p>
 
-          <button type="submit" className="signin-btn">
-            Sign in
+          <button type="submit" className="signin-btn" disabled={loading}>
+            {loading ? (
+              <div className="btn-loader-content">
+                <Loader2 size={18} className="spinner" />
+                <span>Authenticating...</span>
+              </div>
+            ) : (
+              "Sign in"
+            )}
           </button>
         </form>
       </div>
