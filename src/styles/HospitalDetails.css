@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root {
   --primary: #2563eb;
@@ -12,7 +12,12 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    sans-serif;
   background: var(--bg);
 }
 
@@ -120,7 +125,7 @@ body {
 }
 
 .btn.ghost {
-  background: #f1f5f9; 
+  background: #f1f5f9;
   align-items: start;
 }
 
@@ -269,8 +274,8 @@ body {
   backdrop-filter: blur(14px);
   padding: 26px;
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
   animation: scaleIn 0.25s ease;
 }
 
@@ -379,4 +384,81 @@ body {
   .modal {
     width: 90%;
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.details-modal {
+  width: 100%;
+  max-width: 550px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: rgba(20, 24, 33, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.form-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ef4444;
+  margin: 15px 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: #ef4444;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }

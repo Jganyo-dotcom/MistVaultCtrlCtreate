@@ -5,7 +5,7 @@ export const HospitalContext = createContext();
 
 // Change this URL to match your backend port if different (e.g., 8000, 3000)
 const API_BASE_URL = "https://medsec.onrender.com/api";
-//const BASE_URL = "http://127.0.0.1:4444/api"
+//const API_BASE_URL = "http://127.0.0.1:4444/api"
 const token = localStorage.getItem("authToken");
 
 export function HospitalProvider({ children }) {
@@ -103,16 +103,28 @@ export function HospitalProvider({ children }) {
   };
 
   // 4. PUT Request: Modify Existing Hospital Attributes
-  const updateHospital = async (updatedHospital) => {
-    // Determine database key (handles both mock 'id' or MongoDB style '_id')
-    const targetId = updatedHospital.id || updatedHospital._id;
+  const updateHospital = async (id, updatedFields) => {
+    // Safe fallback to ensure we always have an ID, whether it comes as an argument or inside an object
+    const targetId = id || updatedFields?.id || updatedFields?._id;
+
+    if (!targetId) {
+      console.error("Update aborted: No target hospital ID provided.");
+      toast.error("Critical error: Missing hospital identifier.");
+      return;
+    }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/${targetId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedHospital),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/hospital-update/${targetId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedFields),
+        },
+      );
 
       const data = await response.json();
 
@@ -120,22 +132,27 @@ export function HospitalProvider({ children }) {
         throw new Error(data.message || "Server declined data update.");
       }
 
-      const freshData = data.hospital || data;
+      // Extract the fresh document instance returned by your database controller route
+      const freshData = data.hospital || data.data || data;
 
       setHospitals((prev) =>
         Array.isArray(prev)
           ? prev.map((h) =>
-              h.id === targetId || h._id === targetId ? freshData : h,
+              h.id === targetId || h._id === targetId
+                ? { ...h, ...freshData } // Merge the update safely so layout references stay intact
+                : h,
             )
           : [],
       );
-      toast.success("Database updated successfully!");
+
+      // Return the response so that your calling component can access the success message
+      return data;
     } catch (error) {
       console.error("Backend update mutation failed:", error);
-      toast.error(error.message || "Failed to submit updates");
+      // Rethrow the error so that your toast catch block inside HospitalDetails handles the UI response cleanly
+      throw error;
     }
   };
-
   return (
     <HospitalContext.Provider
       value={{

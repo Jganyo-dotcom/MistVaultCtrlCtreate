@@ -1,6 +1,6 @@
 // Base API URL
-const BASE_URL = "https://medsec.onrender.com/api";
-//const BaseApi = "http://127.0.0.1:4444/api"
+//const BASE_URL = "https://medsec.onrender.com/api";
+const BaseApi = "http://127.0.0.1:4444/api"
 
 // ✅ GET ALL Hospitals
 export const hospitalsData = async () => {
