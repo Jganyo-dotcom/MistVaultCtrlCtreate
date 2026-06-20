@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import "../styles/SignIn.css";
 
 function SignIn() {
@@ -59,7 +59,12 @@ function SignIn() {
         <form onSubmit={handleSubmit}>
           {/* LOGO */}
           <div className="logo-wrapper">
-            <img src={logo} alt="MIST logo" className="logo-img" />
+              <div className="logo-top">
+                <img src={logo} alt="MIST logo" className="logo-img" />
+                <span className="logo-text">MIST</span>
+              </div>
+
+            <span className="logo-texts">MEDICAL INFORMATION STORAGE TECHNOLOGY</span>
           </div>
 
           <div className="form-group">

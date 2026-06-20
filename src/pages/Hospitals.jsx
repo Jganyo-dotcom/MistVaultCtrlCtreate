@@ -146,7 +146,8 @@ function Hospitals() {
       <div className="hospitals-header">
         <div className="header-left">
           <h1 className="title">
-            <FiHome /> Hospitals
+            <FiHome /> 
+            <span>Hospitals</span>
           </h1>
           <button className="add-btn" onClick={() => navigate("/add-hospital")}>
             Add Hospital

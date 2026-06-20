@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ActivityContext } from "../contexts/ActivityContext";
 import "../styles/Dashboard.css";
@@ -14,10 +14,40 @@ import {
 function Dashboard() {
   const navigate = useNavigate();
   const { logs } = useContext(ActivityContext);
+  const [counts, setCounts] = useState({ registered: 0, active: 0, inactive: 0 });
 
   const handleStatClick = (filter) => {
-    navigate(`/hospitals?filte=${filter}`);
+    navigate(`/hospitals?filter=${filter}`);
   };
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // fetch hospitals the same way as Hospitals page
+        const token = localStorage.getItem("authToken");
+        const res = await fetch("https://medsec.onrender.com/api/get-hospitals", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch hospitals");
+
+        const data = await res.json();
+        const hs = data.hospitals || [];
+        const registered = hs.length;
+        const active = hs.filter((h) => h.active).length;
+        const inactive = registered - active;
+        setCounts({ registered, active, inactive });
+      } catch (err) {
+        console.error("Error fetching hospitals for dashboard:", err);
+      }
+    };
+    fetchCounts();
+  }, []);
 
   const activities = logs
     .slice(-5)
@@ -55,7 +85,7 @@ function Dashboard() {
       {/* STATS */}
       <div className="stats-section">
         <StatCard
-          value={100}
+          value={counts.registered}
           label="Registered Hospitals"
           percent={100}
           gradient="blue"
@@ -63,17 +93,17 @@ function Dashboard() {
         />
 
         <StatCard
-          value={75}
+          value={counts.active}
           label="Active Hospitals"
-          percent={75}
+          percent={counts.registered ? Math.round((counts.active / counts.registered) * 100) : 0}
           gradient="green"
           onClick={() => handleStatClick("active")}
         />
 
         <StatCard
-          value={25}
+          value={counts.inactive}
           label="Inactive Hospitals"
-          percent={25}
+          percent={counts.registered ? Math.round((counts.inactive / counts.registered) * 100) : 0}
           gradient="red"
           onClick={() => handleStatClick("inactive")}
         />
