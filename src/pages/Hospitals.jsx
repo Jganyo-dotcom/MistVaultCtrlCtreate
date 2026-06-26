@@ -7,6 +7,8 @@ import { FiHome } from "react-icons/fi";
 import "../styles/Hospitals.css";
 
 function Hospitals() {
+  //const BaseApi = "http://127.0.0.1:4444/api";
+  const BaseApi = "https://medsec.onrender.com/api";
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -27,14 +29,17 @@ function Hospitals() {
       try {
         const token = localStorage.getItem("authToken"); // 🔑 get token from localStorage
 
-        const res = await fetch("https://medsec.onrender.com/api/get-hospitals", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // attach token
+        const res = await fetch(
+          `${BaseApi}/get-hospitals`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // attach token
+            },
+            credentials: "include", // only if backend also sets cookies
           },
-          credentials: "include", // only if backend also sets cookies
-        });
+        );
 
         if (!res.ok) throw new Error("Failed to fetch hospitals");
 
@@ -107,7 +112,7 @@ function Hospitals() {
       // ⏳ Backend delete request
       setTimeout(() => {
         fetch(
-          `https://medsec.onrender.com/api/delete-hospital/${deletedHospital._id}`,
+          `${BaseApi}/delete-hospital/${deletedHospital._id}`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },

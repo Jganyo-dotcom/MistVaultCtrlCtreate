@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"; // Using global react-hot-toast notification component
 import { HospitalContext } from "../contexts/HospitalContext";
 import "../styles/AddHospital.css";
 
@@ -113,7 +113,7 @@ const COUNTRY_CODES = [
   { code: "+691", flag: "🇫🇲", name: "Micronesia" },
   { code: "+373", flag: "🇲🇩", name: "Moldova" },
   { code: "+976", flag: "🇲🇳", name: "Mongolia" },
-  { code: "+382", flag: "🇲 Montenegro", name: "Montenegro" },
+  { code: "+382", flag: "🇲🇪", name: "Montenegro" },
   { code: "+212", flag: "🇲🇦", name: "Morocco" },
   { code: "+258", flag: "🇲🇿", name: "Mozambique" },
   { code: "+95", flag: "🇲🇲", name: "Myanmar" },
@@ -130,7 +130,7 @@ const COUNTRY_CODES = [
   { code: "+47", flag: "🇳🇴", name: "Norway" },
   { code: "+968", flag: "🇴🇲", name: "Oman" },
   { code: "+92", flag: "🇵🇰", name: "Pakistan" },
-  { code: "+680", flag: "🇵🇼", name: "Palau" },
+  { code: "+680", flag: "🇵 Palau", name: "Palau" },
   { code: "+970", flag: "🇵🇸", name: "Palestine" },
   { code: "+507", flag: "🇵🇦", name: "Panama" },
   { code: "+675", flag: "🇵🇬", name: "Papua New Guinea" },
@@ -196,24 +196,31 @@ const isValidPhone = (val) => {
 };
 
 const VALIDATIONS = {
-  name: (val) => val.trim() !== "" ? "" : "Hospital name is required",
-  email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
-  contact: (val) => val === "" || isValidPhone(val) ? "" : "Valid phone required",
-  address: (val) => val.trim() !== "" ? "" : "Address is required",
-  city: (val) => val.trim() !== "" ? "" : "City is required",
-  state: (val) => val.trim() !== "" ? "" : "State is required",
-  postalCode: (val) => val.trim() !== "" ? "" : "Postal code is required",
-  representative: (val) => val.trim() !== "" ? "" : "Representative name is required",
-  repEmail: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
-  repContact: (val) => val === "" || isValidPhone(val) ? "" : "Valid phone required"
+  name: (val) => (val.trim() !== "" ? "" : "Hospital name is required"),
+  email: (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
+  contact: (val) =>
+    val === "" || isValidPhone(val) ? "" : "Valid phone required",
+  address: (val) => (val.trim() !== "" ? "" : "Address is required"),
+  city: (val) => (val.trim() !== "" ? "" : "City is required"),
+  state: (val) => (val.trim() !== "" ? "" : "State is required"),
+  postalCode: (val) => (val.trim() !== "" ? "" : "Postal code is required"),
+  representative: (val) =>
+    val.trim() !== "" ? "" : "Representative name is required",
+  repEmail: (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? "" : "Valid email required",
+  repContact: (val) =>
+    val === "" || isValidPhone(val) ? "" : "Valid phone required",
+  password: (val) => (val.length >= 6 ? "" : "Password must be 6+ characters"),
+  confirm_password: (val, allFields) =>
+    val === allFields.password ? "" : "Passwords do not match",
 };
 
 const generateId = () =>
   `hosp_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
 const extractPhoneCode = (codeValue) => {
-  // Extract just the numeric code part (e.g., "+1" from "+1-CA")
-  return codeValue.split('-')[0];
+  return codeValue.split("-")[0];
 };
 
 export function AddHospital() {
@@ -229,23 +236,22 @@ export function AddHospital() {
     city: "",
     state: "",
     postalCode: "",
-
     representative: "",
     repEmail: "",
+    password: "",
+    confirm_password: "",
     repContactCode: "+234",
-    repContact: ""
+    repContact: "",
   });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ message: "", type: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     setFormData((prev) => {
       const updated = { ...prev, [name]: value };
-      // Auto-sync rep contact code when official contact code changes
       if (name === "contactCode") {
         updated.repContactCode = value;
       }
@@ -253,7 +259,8 @@ export function AddHospital() {
     });
 
     if (errors[name]) {
-      const error = VALIDATIONS[name]?.(value) || "";
+      const error =
+        VALIDATIONS[name]?.(value, { ...formData, [name]: value }) || "";
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
   };
@@ -261,55 +268,59 @@ export function AddHospital() {
   const validateForm = () => {
     const newErrors = {};
     Object.keys(VALIDATIONS).forEach((field) => {
-      const error = VALIDATIONS[field](formData[field]);
+      const error = VALIDATIONS[field](formData[field], formData);
       if (error) newErrors[field] = error;
     });
     setErrors(newErrors);
     return !Object.values(newErrors).some((err) => err !== "");
   };
 
-  const showToast = (message, type = "info") => {
-    setToast({ message, type });
-    setTimeout(() => setToast({ message: "", type: "" }), 3000);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validateForm()) {
-      showToast("Please fix errors before submitting");
+      toast.error("Please fix errors before submitting");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Create hospital object with all details
+      // Cleaner compilation for standard backend international regex processing
+      const h_phone_merged = `${extractPhoneCode(formData.contactCode)}${formData.contact.replace(/\D/g, "")}`;
+      const r_phone_merged = `${extractPhoneCode(formData.repContactCode)}${formData.repContact.replace(/\D/g, "")}`;
+
+      // 2. Format the object keys exactly how your backend expects them
       const newHospital = {
-        id: generateId(),
-        name: formData.name,
-        email: formData.email,
-        contact: `${extractPhoneCode(formData.contactCode)} ${formData.contact}`,
-        representative: formData.representative,
-        repEmail: formData.repEmail,
-        repContact: `${extractPhoneCode(formData.repContactCode)} ${formData.repContact}`,
-        location: `${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}`,
-        website: "",
-        departments: 0,
-        staff: 0,
-        engagement: 0,
-        status: "active",
-        createdAt: new Date().toISOString()
+        // Hospital Information
+        h_name: formData.name,
+        addresse: `${formData.address}, ${formData.city}, ${formData.state}`,
+        h_phone: h_phone_merged,
+        h_email: formData.email,
+        h_postalAdress: formData.postalCode,
+
+        // Representative Information
+        r_name: formData.representative,
+        r_phone: r_phone_merged,
+        r_email: formData.repEmail,
+        r_password: formData.password,
+        r_confirm_password: formData.confirm_password,
+
+        // Optional metadata defaults (keep these if your database schema requires them)
+        // website: "",
+        // departments: 0,
+        // staff: 0,
+        // engagement: 0,
+        // status: "active",
       };
 
-      // Add hospital to context
-      addHospital(newHospital);
+      await addHospital(newHospital);
 
-      showToast("Hospital registered successfully!");
+      toast.success("Hospital registered successfully!");
       setTimeout(() => navigate("/hospitals"), 1500);
     } catch (error) {
       console.error("Error:", error);
-      showToast("Failed to register hospital", "error");
+      toast.error(`Registration Failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -318,143 +329,153 @@ export function AddHospital() {
   return (
     <div className="add-hospital-page">
       <div className="form-container">
-      {toast.message && (
-        <div className={`toast toast--${toast.type}`}>{toast.message}</div>
-      )}
-
-      <div className="form-card">
-        <div className="form-header">
-          <div className="back-btn" onClick={() => navigate(-1)}>
-            <ArrowLeft size={18} />
-            <span>BACK</span>
+        <div className="form-card">
+          <div className="form-header">
+            <div className="back-btn" onClick={() => navigate(-1)}>
+              <ArrowLeft size={18} />
+              <span>BACK</span>
+            </div>
+            <h1 className="title">Register New Hospital</h1>
+            <div className="header-spacer"></div>
           </div>
+          <form onSubmit={handleSubmit}>
+            {/* HOSPITAL INFO */}
+            <div className="section">
+              <h2>
+                Hospital Information<span>*</span>
+              </h2>
 
-          <h1 className="title">Register New Hospital</h1>
-          <div className="header-spacer"></div>
+              <Input
+                label="Hospital Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                error={errors.name}
+              />
+
+              <div className="grid-2">
+                <Input
+                  label="Official Email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                />
+                <PhoneInput
+                  label="Official Contact"
+                  codeName="contactCode"
+                  codeValue={formData.contactCode}
+                  phoneName="contact"
+                  phoneValue={formData.contact}
+                  onChange={handleChange}
+                  error={errors.contact}
+                />
+              </div>
+
+              <Input
+                label="Address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                error={errors.address}
+                heading
+              />
+
+              <div className="grid-3">
+                <Input
+                  label="City"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  error={errors.city}
+                />
+                <Input
+                  label="State"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  error={errors.state}
+                />
+                <Input
+                  label="Postal Code"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  error={errors.postalCode}
+                />
+              </div>
+            </div>
+
+            {/* REPRESENTATIVE */}
+            <div className="section">
+              <h2>
+                Representative Information<span>*</span>
+              </h2>
+
+              <Input
+                label="Full Name"
+                name="representative"
+                value={formData.representative}
+                onChange={handleChange}
+                error={errors.representative}
+              />
+
+              <div className="grid-2">
+                <Input
+                  label="Email"
+                  name="repEmail"
+                  type="email"
+                  value={formData.repEmail}
+                  onChange={handleChange}
+                  error={errors.repEmail}
+                />
+                <PhoneInput
+                  label="Contact"
+                  codeName="repContactCode"
+                  codeValue={formData.repContactCode}
+                  phoneName="repContact"
+                  phoneValue={formData.repContact}
+                  onChange={handleChange}
+                  error={errors.repContact}
+                />
+                <Input
+                  label="Account Password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={errors.password}
+                />
+                <Input
+                  label="Confirm Password"
+                  name="confirm_password"
+                  type="password"
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  error={errors.confirm_password}
+                />
+              </div>
+            </div>
+
+            <div className="submit-wrapper">
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Registering...
+                  </>
+                ) : (
+                  "Register"
+                )}
+              </button>
+            </div>
+          </form>
         </div>
-        <form onSubmit={handleSubmit}>
-
-          {/* HOSPITAL INFO */}
-          <div className="section">
-            <h2>Hospital Information<span>*</span></h2>
-
-            <Input
-              label="Hospital Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              error={errors.name}
-            />
-
-            <div className="grid-2">
-              <Input
-                label="Official Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-              <PhoneInput
-                label="Official Contact"
-                codeName="contactCode"
-                codeValue={formData.contactCode}
-                phoneName="contact"
-                phoneValue={formData.contact}
-                onChange={handleChange}
-                error={errors.contact}
-              />
-            </div>
-
-            <Input
-              label="Address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              error={errors.address}
-              heading
-            />
-
-            <div className="grid-3">
-              <Input
-                label="City"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                error={errors.city}
-              />
-              <Input
-                label="State"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                error={errors.state}
-              />
-              <Input
-                label="Postal Code"
-                name="postalCode"
-                value={formData.postalCode}
-                onChange={handleChange}
-                error={errors.postalCode}
-              />
-            </div>
-          </div>
-
-          {/* REPRESENTATIVE */}
-          <div className="section">
-            <h2>Representative Information<span>*</span></h2>
-
-            <Input
-              label="Full Name"
-              name="representative"
-              value={formData.representative}
-              onChange={handleChange}
-              error={errors.representative}
-            />
-
-            <div className="grid-2">
-              <Input
-                label="Email"
-                name="repEmail"
-                value={formData.repEmail}
-                onChange={handleChange}
-                error={errors.repEmail}
-              />
-              <PhoneInput
-                label="Contact"
-                codeName="repContactCode"
-                codeValue={formData.repContactCode}
-                phoneName="repContact"
-                phoneValue={formData.repContact}
-                onChange={handleChange}
-                error={errors.repContact}
-              />
-            </div>
-          </div>
-
-          <div className="submit-wrapper">
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="spinner"></span>
-                  Registering...
-                </>
-              ) : (
-                "Register"
-              )}
-            </button>
-          </div>
-
-        </form>
-      </div>
       </div>
     </div>
   );
 }
-
 
 const PhoneInput = ({
   label,
@@ -474,12 +495,8 @@ const PhoneInput = ({
         onChange={onChange}
         className="country-code"
       >
-
         {COUNTRY_CODES.map((country) => (
-          <option
-            key={`${country.name}-${country.code}`}
-            value={country.code}
-          >
+          <option key={`${country.name}-${country.code}`} value={country.code}>
             {country.flag} {country.name} ({extractPhoneCode(country.code)})
           </option>
         ))}
