@@ -54,6 +54,26 @@ export const deleteHospital = async (id, reason) => {
   return res.json();
 };
 
+export const archiveHospital = async (id, reason) => {
+  try {
+    const res = await fetch(
+      `/api/archive-hospitals/${id}?reason=${encodeURIComponent(reason)}`,
+      {
+        method: "PATCH", // or POST depending on your backend
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Failed to archive hospital");
+
+    return await res.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
 import toast from "react-hot-toast";
 
 export const sendNotification = async (hospitalId) => {

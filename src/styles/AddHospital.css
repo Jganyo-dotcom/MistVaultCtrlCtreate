@@ -36,7 +36,6 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 25px;
   position: relative;
 }
@@ -131,47 +130,61 @@ html, body, #root {
   margin-bottom: 25px;
 }
 
-.section h2 {
+.section-title {
+  display: block;
   font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 14px;
+  font-weight: 600;
+  margin: 0 0 14px;
   text-align: left;
+  line-height: 1.4;
+  color: #111827;
+  visibility: visible;
 }
 
-.section h2 span {
-  color: red;
+.section-title span {
+  color: #ef4444;
 }
 
 /* INPUT */
-.input-group {
+.add-hospital-page .input-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   align-items: flex-start;
+  width: 100%;
 }
 
-.input-group label {
+.add-hospital-page .input-group label {
+  display: block;
+  width: 100%;
   margin-bottom: 8px;
-  color: #4b5563;
+  text-align: left;
+  align-self: flex-start;
+  color: #1f2937;
   font-size: 14px;
   font-weight: 500;
 }
 
-.field-heading {
+.add-hospital-page .field-heading {
+  display: block;
+  width: 100%;
   font-size: 16px;
   font-weight: 700;
   color: #111827;
 }
 
-.input-group input {
+.add-hospital-page .input-group input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 14px 14px;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  background: #f8fafc;
-  color: #000;
+  background: #ffffff;
+  color: #111827;
 }
 
 .input-group input:focus {
@@ -189,6 +202,37 @@ html, body, #root {
 
 .input-group.has-error label {
   color: #b91c1c;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 42px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.password-toggle:hover {
+  color: #111827;
 }
 
 .error-text {
@@ -251,37 +295,34 @@ html, body, #root {
   animation: spin 0.8s linear infinite;
 }
 
-.title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  color: #1e3a8a;
-}
-
 .phone-input-wrapper {
   display: flex;
   gap: 10px;
+  width: 100%;
 }
 
-.country-code,
-  .phone-input-wrapper select,
-  .input-group input {
-    color: #000;
-  }
-
-  .country-code {
-    width: 120px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 0 10px;
-    background: #f8fafc;
-    outline: none;
-    font-size: 14px;
+.add-hospital-page .country-code,
+.add-hospital-page .phone-input-wrapper select,
+.add-hospital-page .input-group input {
+  color: #111827;
 }
 
-.phone-input-wrapper input {
+.add-hospital-page .country-code {
+  width: 120px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 10px;
+  background: #ffffff;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.add-hospital-page .phone-input-wrapper input {
   flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  color: #111827;
 }
 
 @keyframes spin {

@@ -45,16 +45,54 @@
 /* Logo */
 .logo-wrapper {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  text-align: center;
+  gap: 8px;
   margin-bottom: 24px;
 }
 
+.logo-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .logo-img {
+<<<<<<< HEAD
   width: 300px;
+=======
+  width: 60px;
+>>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895
   height: auto;
   object-fit: contain;
 
 
+}
+
+.logo-text {
+  font-size: 18px;
+  font-family: inherit;
+  font-weight: 600;
+  color: #222;
+  letter-spacing: 1px;
+  white-space: normal;
+  transition: opacity 0.25s ease, max-width 0.3s ease;
+}
+
+.logo-texts {
+  font-size: 10px;
+  font-family: inherit;
+  font-weight: 100;
+  color: #4a6cf7;
+  white-space: normal;
+  overflow: visible;
+  max-width: 220px;
+  text-align: center;
+  line-height: 1.4;
+  transition: opacity 0.25s ease, max-width 0.3s ease;
+  opacity: 0.7;
 }
 
 /* Form */
@@ -232,4 +270,36 @@
     border-radius: 18px;
     font-weight: 500;
   }
+<<<<<<< HEAD
 }
+=======
+}
+
+/* Container rules inside the button to align icon and text nicely */
+.btn-loader-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Keyframes animation rule to make the lucide loader spin */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button style adjustments while processing request */
+.signin-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+>>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895

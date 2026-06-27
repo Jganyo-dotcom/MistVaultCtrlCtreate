@@ -52,14 +52,12 @@
   border-radius: 3px;
 }
 
-.logo-text {
+.sidebar .logo-text {
   font-size: 20px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: inherit;
   font-weight: 600;
-  color: white;
+  color: #ffffff;
   letter-spacing: 1px;
-  white-space: nowrap;
-  overflow: hidden;
   max-width: 120px;
   transition: opacity 0.25s ease, max-width 0.3s ease;
 }
