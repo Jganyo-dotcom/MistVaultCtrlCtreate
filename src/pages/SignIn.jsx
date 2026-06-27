@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react"; // Imported Loader2 for a sleek look
 import toast from "react-hot-toast"; // Integrated unified toast messages
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import "../styles/SignIn.css";
 
 function SignIn() {

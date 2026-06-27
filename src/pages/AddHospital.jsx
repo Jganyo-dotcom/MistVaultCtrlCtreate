@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast"; // Using global react-hot-toast notification component
 import { HospitalContext } from "../contexts/HospitalContext";
@@ -246,6 +246,8 @@ export function AddHospital() {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -341,7 +343,7 @@ export function AddHospital() {
           <form onSubmit={handleSubmit}>
             {/* HOSPITAL INFO */}
             <div className="section">
-              <h2>
+              <h2 className="section-title">
                 Hospital Information<span>*</span>
               </h2>
 
@@ -409,7 +411,7 @@ export function AddHospital() {
 
             {/* REPRESENTATIVE */}
             <div className="section">
-              <h2>
+              <h2 className="section-title">
                 Representative Information<span>*</span>
               </h2>
 
@@ -439,21 +441,23 @@ export function AddHospital() {
                   onChange={handleChange}
                   error={errors.repContact}
                 />
-                <Input
+                <PasswordInput
                   label="Account Password"
                   name="password"
-                  type="password"
                   value={formData.password}
                   onChange={handleChange}
                   error={errors.password}
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
-                <Input
+                <PasswordInput
                   label="Confirm Password"
                   name="confirm_password"
-                  type="password"
                   value={formData.confirm_password}
                   onChange={handleChange}
                   error={errors.confirm_password}
+                  showPassword={showConfirmPassword}
+                  setShowPassword={setShowConfirmPassword}
                 />
               </div>
             </div>
@@ -535,6 +539,39 @@ const Input = ({
       onChange={onChange}
       className={error ? "invalid" : ""}
     />
+    {error && <span className="error-text">{error}</span>}
+  </div>
+);
+
+const PasswordInput = ({
+  label,
+  name,
+  value,
+  onChange,
+  error,
+  showPassword,
+  setShowPassword,
+}) => (
+  <div className={`input-group ${error ? "has-error" : ""}`}>
+    <label htmlFor={name}>{label}</label>
+    <div className="password-input-wrapper">
+      <input
+        id={name}
+        name={name}
+        type={showPassword ? "text" : "password"}
+        value={value}
+        onChange={onChange}
+        className={error ? "invalid" : ""}
+      />
+      <button
+        type="button"
+        className="password-toggle"
+        onClick={() => setShowPassword((prev) => !prev)}
+        aria-label={showPassword ? "Hide password" : "Show password"}
+      >
+        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
+    </div>
     {error && <span className="error-text">{error}</span>}
   </div>
 );
