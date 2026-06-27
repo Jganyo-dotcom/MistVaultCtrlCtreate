@@ -43,9 +43,6 @@ export default function DeleteModal({ open, onClose, onConfirm, loading }) {
 
         <h2>Archive Hospital Account</h2>
         <p className="subtitle">
-          {/* Please tell us why you are archiving this hospital account */}
-          {/* This action will archive the hospital account and all associated data. 
-          Please provide a reason for archiving to help us improve our services. */}
           This will archive the hospital account and remove it from active records.
         </p>
 
