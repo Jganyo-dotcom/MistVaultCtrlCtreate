@@ -1,15 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import { Eye, EyeOff } from "lucide-react";
-import hmm from "../assets/hmm.png";
-=======
-import { Eye, EyeOff, Loader2 } from "lucide-react"; // Imported Loader2 for a sleek look
-import toast from "react-hot-toast"; // Integrated unified toast messages
-import logo from "../assets/logo.png";
->>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895
-import "../styles/SignIn.css";
-
+import { useEffect, useState } from "react"; import { useNavigate } from "react-router-dom"; import "../styles/SignIn.css";
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -72,18 +61,7 @@ function SignIn() {
     <div className="signin-container">
       <div className="signin-card">
         <form onSubmit={handleSubmit}>
-          {/* LOGO */}
-          <div className="logo-wrapper">
-<<<<<<< HEAD
-            <img src={hmm} alt="MIST logo" className="logo-img" />
-=======
-              <div className="logo-top">
-                <img src={logo} alt="MIST logo" className="logo-img" />
-                <span className="logo-text">MIST</span>
-              </div>
-
-            <span className="logo-texts">MEDICAL INFORMATION STORAGE TECHNOLOGY</span>
->>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895
+          {/* LOGO */}          <div className="logo-wrapper">            <img src={hmm} alt="MIST logo" className="logo-img" />
           </div>
 
           <div className="form-group">
@@ -130,9 +108,8 @@ function SignIn() {
               "Sign in"
             )}
           </button>
-        </form>
-      </div>
-    </div>
+        </form >
+      </div >    </div >
   );
 }
 
