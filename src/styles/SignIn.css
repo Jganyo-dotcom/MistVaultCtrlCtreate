@@ -60,9 +60,15 @@
 }
 
 .logo-img {
+<<<<<<< HEAD
+  width: 300px;
+=======
   width: 60px;
+>>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895
   height: auto;
   object-fit: contain;
+
+
 }
 
 .logo-text {
@@ -264,6 +270,9 @@
     border-radius: 18px;
     font-weight: 500;
   }
+<<<<<<< HEAD
+}
+=======
 }
 
 /* Container rules inside the button to align icon and text nicely */
@@ -293,3 +302,4 @@
   opacity: 0.75;
   cursor: not-allowed;
 }
+>>>>>>> fb0237b25ba8cbf05831e294e68fc4d0d6c80895
