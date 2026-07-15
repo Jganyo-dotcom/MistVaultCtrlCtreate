@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react"; // Imported Loader2 for a sleek look
 import toast from "react-hot-toast"; // Integrated unified toast messages
 import logo from "../assets/logo.png";
@@ -11,12 +11,15 @@ function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false); // New loading state variable
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (localStorage.getItem("authenticated") === "true") {
+    const fromLanding = location.state?.fromLanding === true;
+
+    if (localStorage.getItem("authenticated") === "true" && !fromLanding) {
       navigate("/dashboard", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

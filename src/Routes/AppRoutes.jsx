@@ -10,19 +10,25 @@ import SignIn from "../pages/SignIn";
 import HospitalDetails from "../pages/HospitalDetails";
 import { AddHospital } from "../pages/AddHospital";
 import ProtectedRoute from "./ProtectedRoute";
+import MistLanding from "../pages/MistLanding"; // ✅ ADD
 
 function AppRoutes() {
   return (
     <Routes>
+
+      {/* ✅ LANDING PAGE FIRST */}
+      <Route path="/" element={<MistLanding />} />
+
+      {/* Public */}
       <Route path="/signin" element={<SignIn />} />
 
+      {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route path="/add-hospital" element={<AddHospital />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/hospitals" element={<Hospitals />} />
           <Route path="/analytics" element={<Analytics />} />
@@ -33,7 +39,9 @@ function AppRoutes() {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/signin" replace />} />
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }
