@@ -1,4 +1,9 @@
-import { useEffect, useState } from "react"; import { useNavigate } from "react-router-dom"; import "../styles/SignIn.css";
+import { useEffect, useState } from "react"; import { useNavigate } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import "../styles/SignIn.css";
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +69,9 @@ function SignIn() {
     <div className="signin-container">
       <div className="signin-card">
         <form onSubmit={handleSubmit}>
-          {/* LOGO */}          <div className="logo-wrapper">            <img src={hmm} alt="MIST logo" className="logo-img" />
+          {/* LOGO */} 
+          <div className="logo-wrapper"> 
+            <img src={logo} alt="MIST logo" className="logo-img" />
           </div>
 
           <div className="form-group">
