@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react"; import { useNavigate } from "react-router-dom"; import "../styles/SignIn.css";
+import hmm from "../assets/final.png";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/SignIn.css";
+import toast from "react-hot-toast";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
