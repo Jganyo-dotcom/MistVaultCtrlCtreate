@@ -1,22 +1,36 @@
-import hmm from "../assets/final.png";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/SignIn.css";
-import toast from "react-hot-toast";
+﻿import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import logo from "../assets/mist-icon.png";
+import "../styles/SignIn.css";
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
+function App() {
+  return (
+    <>
+      <AppRoutes />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
+}
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // New loading state variable
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (localStorage.getItem("authenticated") === "true") {
+    const fromLanding = location.state?.fromLanding === true;
+
+    if (localStorage.getItem("authenticated") === "true" && !fromLanding) {
       navigate("/dashboard", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +44,7 @@ function SignIn() {
 
     try {
       //const BaseApi = "http://127.0.0.1:4444/api";
-      const BaseApi = "https://medsec.onrender.com/api";
+      const BaseApi = "https://medsec.onrender.com/api/get-all-logs";
       const response = await fetch(`${BaseApi}/login-manager`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,7 +72,8 @@ function SignIn() {
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Connection failed. Server could be sleeping.");
-    } finally {
+    }
+    finally {
       setLoading(false); // Stop loader regardless of success or failure
     }
   };
@@ -67,7 +82,9 @@ function SignIn() {
     <div className="signin-container">
       <div className="signin-card">
         <form onSubmit={handleSubmit}>
-          {/* LOGO */}          <div className="logo-wrapper">            <img src={hmm} alt="MIST logo" className="logo-img" />
+          {/* LOGO */}
+          <div className="logo-wrapper">
+            <img src={logo} alt="MIST logo" className="logo-img" />
           </div>
 
           <div className="form-group">
@@ -120,3 +137,4 @@ function SignIn() {
 }
 
 export default SignIn;
+
