@@ -7,10 +7,12 @@ import AuditLogs from "../pages/AuditLogs";
 import Settings from "../pages/Settings";
 import Add from "../pages/Add";
 import SignIn from "../pages/SignIn";
+import signIn2 from "../pages/signin2"
 import HospitalDetails from "../pages/HospitalDetails";
 import { AddHospital } from "../pages/AddHospital";
 import ProtectedRoute from "./ProtectedRoute";
 import MistLanding from "../pages/MistLanding";
+import ITDashboard from "../pages/ItDashboard"
 
 
 function AppRoutes() {
@@ -22,11 +24,14 @@ function AppRoutes() {
 
       {/* Public */}
       <Route path="/signin" element={<SignIn />} />
+      {/* Public */}
+      <Route path="/signinStaff" element={<SignIn2 />} />
 
 
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route path="/add-hospital" element={<AddHospital />} />
+        <Route path="/ITDashboard" element={<ITDashboard />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

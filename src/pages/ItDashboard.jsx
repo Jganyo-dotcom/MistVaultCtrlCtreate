@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/sidebar/Sidebar.jsx";
 import "../styles/ItDashboard.css";
 
-export default function Dashboard() {
+export default function ITDashboard() {
   return (
     <div className="layout">
       <Sidebar />
