@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import logo from "../assets/mist-icon.png";
@@ -16,7 +16,7 @@ function App() {
   );
 }
 
-function SignIn() {
+function SignIn2() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +28,20 @@ function SignIn() {
     const fromLanding = location.state?.fromLanding === true;
 
     if (localStorage.getItem("authenticated") === "true" && !fromLanding) {
-      navigate("/dashboard", { replace: true });
+      const role = localStorage.getItem("role");
+      if (role === "IT ADMIN") {
+        navigate("/iTdashboard", { replace: true });
+      }
+      if (role === "staff") {
+        navigate("/iTdashboard", { replace: true });
+      } else {
+        toast.error("Your first warning has been issued");
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authenticated");
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        navigate("/signinStaff");
+      }
     }
   }, [navigate, location.state]);
 
@@ -45,28 +58,50 @@ function SignIn() {
     try {
       //const BaseApi = "http://127.0.0.1:4444/api";
       const BaseApi = "https://medsec.onrender.com/api";
-      const response = await fetch(`${BaseApi}/login-manager`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include", // ensures cookies/JWT are sent
-      });
+      const response = await fetch(
+        `${BaseApi}/accountStaff/login-it-Admin/staffMember`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include", // ensures cookies/JWT are sent
+        },
+      );
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Save token or flag
-        localStorage.setItem("authToken", data.token);
+      // ✅ Success branch only if we truly have a user object
+      // Check for response.ok and verify staff/user data exists
+      const staffData = data.staff || data.person || data;
+
+      if (response.ok && staffData) {
+        const userRole = (staffData.role || "").toUpperCase();
+
+        if (userRole === "IT ADMIN") {
+          toast.success("Welcome back! Signing in IT Admin 🎉");
+          setTimeout(() => {
+            navigate("/iTdashboard");
+          }, 800);
+        } else if (userRole === "STAFF") {
+          toast.success("Welcome back! Signing in staff 🎉");
+          setTimeout(() => {
+            navigate("/iTdashboard");
+          }, 800);
+        } else {
+          // Fallback if role doesn't match expected strings but login was successful
+          toast.error("Login failed! 🎉");
+          return;
+        }
+
+        // Save tokens and user details cleanly
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+        }
         localStorage.setItem("authenticated", "true");
-        localStorage.setItem("username", data.manager?.name || "Manager");
-
-        toast.success("Welcome back! Signing in... 🎉");
-
-        // Brief timeout gives the toast a second to breathe before redirecting
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 800);
+        localStorage.setItem("username", staffData.name || "");
+        localStorage.setItem("role", staffData.role || "");
       } else {
+        // Error branch runs if response is not OK or data is missing
         toast.error(data.message || "Invalid email or password.");
       }
     } catch (err) {
@@ -136,4 +171,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default SignIn2;

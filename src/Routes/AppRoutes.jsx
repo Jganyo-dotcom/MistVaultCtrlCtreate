@@ -7,22 +7,35 @@ import AuditLogs from "../pages/AuditLogs";
 import Settings from "../pages/Settings";
 import Add from "../pages/Add";
 import SignIn from "../pages/SignIn";
+import SignIn2 from "../pages/signin2"
 import HospitalDetails from "../pages/HospitalDetails";
 import { AddHospital } from "../pages/AddHospital";
 import ProtectedRoute from "./ProtectedRoute";
+import MistLanding from "../pages/MistLanding";
+import ITDashboard from "../pages/ItDashboard"
+
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/signin" element={<SignIn />} />
 
+      {/* ✅ LANDING PAGE FIRST */}
+      <Route path="/" element={<MistLanding />} />
+
+      {/* Public */}
+      <Route path="/signin" element={<SignIn />} />
+      {/* Public */}
+      <Route path="/signinStaff" element={<SignIn2 />} />
+
+
+      {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route path="/add-hospital" element={<AddHospital />} />
+        <Route path="/ITDashboard" element={<ITDashboard />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/hospitals" element={<Hospitals />} />
           <Route path="/analytics" element={<Analytics />} />
@@ -33,7 +46,9 @@ function AppRoutes() {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/signin" replace />} />
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }

@@ -125,23 +125,29 @@ body {
 }
 
 .btn.ghost {
-  background: #f1f5f9;
+  background: #1d4ed8;
   align-items: start;
+  color: var(--bg);
 }
 
 .btn.success {
-  background: #ecfdf5;
+  background: #ffffff;
   color: var(--success);
 }
 
+.btn.btn.success1 {
+  background: #ffffff;
+  color: var(--primary);
+}
+
 .btn.warning {
-  background: #fefce8;
-  color: var(--warning);
+  background: #ffffff;
+  color: var(--danger);
 }
 
 .btn.danger {
-  background: #fef2f2;
-  color: var(--danger);
+  background: #ffffff;
+  color: var(--warning);
 }
 
 .btn.danger:hover {
