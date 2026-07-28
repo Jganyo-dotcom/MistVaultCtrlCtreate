@@ -69,12 +69,14 @@ function SignIn() {
         <form onSubmit={handleSubmit}>
           {/* LOGO */}
           <div className="logo-wrapper">
-              <div className="logo-top">
-                <img src={logo} alt="MIST logo" className="logo-img" />
-                <span className="logo-text">MIST</span>
-              </div>
+            <div className="logo-top">
+              <img src={logo} alt="MIST logo" className="logo-img" />
+              <span className="logo-text">MIST</span>
+            </div>
 
-            <span className="logo-texts">MEDICAL INFORMATION STORAGE TECHNOLOGY</span>
+            <span className="logo-texts">
+              MEDICAL INFORMATION STORAGE TECHNOLOGY
+            </span>
           </div>
 
           <div className="form-group">
