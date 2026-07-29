@@ -172,11 +172,13 @@ function Settings() {
     }, 800);
   };
 // Add this right before your return (<div className="settings-container">...
-    if (loading) {
+   if (loading) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "20px", color: "#4b5563" }}>
-      <div className="spinner"></div>
-      <span>Loading user profile</span>
+    <div className="settings-container">
+      <div id="settings-loading-state">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">Loading user profile...</p>
+      </div>
     </div>
   );
 }
