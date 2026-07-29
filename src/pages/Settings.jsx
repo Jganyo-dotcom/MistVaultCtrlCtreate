@@ -176,7 +176,7 @@ function Settings() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "20px", color: "#4b5563" }}>
       <div className="spinner"></div>
-      <span>Loading user profile...</span>
+      <span>Loading user profile</span>
     </div>
   );
 }
