@@ -13,7 +13,7 @@ import {
 function Settings() {
   const BaseApi = "https://medsec.onrender.com/api";
 
-  const { user, updateUser } = useContext(SettingsContext);
+  const { user, updateUser,loading } = useContext(SettingsContext);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -171,8 +171,17 @@ function Settings() {
       setShowReportModal(false);
     }, 800);
   };
-
+// Add this right before your return (<div className="settings-container">...
+    if (loading) {
   return (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "20px", color: "#4b5563" }}>
+      <div className="spinner"></div>
+      <span>Loading user profile...</span>
+    </div>
+  );
+}
+  return (
+    
     <div className="settings-container">
       {/* HEADER */}
       <div className="settings-header">
@@ -342,6 +351,7 @@ function Settings() {
       )}
 
       {/* PASSWORD */}
+      
       {showPasswordModal && (
         <div className="modal-overlay">
           <div className="modal">
