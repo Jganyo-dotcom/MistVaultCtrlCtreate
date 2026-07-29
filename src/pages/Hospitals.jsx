@@ -41,13 +41,12 @@ function Hospitals() {
           },
         );
 
-        if (!res.ok) throw new Error("Failed to fetch hospitals");
-
         const data = await res.json();
+         if (!res.ok) throw new Error(data.message ||"Failed to fetch hospitals");
         setHospitals(data.hospitals); // backend returns { message, hospitals }
       } catch (err) {
         console.error("Error fetching hospitals:", err);
-        toast.error("Failed to load hospitals");
+        toast.error(err.message||"Failed to load hospitals");
       }
     };
     fetchHospitals();

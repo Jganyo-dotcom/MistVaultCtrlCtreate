@@ -24,7 +24,7 @@ export default function Sidebar({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.setItem("authenticated", "false");
+    localStorage.clear();
     navigate("/signin");
   };
 
