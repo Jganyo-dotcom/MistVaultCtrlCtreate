@@ -5,6 +5,7 @@ import logo from "../assets/mist-icon.png";
 import "../styles/SignIn.css";
 import { toast } from "react-hot-toast";
 
+
 function SignIn2() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +49,7 @@ function SignIn2() {
 
     if (isAuthenticated && !fromLanding) {
       const role = localStorage.getItem("role") || "";
-      
+
       if (role) {
         navigateToRoleDashboard(role);
       } else {
@@ -82,7 +83,7 @@ function SignIn2() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
           credentials: "include",
-        }
+        },
       );
 
       const data = await response.json();

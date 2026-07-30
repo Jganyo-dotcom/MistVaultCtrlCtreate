@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../pages/layouts/Layout";
+import ItLayout from "../pages/layouts/itLayout";
 import Dashboard from "../pages/Dashboard";
 import Hospitals from "../pages/Hospitals";
 import Analytics from "../pages/Analytics";
@@ -28,6 +29,12 @@ function AppRoutes() {
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route path="/add-hospital" element={<AddHospital />} />
+      </Route>
+
+      <Route element={<ProtectedRoute />}>
+        <Route element={<ItLayout />}>
+          <Route path="/ITDashboard" element={<ITDashboard />} />
+        </Route>
       </Route>
 
       <Route element={<ProtectedRoute />}>
