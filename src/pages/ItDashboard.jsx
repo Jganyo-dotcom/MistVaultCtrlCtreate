@@ -1,12 +1,10 @@
 import React from "react";
-import Sidebar from "../components/sidebar/Sidebar.jsx";
+
 import "../styles/ItDashboard.css";
 
 export default function ITDashboard() {
   return (
     <div className="it-layout">
-      <Sidebar />
-
       <main className="it-main">
         {/* TOPBAR */}
         <div className="it-topbar">

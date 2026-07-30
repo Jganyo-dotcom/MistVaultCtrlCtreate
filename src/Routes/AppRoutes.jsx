@@ -28,7 +28,6 @@ function AppRoutes() {
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
         <Route path="/add-hospital" element={<AddHospital />} />
-        <Route path="/ITDashboard" element={<ITDashboard />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>
@@ -40,6 +39,7 @@ function AppRoutes() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/add" element={<Add />} />
           <Route path="/hospitals/:id" element={<HospitalDetails />} />
+          <Route path="/ITDashboard" element={<ITDashboard />} />
         </Route>
       </Route>
 
