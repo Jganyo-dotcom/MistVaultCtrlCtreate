@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../components/sidebar/Sidebar.jsx";
+import Sidebar from "../components/sidebar.jsx";
 import "../styles/ItDashboard.css";
 
 export default function ITDashboard() {
