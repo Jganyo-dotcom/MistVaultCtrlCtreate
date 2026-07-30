@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import logo from "../assets/mist-icon.png";
 import "../styles/SignIn.css";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
@@ -29,11 +29,9 @@ function SignIn2() {
 
     if (localStorage.getItem("authenticated") === "true" && !fromLanding) {
       const role = localStorage.getItem("role");
-      if (role === "IT ADMIN") {
-        navigate("/iTdashboard", { replace: true });
-      }
-      if (role === "staff") {
-        navigate("/iTdashboard", { replace: true });
+
+      if (role === "IT ADMIN" || role === "STAFF") {
+        navigate("/ITDashboard", { replace: true });
       } else {
         toast.error("Your first warning has been issued");
         localStorage.removeItem("authToken");
@@ -70,6 +68,7 @@ function SignIn2() {
 
       const data = await response.json();
 
+
       // ✅ Success branch only if we truly have a user object
       // Check for response.ok and verify staff/user data exists
       const staffData = data.staff || data.person || data;
@@ -80,12 +79,12 @@ function SignIn2() {
         if (userRole === "IT ADMIN") {
           toast.success("Welcome back! Signing in IT Admin 🎉");
           setTimeout(() => {
-            navigate("/iTdashboard");
+            navigate("/ITDashboard");
           }, 800);
         } else if (userRole === "STAFF") {
           toast.success("Welcome back! Signing in staff 🎉");
           setTimeout(() => {
-            navigate("/iTdashboard");
+            navigate("/ITDashboard");
           }, 800);
         } else {
           // Fallback if role doesn't match expected strings but login was successful
@@ -99,7 +98,7 @@ function SignIn2() {
         }
         localStorage.setItem("authenticated", "true");
         localStorage.setItem("username", staffData.name || "");
-        localStorage.setItem("role", staffData.role || "");
+        localStorage.setItem("role", userRole);
       } else {
         // Error branch runs if response is not OK or data is missing
         toast.error(data.message || "Invalid email or password.");

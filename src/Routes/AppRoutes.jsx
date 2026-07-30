@@ -7,18 +7,16 @@ import AuditLogs from "../pages/AuditLogs";
 import Settings from "../pages/Settings";
 import Add from "../pages/Add";
 import SignIn from "../pages/SignIn";
-import SignIn2 from "../pages/signin2"
+import SignIn2 from "../pages/signin2";
 import HospitalDetails from "../pages/HospitalDetails";
 import { AddHospital } from "../pages/AddHospital";
 import ProtectedRoute from "./ProtectedRoute";
 import MistLanding from "../pages/MistLanding";
-import ITDashboard from "../pages/ItDashboard"
-
+import ITDashboard from "../pages/ItDashboard";
 
 function AppRoutes() {
   return (
     <Routes>
-
       {/* ✅ LANDING PAGE FIRST */}
       <Route path="/" element={<MistLanding />} />
 
@@ -26,7 +24,6 @@ function AppRoutes() {
       <Route path="/signin" element={<SignIn />} />
       {/* Public */}
       <Route path="/signinStaff" element={<SignIn2 />} />
-
 
       {/* Protected */}
       <Route element={<ProtectedRoute />}>
@@ -48,7 +45,6 @@ function AppRoutes() {
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
-
     </Routes>
   );
 }

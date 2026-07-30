@@ -72,9 +72,9 @@ function Nav() {
       </ul>
 
       <div className="nav-actions">
-        <Link to="/signin" className="btn-primary nav-cta">
-          Go to Dashboard
-        </Link>
+       <Link to="SignIn" className="btn-primary nav-cta">
+  Go to Dashboard
+</Link>
         <a
           href="#contact"
           className="btn-primary nav-cta"

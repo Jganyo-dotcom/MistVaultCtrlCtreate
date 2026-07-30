@@ -1,64 +1,100 @@
 import React from "react";
-import Sidebar from "../components/sidebar.jsx";
+import Sidebar from "../components/sidebar/Sidebar.jsx";
 import "../styles/ItDashboard.css";
 
 export default function ITDashboard() {
   return (
-    <div className="layout">
+    <div className="it-layout">
       <Sidebar />
 
-      <main className="main">
+      <main className="it-main">
         {/* TOPBAR */}
-        <div className="topbar">
-          <h2>Dashboard</h2>
+        <div className="it-topbar">
+          <div className="it-topbar-title">
+            <span className="it-topbar-icon">▦</span>
+            <h2>Dashboard</h2>
+          </div>
 
           <input
-            className="search"
-            placeholder="Search by name, role or department"
+            className="it-search"
+            placeholder="Search by device, ticket, or staff member"
           />
-
-          <div className="user">Akpan Samuel</div>
         </div>
 
         {/* BUTTON */}
-        <button className="add-btn">+ Add New Staff</button>
+        <button className="it-add-btn">+ New Support Ticket</button>
 
         {/* STATS */}
-        <div className="card">
-          <h3>100 Staff</h3>
+        <div className="it-card">
+          <h3>System Status</h3>
+          <hr className="it-divider" />
 
-          <div className="stats">
-            <div className="stat">
-              <div className="circle green">45</div>
-              <p>Active</p>
+          <div className="it-stats">
+            <div className="it-stat">
+              <div className="it-ring it-ring-green">
+                <span>18</span>
+              </div>
+              <p>Systems Online</p>
             </div>
 
-            <div className="stat">
-              <div className="circle red">30</div>
-              <p>Inactive</p>
+            <div className="it-stat">
+              <div className="it-ring it-ring-red">
+                <span>3</span>
+              </div>
+              <p>Systems Down</p>
             </div>
 
-            <div className="stat">
-              <div className="circle orange">25</div>
-              <p>Suspended</p>
+            <div className="it-stat">
+              <div className="it-ring it-ring-orange">
+                <span>7</span>
+              </div>
+              <p>Open Tickets</p>
             </div>
           </div>
         </div>
 
         {/* RECENT ACTIVITY */}
-        <div className="card">
+        <div className="it-card">
           <h3>Recent Activity</h3>
-          <p className="sub">Last 5 Activities</p>
+          <hr className="it-divider" />
+          <p className="it-sub">Last 5 Activities</p>
 
-          <ul className="activity">
-            <li>
-              <strong>5/05/2026 10:32am</strong>
-              <span> RAD Simi uploaded patient chest xray</span>
+          <ul className="it-activity">
+            <li className="it-activity-item it-activity-latest">
+              <span className="it-dot" />
+              <div>
+                <strong>5/05/2026 10:32am</strong>
+                <p>Password reset request from Tolu</p>
+              </div>
             </li>
-            <li>PHARM Bibi administered patient medication</li>
-            <li>System automated daily backup</li>
-            <li>WellNest Hospital was deactivated</li>
-            <li>Tolu forgot password</li>
+            <li className="it-activity-item">
+              <span className="it-dot" />
+              <div>
+                <strong>5/05/2026 9:45am</strong>
+                <p>Server backup completed successfully</p>
+              </div>
+            </li>
+            <li className="it-activity-item">
+              <span className="it-dot" />
+              <div>
+                <strong>5/05/2026 9:40am</strong>
+                <p>New device registered: Ward 4 workstation</p>
+              </div>
+            </li>
+            <li className="it-activity-item">
+              <span className="it-dot" />
+              <div>
+                <strong>5/05/2026 8:40am</strong>
+                <p>Firewall rule updated by IT Admin</p>
+              </div>
+            </li>
+            <li className="it-activity-item">
+              <span className="it-dot" />
+              <div>
+                <strong>5/05/2026 8:00am</strong>
+                <p>Login attempt flagged from unknown IP</p>
+              </div>
+            </li>
           </ul>
         </div>
       </main>
