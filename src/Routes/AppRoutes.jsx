@@ -46,7 +46,6 @@ function AppRoutes() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/add" element={<Add />} />
           <Route path="/hospitals/:id" element={<HospitalDetails />} />
-          <Route path="/ITDashboard" element={<ITDashboard />} />
         </Route>
       </Route>
 
