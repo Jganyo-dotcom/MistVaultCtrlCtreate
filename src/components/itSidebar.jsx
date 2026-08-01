@@ -33,9 +33,8 @@ export default function ItSidebar({
 
   return (
     <div
-      className={`sidebar ${
-        isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
-      }`}
+      className={`sidebar ${isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
+        }`}
     >
       {/* ================= HEADER ================= */}
       <div className="sidebar-header">
@@ -68,19 +67,19 @@ export default function ItSidebar({
           {!isCollapsed && <span>IT Dashboard</span>}
         </NavLink>
 
-        <NavLink to="/hospitals" className="nav-item">
+        <NavLink to="/ITStaff" className="nav-item">
           <FiHome />
-          {!isCollapsed && <span>IT Hospitals</span>}
+          {!isCollapsed && <span>IT Staff</span>}
         </NavLink>
 
-        <NavLink to="/analytics" className="nav-item">
+        <NavLink to="/Activity" className="nav-item">
           <FiBarChart2 />
-          {!isCollapsed && <span>IT Analytics</span>}
+          {!isCollapsed && <span>Activity</span>}
         </NavLink>
 
-        <NavLink to="/auditlogs" className="nav-item">
+        <NavLink to="/Control" className="nav-item">
           <FiClipboard />
-          {!isCollapsed && <span>Audit Logs</span>}
+          {!isCollapsed && <span>Control</span>}
         </NavLink>
 
         <NavLink to="/settings" className="nav-item">

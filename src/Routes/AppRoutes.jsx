@@ -14,6 +14,8 @@ import { AddHospital } from "../pages/AddHospital";
 import ProtectedRoute from "./ProtectedRoute";
 import MistLanding from "../pages/MistLanding";
 import ITDashboard from "../pages/ItDashboard";
+import ITStaff from "../pages/ItStaff";
+import StaffDetails from "../pages/StaffDetails";
 
 function AppRoutes() {
   return (
@@ -34,6 +36,8 @@ function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<ItLayout />}>
           <Route path="/ITDashboard" element={<ITDashboard />} />
+          <Route path="/ITStaff" element={<ITStaff />} />
+          <Route path="/staff/:id" element={<StaffDetails />} />
         </Route>
       </Route>
 
