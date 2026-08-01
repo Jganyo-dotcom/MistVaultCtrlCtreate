@@ -116,7 +116,7 @@ function Dashboard() {
           <p>Last 5 Activities</p>
         </div>
 
-        <div 
+        <div
           className="activity-timeline"
           onClick={() => navigate("/auditlogs")}
         >
