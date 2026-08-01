@@ -1,7 +1,9 @@
 /* FONT */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -122,7 +124,8 @@ html, body, #root {
 }
 
 .header-spacer {
-  width: 60px; /* Adjust this width to match the back button's width */
+  width: 60px;
+  /* Adjust this width to match the back button's width */
 }
 
 /* SECTION */
@@ -326,7 +329,9 @@ html, body, #root {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1024px) {

@@ -16,6 +16,7 @@ import MistLanding from "../pages/MistLanding";
 import ITDashboard from "../pages/ItDashboard";
 import ITStaff from "../pages/ItStaff";
 import StaffDetails from "../pages/StaffDetails";
+import Activity from "../pages/Activity";
 
 function AppRoutes() {
   return (
@@ -38,6 +39,7 @@ function AppRoutes() {
           <Route path="/ITDashboard" element={<ITDashboard />} />
           <Route path="/ITStaff" element={<ITStaff />} />
           <Route path="/staff/:id" element={<StaffDetails />} />
+          <Route path="/Activity" element={<Activity />} />
         </Route>
       </Route>
 
