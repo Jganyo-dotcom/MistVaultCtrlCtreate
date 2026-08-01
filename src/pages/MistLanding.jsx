@@ -48,7 +48,9 @@ function Nav() {
         <img src={misticon} alt="MIST logo" className="nav-logo-img" />
         <div className="nav-logo-text">
           <span className="nav-wordmark">MIST</span>
-          <span className="nav-tagline">Medical Information Storage Technology</span>
+          <span className="nav-tagline">
+            Medical Information Storage Technology
+          </span>
         </div>
       </div>
 
@@ -61,7 +63,10 @@ function Nav() {
             <a
               href={`#${id}`}
               className={active === id ? "active" : ""}
-              onClick={e => { e.preventDefault(); scrollTo(id); }}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo(id);
+              }}
               onMouseEnter={() => setActive(id)}
               onMouseLeave={() => setActive(null)}
             >
@@ -72,13 +77,16 @@ function Nav() {
       </ul>
 
       <div className="nav-actions">
-       <Link to="SignIn" className="btn-primary nav-cta">
-  Go to Dashboard
-</Link>
+        <Link to="signinStaff" className="btn-primary nav-cta">
+          Go to Dashboard
+        </Link>
         <a
           href="#contact"
           className="btn-primary nav-cta"
-          onClick={e => { e.preventDefault(); scrollTo("contact"); }}
+          onClick={(e) => {
+            e.preventDefault();
+            scrollTo("contact");
+          }}
         >
           Contact Us
         </a>
@@ -104,14 +112,20 @@ function Hero() {
             <a
               href="#contact"
               className="btn-primary btn-blue"
-              onClick={e => { e.preventDefault(); scrollTo("contact"); }}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("contact");
+              }}
             >
               Contact Us
             </a>
             <a
               href="#features"
               className="btn-outline"
-              onClick={e => { e.preventDefault(); scrollTo("features"); }}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("features");
+              }}
             >
               View Demo
             </a>
@@ -120,7 +134,11 @@ function Hero() {
       </div>
 
       <div className="hero-visual">
-        <img src={doctor} alt="Doctor illustration" className="hero-doctor-img" />
+        <img
+          src={doctor}
+          alt="Doctor illustration"
+          className="hero-doctor-img"
+        />
       </div>
     </section>
   );
@@ -133,19 +151,22 @@ function WhatWeDo() {
   return (
     <section className="mist-what-we-do" id="what-we-do">
       <h2 className="section-title">What We Do</h2>
-      <p className="section-subtitle">A centralized EMR system for managing hospital operations.</p>
+      <p className="section-subtitle">
+        A centralized EMR system for managing hospital operations.
+      </p>
       <div className="wwd-grid">
         <div className="wwd-illustration">
           <img src={doctorDesk} alt="Doctor at desk" className="wwd-img" />
         </div>
         <div className="wwd-text">
           <p>
-            MIST is designed to support efficient hospital management by providing a platform
-            to oversee accounts, track system activity and maintain secure access.
+            MIST is designed to support efficient hospital management by
+            providing a platform to oversee accounts, track system activity and
+            maintain secure access.
           </p>
           <p>
-            It enables healthcare administrators to streamline, improve oversight and manage
-            multiple facilities with ease.
+            It enables healthcare administrators to streamline, improve
+            oversight and manage multiple facilities with ease.
           </p>
         </div>
       </div>
@@ -158,20 +179,28 @@ function WhatWeDo() {
 ══════════════════════════════════════════════════ */
 const FEATURES = [
   {
-    icon: "🗂️", title: "Patient Records Management", variant: "",
-    desc: "A digital system where all patient information (history, diagnoses, prescriptions, lab results and visits) is stored securely and accessed in seconds."
+    icon: "🗂️",
+    title: "Patient Records Management",
+    variant: "",
+    desc: "A digital system where all patient information (history, diagnoses, prescriptions, lab results and visits) is stored securely and accessed in seconds.",
   },
   {
-    icon: "📋", title: "Clinical Documentation Tools", variant: "accent",
-    desc: "Fast documentation for consultations, procedures and medical notes with templates to save time."
+    icon: "📋",
+    title: "Clinical Documentation Tools",
+    variant: "accent",
+    desc: "Fast documentation for consultations, procedures and medical notes with templates to save time.",
   },
   {
-    icon: "💊", title: "Electronic Prescriptions", variant: "accent",
-    desc: "Enables doctors to create and send prescriptions digitally, reducing handwriting errors and improving pharmacy workflow."
+    icon: "💊",
+    title: "Electronic Prescriptions",
+    variant: "accent",
+    desc: "Enables doctors to create and send prescriptions digitally, reducing handwriting errors and improving pharmacy workflow.",
   },
   {
-    icon: "🔒", title: "Secure Access & Data Protection", variant: "dark",
-    desc: "Role-based access control with encrypted data to ensure only authorized staff can view or edit patient information."
+    icon: "🔒",
+    title: "Secure Access & Data Protection",
+    variant: "dark",
+    desc: "Role-based access control with encrypted data to ensure only authorized staff can view or edit patient information.",
   },
 ];
 
@@ -181,7 +210,7 @@ function Features() {
       <h2 className="section-title">Features</h2>
       <div className="features-grid">
         <div className="features-blob" aria-hidden="true" />
-        {FEATURES.map(f => (
+        {FEATURES.map((f) => (
           <div key={f.title} className={`feature-card ${f.variant}`}>
             <div className="feature-icon">{f.icon}</div>
             <h3>{f.title}</h3>
@@ -201,9 +230,15 @@ function WhoItsFor() {
     <section className="mist-who">
       <h2 className="section-title">Who It's For</h2>
       <div className="audience-cards">
-        {["Hospital Medical Staff", "Hospital IT Teams", "Medical System Managers"].map(a => (
+        {[
+          "Hospital Medical Staff",
+          "Hospital IT Teams",
+          "Medical System Managers",
+        ].map((a) => (
           <div key={a} className="audience-card">
-            <span aria-hidden="true" style={{ color: "#1a73e8", fontSize: 18 }}>•</span>
+            <span aria-hidden="true" style={{ color: "#1a73e8", fontSize: 18 }}>
+              •
+            </span>
             {a}
           </div>
         ))}
@@ -216,9 +251,24 @@ function WhoItsFor() {
    CONTACT
 ══════════════════════════════════════════════════ */
 const CONTACTS = [
-  { icon: "📞", color: "green", title: "Call Us", lines: ["+2340123456789", "+2330123456789"] },
-  { icon: "💬", color: "blue", title: "Send Us a Message", lines: ["+2340123456789", "+2330123456789"] },
-  { icon: "✉️", color: "red", title: "Send Us an E-mail", lines: ["mistemr@gmail.com"] },
+  {
+    icon: "📞",
+    color: "green",
+    title: "Call Us",
+    lines: ["+2340123456789", "+2330123456789"],
+  },
+  {
+    icon: "💬",
+    color: "blue",
+    title: "Send Us a Message",
+    lines: ["+2340123456789", "+2330123456789"],
+  },
+  {
+    icon: "✉️",
+    color: "red",
+    title: "Send Us an E-mail",
+    lines: ["mistemr@gmail.com"],
+  },
 ];
 
 function Contact() {
@@ -226,13 +276,16 @@ function Contact() {
     <section className="mist-contact" id="contact">
       <h2 className="section-title">Contact Us</h2>
       <div className="contact-grid">
-        {CONTACTS.map(c => (
+        {CONTACTS.map((c) => (
           <div key={c.title} className="contact-card">
             <div className={`contact-icon ${c.color}`}>{c.icon}</div>
             <h4>{c.title}</h4>
             <p>
               {c.lines.map((line, i) => (
-                <span key={i}>{line}{i < c.lines.length - 1 && <br />}</span>
+                <span key={i}>
+                  {line}
+                  {i < c.lines.length - 1 && <br />}
+                </span>
               ))}
             </p>
           </div>
@@ -247,20 +300,33 @@ function Contact() {
 ══════════════════════════════════════════════════ */
 const TESTIMONIALS = [
   {
-    name: "Ajayi Adebisi", role: "Doctor", roleKey: "doctor", icon: "🧑‍⚕️",
-    quote: "Everything I need is right there. It saves time during consultations."
+    name: "Ajayi Adebisi",
+    role: "Doctor",
+    roleKey: "doctor",
+    icon: "🧑‍⚕️",
+    quote:
+      "Everything I need is right there. It saves time during consultations.",
   },
   {
-    name: "Folakemi Hassan", role: "Nurse", roleKey: "nurse", icon: "👩‍⚕️",
-    quote: "Documentation is faster and less stressful with this system."
+    name: "Folakemi Hassan",
+    role: "Nurse",
+    roleKey: "nurse",
+    icon: "👩‍⚕️",
+    quote: "Documentation is faster and less stressful with this system.",
   },
   {
-    name: "Isaiah Devonte", role: "Pharmacist", roleKey: "pharma", icon: "💊",
-    quote: "It helps keep medications record clear and easy to track."
+    name: "Isaiah Devonte",
+    role: "Pharmacist",
+    roleKey: "pharma",
+    icon: "💊",
+    quote: "It helps keep medications record clear and easy to track.",
   },
   {
-    name: "Tobi Kolade", role: "IT", roleKey: "it", icon: "💻",
-    quote: "Monitoring and managing the system is more smoother now."
+    name: "Tobi Kolade",
+    role: "IT",
+    roleKey: "it",
+    icon: "💻",
+    quote: "Monitoring and managing the system is more smoother now.",
   },
 ];
 
@@ -269,7 +335,7 @@ function Testimonials() {
     <section className="mist-testimonials">
       <h2 className="section-title">What People are Saying</h2>
       <div className="testimonials-grid">
-        {TESTIMONIALS.map(t => (
+        {TESTIMONIALS.map((t) => (
           <div key={t.name} className="testimonial-card">
             <div className="testimonial-author">
               <div className={`testimonial-avatar ${t.roleKey}`}>{t.icon}</div>
@@ -313,7 +379,9 @@ function Footer() {
             <img src={misticon} alt="MIST" className="footer-logo-img" />
             <span className="footer-logo-wordmark">MIST</span>
           </div>
-          <p className="footer-brand-p">Simplifying hospital management and system oversight.</p>
+          <p className="footer-brand-p">
+            Simplifying hospital management and system oversight.
+          </p>
         </div>
 
         <div className="footer-col">
@@ -321,7 +389,13 @@ function Footer() {
           <ul>
             {QUICK_LINKS.map(({ id, label }) => (
               <li key={id}>
-                <a href={`#${id}`} onClick={e => { e.preventDefault(); scrollTo(id); }}>
+                <a
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo(id);
+                  }}
+                >
                   {label}
                 </a>
               </li>
@@ -332,14 +406,25 @@ function Footer() {
         <div className="footer-col">
           <h5>Contact</h5>
           <ul>
-            {["+2340123456789", "+2330123456789", "mistemr@gmail.com"].map(item => (
-              <li key={item}>{item}</li>
-            ))}
+            {["+2340123456789", "+2330123456789", "mistemr@gmail.com"].map(
+              (item) => {
+                const isEmail = item.includes("@");
+                const href = isEmail ? `mailto:${item}` : `tel:${item}`;
+
+                return (
+                  <li key={item}>
+                    <a href={href}>{item}</a>
+                  </li>
+                );
+              },
+            )}
           </ul>
         </div>
       </div>
 
-      <div className="footer-bottom">© 2026 Ctrl + Create Labs · All rights reserved.</div>
+      <div className="footer-bottom">
+        © 2026 Ctrl + Create Labs · All rights reserved.
+      </div>
     </footer>
   );
 }

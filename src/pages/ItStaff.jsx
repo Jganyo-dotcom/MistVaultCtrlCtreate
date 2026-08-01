@@ -31,7 +31,7 @@ export default function Staff() {
 
     return (
         <div className="staff-layout">
-            <Sidebar />
+  
 
             <main className="staff-main">
                 <div className="staff-topbar">

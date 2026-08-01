@@ -30,7 +30,7 @@ export default function Activity() {
 
     return (
         <div className="activity-layout">
-            <Sidebar />
+
 
             <main className="activity-main">
                 <div className="activity-topbar">

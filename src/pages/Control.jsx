@@ -27,8 +27,7 @@ export default function Control() {
 
     return (
         <div className="control-layout">
-            <Sidebar />
-
+       
             <main className="control-main">
                 <div className="control-topbar">
                     <div className="control-topbar-title">

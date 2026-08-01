@@ -26,7 +26,8 @@ export default function ItSidebar({
 
   const handleLogout = () => {
     localStorage.setItem("authenticated", "false");
-    navigate("/signin");
+    localStorage.clear()
+    navigate("/signinStaff");
   };
 
   const isCollapsed = isMobile ? false : collapsed;

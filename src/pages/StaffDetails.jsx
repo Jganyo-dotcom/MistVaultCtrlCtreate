@@ -21,7 +21,6 @@ export default function StaffDetails() {
     if (!staff) {
         return (
             <div className="staff-details-layout">
-                <Sidebar />
                 <main className="staff-details-main">
                     <p>Staff member not found.</p>
                     <button onClick={() => navigate("/staff")}>‹ Back to Staff</button>
