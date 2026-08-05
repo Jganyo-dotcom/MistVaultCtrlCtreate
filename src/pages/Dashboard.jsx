@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ActivityContext } from "../contexts/ActivityContext";
 import "../styles/Dashboard.css";
 import { FiGrid } from "react-icons/fi";
-import Staff from "../pages/Staff.jsx"
+import Staff from "./AddStaff.jsx"
 
 import {
   PieChart,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
-import "./Staff.css";
+import "./AddStaff.css";
 
 const ROLES = [
     "Receptionist",
