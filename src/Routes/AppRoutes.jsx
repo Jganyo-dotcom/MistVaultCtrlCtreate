@@ -18,6 +18,7 @@ import ITStaff from "../pages/ItStaff";
 import StaffDetails from "../pages/StaffDetails";
 import Activity from "../pages/Activity";
 import Control from "../pages/Control";
+import AddStaff from "../pages/AddStaff";
 
 function AppRoutes() {
   return (
@@ -42,6 +43,7 @@ function AppRoutes() {
           <Route path="/staff/:id" element={<StaffDetails />} />
           <Route path="/Activity" element={<Activity />} />
           <Route path="/Control" element={<Control />} />
+          <Route path="/AddStaff" element={<AddStaff />} />
         </Route>
       </Route>
 
