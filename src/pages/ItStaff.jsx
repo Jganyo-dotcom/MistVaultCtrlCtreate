@@ -6,7 +6,7 @@ import STAFF_DATA from "../data/staffData.js";
 import "./ItStaff.css";
 import AddStaff from "./AddStaff.jsx";
 
-const [showStaff, setShowStaff] = useState(false);
+
 const PAGE_SIZE = 15;
 
 function StatusBadge({ status }) {
@@ -14,6 +14,7 @@ function StatusBadge({ status }) {
 }
 
 export default function Staff() {
+    const [showStaff, setShowStaff] = useState(false);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");

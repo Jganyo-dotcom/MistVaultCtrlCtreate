@@ -105,7 +105,12 @@ export default function ITDashboard() {
             </li>
           </ul>
         </div>
-      </main>
-    </div>
+        {/* closes it-card for Recent Activity */}
+      </main >
+
+      {showStaff && <AddStaff onClose={() => setShowStaff(false)} />
+
+      }
+    </div >
   );
 }
