@@ -4,7 +4,9 @@ import Dashboardicon from "../assets/employee.png";
 import Sidebar from "../components/sidebar.jsx";
 import STAFF_DATA from "../data/staffData.js";
 import "./ItStaff.css";
+import Staff from "../pages/Staff.jsx"
 
+const [showStaff, setShowStaff] = useState(false);
 const PAGE_SIZE = 15;
 
 function StatusBadge({ status }) {
@@ -31,7 +33,7 @@ export default function Staff() {
 
     return (
         <div className="staff-layout">
-  
+
 
             <main className="staff-main">
                 <div className="staff-topbar">
@@ -55,7 +57,10 @@ export default function Staff() {
 
                 <section className="staff-card">
                     <div className="staff-controls">
-                        <button className="add-staff-btn">+ Add New Staff</button>
+                        <button className="add-staff-btn" onClick={() => setShowStaff(true)}>
+                            + Add New Staff
+                        </button>
+
 
                         <div className="staff-filters">
                             <select

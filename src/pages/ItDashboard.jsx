@@ -3,6 +3,8 @@ import "./ItDashboard.css";
 import Sidebar from "../components/sidebar.jsx";
 import dashboardIcon from "../assets/four-squares-with-frame-shape.png";
 
+
+const [showStaff, setShowStaff] = useState(false);
 export default function ITDashboard() {
   return (
     <div className="it-layout">
@@ -23,7 +25,10 @@ export default function ITDashboard() {
         </div>
 
         {/* BUTTON */}
-        <button className="it-add-btn">+ Add New Staff</button>
+        <button className="add-staff-btn" onClick={() => setShowStaff(true)}>
+          + Add New Staff
+        </button>
+
 
         {/* STATS */}
         <div className="it-card">
