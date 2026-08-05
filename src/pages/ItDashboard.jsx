@@ -5,8 +5,9 @@ import dashboardIcon from "../assets/four-squares-with-frame-shape.png";
 import AddStaff from "../pages/AddStaff.jsx";
 
 
-const [showStaff, setShowStaff] = useState(false);
+
 export default function ITDashboard() {
+  const [showStaff, setShowStaff] = useState(false);
   return (
     <div className="it-layout">
       <main className="it-main">
