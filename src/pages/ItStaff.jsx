@@ -4,7 +4,7 @@ import Dashboardicon from "../assets/employee.png";
 import Sidebar from "../components/sidebar.jsx";
 import STAFF_DATA from "../data/staffData.js";
 import "./ItStaff.css";
-import Staff from "./AddStaff.jsx";
+import AddStaff from "./AddStaff.jsx";
 
 const [showStaff, setShowStaff] = useState(false);
 const PAGE_SIZE = 15;
