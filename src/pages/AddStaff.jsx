@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
-import "../AddStaff.css";
+import "./AddStaff.css";
 
 const ROLES = [
     "Receptionist",
@@ -42,12 +42,7 @@ export default function AddStaffRoleModal({ onClose, onContinue }) {
                     ))}
                 </div>
 
-                <button
-                    className="role-continue-btn"
-                    onClick={() => onContinue(selectedRole)}
-                >
-                    Continue
-                </button>
+
             </div>
         </div>
     );
