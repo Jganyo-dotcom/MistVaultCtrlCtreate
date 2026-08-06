@@ -91,12 +91,13 @@
 }
 
 .role-option:hover {
-    background: #dfe3ee;
+    background: #10162b;
+    color: white;
 }
 
 .role-selected {
-    background: #10162b;
-    color: #fff;
+    background: #dfe3ee;
+    color: black;
 }
 
 .role-radio {
@@ -104,7 +105,7 @@
     height: 15px;
     min-width: 15px;
     border-radius: 50%;
-    border: 2px solid #9aa1b5;
+    border: 2px solid #10162b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -119,4 +120,23 @@
     height: 7px;
     border-radius: 50%;
     background: #fff;
+}
+
+.register-card {
+    position: fixed;
+    background-color: white;
+    border-radius: 8px;
+    width: 50%;
+
+
+}
+
+.role-modal-logo {
+    font-weight: 300;
+    padding: 15px;
+}
+
+.register-card h2 {
+    font-size: 20px;
+    padding-top: 15px;
 }

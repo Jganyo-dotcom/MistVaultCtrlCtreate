@@ -14,11 +14,11 @@ function StatusBadge({ status }) {
 }
 
 export default function Staff() {
-    const [showStaff, setShowStaff] = useState(false);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
     const [page, setPage] = useState(1);
+    const [showStaff, setShowStaff] = useState(false);
 
     const filtered = STAFF_DATA.filter((s) => {
         const matchesSearch =
@@ -137,6 +137,18 @@ export default function Staff() {
                     </div>
                 </section>
             </main>
-        </div>
+
+            {showStaff && (
+                <AddStaff
+                    onClose={() => setShowStaff(false)}
+                    onRegister={(newStaff) => {
+                        console.log("New staff registered:", newStaff);
+                        setShowStaff(false);
+                        // TODO: send to backend or add to STAFF_DATA
+                    }}
+                />
+            )}
+
+        </div >
     );
 }
