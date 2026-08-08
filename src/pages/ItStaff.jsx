@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Dashboardicon from "../assets/employee.png";
-import Sidebar from "../components/sidebar.jsx";
+import Sidebar from "../components/Sidebar.jsx";
 import "./ItStaff.css";
 import AddStaff from "./AddStaff.jsx";
 import { BaseApi } from "../components/apiEndpoint.jsx";
