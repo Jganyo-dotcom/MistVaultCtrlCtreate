@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar.jsx";
+import Sidebar from "../components/Sidebar.jsx";
 import { FiUserX, FiCheckCircle, FiKey, FiLock } from "react-icons/fi";
 import "./Control.css";
 
