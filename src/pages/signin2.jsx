@@ -4,7 +4,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import logo from "../assets/mist-icon.png";
 import "../styles/SignIn.css";
 import { toast } from "react-hot-toast";
-
+import { BaseApi } from "../components/apiEndpoint";
 
 function SignIn2() {
   const [email, setEmail] = useState("");
@@ -74,7 +74,7 @@ function SignIn2() {
     setLoading(true);
 
     try {
-      const BaseApi = "https://medsec.onrender.com/api";
+      
 
       const response = await fetch(
         `${BaseApi}/accountStaff/login-it-Admin/staffMember`,
