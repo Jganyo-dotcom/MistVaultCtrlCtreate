@@ -76,6 +76,7 @@
 }
 
 /* Danger item (logout) */
+
 .settings-item.danger .settings-icon {
   color: #ef4444;
 }
