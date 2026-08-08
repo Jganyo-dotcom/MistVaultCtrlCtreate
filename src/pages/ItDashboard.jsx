@@ -1,13 +1,101 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ItDashboard.css";
 import Sidebar from "../components/Sidebar.jsx";
 import dashboardIcon from "../assets/four-squares-with-frame-shape.png";
 import AddStaff from "../pages/AddStaff.jsx";
+import { BaseApi } from "../components/apiEndpoint";
 
+// Safely convert status values (strings, booleans, objects) to lowercase string
+function getStatusString(s) {
+  if (!s) return "";
 
+  let statusVal = s.status;
+
+  // Handle case where status is an object
+  if (typeof statusVal === "object" && statusVal !== null) {
+    statusVal = statusVal.name || statusVal.label || statusVal.title || "";
+  }
+
+  // Handle case where status is a boolean
+  if (typeof statusVal === "boolean") {
+    return statusVal ? "active" : "inactive";
+  }
+
+  // Convert string or number safely
+  if (statusVal !== undefined && statusVal !== null) {
+    return String(statusVal).toLowerCase();
+  }
+
+  // Fallback to s.isActive boolean
+  if (typeof s.isActive === "boolean") {
+    return s.isActive ? "active" : "inactive";
+  }
+
+  return "";
+}
 
 export default function ITDashboard() {
   const [showStaff, setShowStaff] = useState(false);
+
+  // Dynamic State for backend staff data
+  const [staffList, setStaffList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch staff data from Express backend
+  const fetchStaffData = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("authToken");
+
+      const response = await fetch(`${BaseApi}/accountStaff/get-staffs`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch staff records from server.");
+      }
+
+      const responseData = await response.json();
+
+      // Extract array safely from API response format
+      const actualStaffList = Array.isArray(responseData)
+        ? responseData
+        : responseData.staffs || responseData.data || responseData.staff || [];
+
+      setStaffList(actualStaffList);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching staff records:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStaffData();
+  }, []);
+
+  // Compute live statistics safely
+  const totalStaff = staffList.length;
+
+  const activeCount = staffList.filter(
+    (s) => getStatusString(s) === "active",
+  ).length;
+
+  const inactiveCount = staffList.filter(
+    (s) => getStatusString(s) === "inactive",
+  ).length;
+
+  const suspendedCount = staffList.filter(
+    (s) => getStatusString(s) === "suspended",
+  ).length;
+
   return (
     <div className="it-layout">
       <main className="it-main">
@@ -31,34 +119,43 @@ export default function ITDashboard() {
           + Add New Staff
         </button>
 
-
         {/* STATS */}
         <div className="it-card">
-          <h3>100 Staff</h3>
-          <hr className="it-divider" />
+          {loading ? (
+            <p style={{ padding: "10px 0", color: "#666" }}>
+              Loading staff counts...
+            </p>
+          ) : error ? (
+            <p style={{ color: "#d9534f", padding: "10px 0" }}>{error}</p>
+          ) : (
+            <>
+              <h3>{totalStaff} Staff</h3>
+              <hr className="it-divider" />
 
-          <div className="it-stats">
-            <div className="it-stat">
-              <div className="it-ring it-ring-green">
-                <span>45</span>
-              </div>
-              <p>Active</p>
-            </div>
+              <div className="it-stats">
+                <div className="it-stat">
+                  <div className="it-ring it-ring-green">
+                    <span>{activeCount}</span>
+                  </div>
+                  <p>Active</p>
+                </div>
 
-            <div className="it-stat">
-              <div className="it-ring it-ring-red">
-                <span>30</span>
-              </div>
-              <p>Inactive </p>
-            </div>
+                <div className="it-stat">
+                  <div className="it-ring it-ring-red">
+                    <span>{inactiveCount}</span>
+                  </div>
+                  <p>Inactive</p>
+                </div>
 
-            <div className="it-stat">
-              <div className="it-ring it-ring-orange">
-                <span>25</span>
+                <div className="it-stat">
+                  <div className="it-ring it-ring-orange">
+                    <span>{suspendedCount}</span>
+                  </div>
+                  <p>Suspended</p>
+                </div>
               </div>
-              <p>Suspended</p>
-            </div>
-          </div>
+            </>
+          )}
         </div>
 
         {/* RECENT ACTIVITY */}
@@ -105,12 +202,17 @@ export default function ITDashboard() {
             </li>
           </ul>
         </div>
-        {/* closes it-card for Recent Activity */}
-      </main >
+      </main>
 
-      {showStaff && <AddStaff onClose={() => setShowStaff(false)} />
-
-      }
-    </div >
+      {showStaff && (
+        <AddStaff
+          onClose={() => setShowStaff(false)}
+          onRegister={() => {
+            setShowStaff(false);
+            fetchStaffData();
+          }}
+        />
+      )}
+    </div>
   );
 }
