@@ -17,6 +17,57 @@ function initials(name = "") {
     .slice(0, 2);
 }
 
+// Safely extracts display text from objects without dumping raw JSON objects
+function getDisplayString(val, fallback = "N/A") {
+  if (val === null || val === undefined) return fallback;
+  if (typeof val === "object") {
+    return val.name || val.title || val.label || val.text || fallback;
+  }
+  return String(val);
+}
+
+// Cleans ISO strings (2026-08-08T17:21:22.217Z) into "2026-08-08 05:21 PM"
+function formatDateTime(val, fallback = "N/A") {
+  if (!val) return fallback;
+
+  let rawDate = "";
+  let rawTime = "";
+
+  if (typeof val === "object" && val !== null) {
+    rawDate = val.date || "";
+    rawTime = val.time || "";
+  } else if (typeof val === "string") {
+    rawDate = val;
+  }
+
+  // Handle ISO string formatting (e.g., "2026-08-08T17:21:22.217Z")
+  if (rawDate && typeof rawDate === "string" && rawDate.includes("T")) {
+    try {
+      const parsed = new Date(rawDate);
+      if (!isNaN(parsed.getTime())) {
+        // Extract YYYY-MM-DD
+        rawDate = parsed.toISOString().split("T")[0];
+
+        // If time was not provided separately, format time from ISO string
+        if (!rawTime) {
+          rawTime = parsed.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          });
+        }
+      } else {
+        rawDate = rawDate.split("T")[0];
+      }
+    } catch (e) {
+      rawDate = rawDate.split("T")[0];
+    }
+  }
+
+  const result = `${rawDate} ${rawTime}`.trim();
+  return result || fallback;
+}
+
 export default function StaffDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -34,7 +85,7 @@ export default function StaffDetails() {
 
         // Retrieve token from localStorage
         const token = localStorage.getItem("authToken");
-        
+
         // Trigger HTTP request to Express backend
         const response = await fetch(`${BaseApi}/accountStaff/staff/${id}`, {
           method: "GET",
@@ -104,12 +155,15 @@ export default function StaffDetails() {
   }
 
   // Extract variables with safe fallbacks
-  const name =
+  const rawName =
     staff.name || `${staff.firstName || ""} ${staff.lastName || ""}`.trim();
-  const staffID = staff.id || staff.staffID || "N/A";
-  const contact = staff.contact || staff.phone || "N/A";
+  const name = getDisplayString(rawName, "Unknown Staff");
+  const staffID = getDisplayString(staff.id || staff.staffID || staff._id);
+  const contact = getDisplayString(staff.contact || staff.phone);
   const status = staff.status || (staff.isActive ? "Active" : "Inactive");
-  const recentActivity = staff.recentActivity || [];
+  const recentActivity = Array.isArray(staff.recentActivity)
+    ? staff.recentActivity
+    : [];
 
   return (
     <div className="staff-details-layout">
@@ -136,13 +190,14 @@ export default function StaffDetails() {
               <strong>Staff ID:</strong> {staffID}
             </p>
             <p className="profile-line">
-              <strong>Role:</strong> {staff.role}
+              <strong>Role:</strong> {getDisplayString(staff.role)}
             </p>
             <p className="profile-line">
-              <strong>Department:</strong> {staff.department}
+              <strong>Department:</strong> {getDisplayString(staff.department)}
             </p>
             <p className="profile-line">
-              <strong>Last Login:</strong> {staff.lastLogin || "N/A"}
+              <strong>Last Login:</strong>{" "}
+              {formatDateTime(staff.lastLogin || staff.lastLoginDate)}
             </p>
 
             <div className="profile-actions">
@@ -161,7 +216,7 @@ export default function StaffDetails() {
         <div className="details-lower">
           <section className="details-panel">
             <p>
-              <strong>Official E-mail:</strong> {staff.email}
+              <strong>Official E-mail:</strong> {getDisplayString(staff.email)}
             </p>
             <p>
               <strong>Contact:</strong> {contact}
@@ -169,11 +224,12 @@ export default function StaffDetails() {
             <p>
               <strong>Access Level:</strong>{" "}
               <span className="access-level">
-                {staff.accessLevel || staff.role}
+                {getDisplayString(staff.accessLevel || staff.role)}
               </span>
             </p>
             <p>
-              <strong>Date Joined:</strong> {staff.dateJoined || "N/A"}
+              <strong>Date Joined:</strong>{" "}
+              {formatDateTime(staff.dateJoined || staff.createdAt)}
             </p>
           </section>
 
@@ -184,7 +240,7 @@ export default function StaffDetails() {
             <div className="activity-feed">
               {recentActivity.length > 0 ? (
                 recentActivity.map((a, i) => (
-                  <div className="activity-row" key={i}>
+                  <div className="activity-row" key={a._id || i}>
                     <span
                       className={`activity-dot ${i === 0 ? "dot-latest" : ""}`}
                     />
@@ -192,9 +248,11 @@ export default function StaffDetails() {
                       <p
                         className={`activity-time ${i === 0 ? "time-latest" : ""}`}
                       >
-                        {a.time}
+                        {formatDateTime(a.time || a.date || a.timestamp)}
                       </p>
-                      <p className="activity-text">{a.text}</p>
+                      <p className="activity-text">
+                        {getDisplayString(a.text || a.action || a.description)}
+                      </p>
                     </div>
                   </div>
                 ))

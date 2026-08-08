@@ -26,7 +26,7 @@ export default function ItSidebar({
 
   const handleLogout = () => {
     localStorage.setItem("authenticated", "false");
-    localStorage.clear()
+    localStorage.clear();
     navigate("/signinStaff");
   };
 
@@ -34,8 +34,9 @@ export default function ItSidebar({
 
   return (
     <div
-      className={`sidebar ${isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
-        }`}
+      className={`sidebar ${
+        isMobile ? (isOpen ? "open" : "closed") : collapsed ? "collapsed" : ""
+      }`}
     >
       {/* ================= HEADER ================= */}
       <div className="sidebar-header">
@@ -81,11 +82,6 @@ export default function ItSidebar({
         <NavLink to="/Control" className="nav-item">
           <FiClipboard />
           {!isCollapsed && <span>Control</span>}
-        </NavLink>
-
-        <NavLink to="/settings" className="nav-item">
-          <FiSettings />
-          {!isCollapsed && <span>Settings</span>}
         </NavLink>
 
         {/* LOGOUT */}
