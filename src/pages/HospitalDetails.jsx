@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { archiveHospital } from "../services/hospitalService";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import toast from "react-hot-toast";
 
@@ -28,6 +29,8 @@ function HospitalDetails() {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const [archiveReason, setArchiveReason] = useState("");
 
   useEffect(() => {
     const fetchHospital = async () => {
@@ -158,15 +161,15 @@ function HospitalDetails() {
             onClick={() => suspendHospital(hospitalData.id || hospitalData._id)}
             className="btn success"
           >
-            Deactivate
+            Launch
           </button>
           <button
-            className="btn success"
+            className="btn success1"
             onClick={() =>
               sendNotification(hospitalData.id || hospitalData._id)
             }
           >
-            Launch
+            Activate
           </button>
           <button
             onClick={() =>
@@ -174,7 +177,7 @@ function HospitalDetails() {
             }
             className="btn warning"
           >
-            Activate
+            Deactivate
           </button>
           <button
             className="btn danger"
@@ -358,11 +361,27 @@ function HospitalDetails() {
       <DeleteModal
         open={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        onConfirm={() => {
-          /* implement delete flow */
-        }}
         loading={deleting}
-      />
+        onConfirm={async ({ reason }) => {
+          setDeleting(true);
+
+          try {
+            const res = await archiveHospital(
+              hospitalData.id || hospitalData._id,
+              reason
+            );
+
+            toast.success(res.message || "Hospital archived successfully");
+
+            setShowDeleteModal(false);
+            navigate("/hospitals");
+          } catch (err) {
+            toast.error(err.message || "Failed to archive hospital");
+          } finally {
+            setDeleting(false);
+          }
+        }}
+          />
     </div>
   );
 }

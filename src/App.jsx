@@ -1,14 +1,13 @@
-import React from "react";
+﻿import React from "react";
 import "./App.css";
 import AppRoutes from "./Routes/AppRoutes";
 import { Toaster } from "react-hot-toast";
-import { SettingsProvider } from "./contexts/SettingsContext"; // ✅ ADD
+import { SettingsProvider } from "./contexts/SettingsContext";
 
 function App() {
   return (
-    <SettingsProvider> {/* ✅ WRAP EVERYTHING */}
+    <SettingsProvider>
       <div className="app">
-        
         <Toaster
           position="top-right"
           toastOptions={{
@@ -18,10 +17,10 @@ function App() {
               fontSize: "14px",
             },
             success: {
-              icon: "✅",
+              icon: "OK",
             },
             error: {
-              icon: "❌",
+              icon: "X",
             },
           }}
         />

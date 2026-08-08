@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ActivityContext } from "../contexts/ActivityContext";
 import "../styles/Dashboard.css";
 import { FiGrid } from "react-icons/fi";
+import Staff from "./AddStaff.jsx"
 
 import {
   PieChart,
@@ -116,7 +117,7 @@ function Dashboard() {
           <p>Last 5 Activities</p>
         </div>
 
-        <div 
+        <div
           className="activity-timeline"
           onClick={() => navigate("/auditlogs")}
         >
